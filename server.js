@@ -7,7 +7,7 @@ const user = require('./routes/api/user');
 const profile = require('./routes/api/profile');
 
 const app = express();
-
+//Test
 //Database Config
 let db = mysql.createConnection({
     host: 'localhost',
