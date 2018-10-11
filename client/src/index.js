@@ -1,26 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 
+import SignIn from "./components/sign-in";
+import Login from "./components/login";
+import Main from "./components/main";
 import reducers from './reducers';
 
-
 const createStoreWithMiddleware = applyMiddleware()(createStore);
-
-class Signin extends Component{
-    render() { return <div>Sign in!</div>}
-}
-
-class Login extends Component{
-    render() { return <div>Log in!</div>}
-}
-
-class Main extends Component{
-    render() { return <div>Main</div>}
-}
 
 const myApp = (
     <div>
@@ -28,7 +18,7 @@ const myApp = (
             <BrowserRouter>
                 <div>
                     <Switch>
-                        <Route path="/sign-in" component={Signin}/>
+                        <Route path="/sign-in" component={SignIn}/>
                         <Route path="/login" component={Login}/>
                         <Route path="/" component={Main}/>
                     </Switch>
