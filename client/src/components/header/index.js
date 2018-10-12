@@ -9,19 +9,19 @@ import InputBase from '@material-ui/core/InputBase';
 const Header = () => {
     return (
         <div>
-            <AppBar position="static">
+            <AppBar position="static" style={{backgroundColor: "#4169e1"}}>
                 <Toolbar>
                     <Typography style={{color: "#FFFFFF", fontSize: "20px"}}>ETES</Typography>
                     <div>
-                        <div>
+                        <div style={{position: 'relative'}}>
                             <SearchIcon/>
                         </div>
                         <InputBase/>
                     </div>
                     <div/>
-                    <div>
-                        <Button href={"/sign-in"}>Sign-in</Button>
-                        <Button href={"/login"}>Login</Button>
+                    <div style={{textAlign: "right"}}>
+                        <Button href={"/sign-in"} style={{color: "#FFFFFF"}}>Sign-in</Button>
+                        <Button href={"/login"} style={{color: "#FFFFFF"}}>Login</Button>
                     </div>
                 </Toolbar>
             </AppBar>
