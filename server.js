@@ -14,13 +14,14 @@ let db = mysql.createConnection({
     user: 'root',
     password: '',
     database: 'ETES',
-    port: 8080
+    port: 3306
 });
 //Database Connection
-db.connect((err) => {
+/**db.connect((err) => {
     if(err) throw err;
     console.log('MySQL Connected')
 });
+ **/
 
 
 app.get('/', (req, res) => res.send('Hello there!'));
