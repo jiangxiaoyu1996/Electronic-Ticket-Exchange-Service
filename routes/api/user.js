@@ -20,16 +20,10 @@ function getMySQLConnection() {
     });
 }
 router.get('/test', (req, res) => res.send({msg: 'User works'}));
-router.get('/search', function(req){
 
-});
-
-
-router.get('/login', function(req, res){
-   // const email = req.body.email
-    //const password = req.body.password
-    const email = "qwer@qwe.com";
-    const password = "123";
+router.post('/login', function(req, res){
+    const email = req.body.email
+    const password = req.body.password
     var bcrypt = require('bcryptjs');
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(password, salt);
@@ -68,21 +62,24 @@ router.get('/login', function(req, res){
 
 
 
-router.get('/signup', function(req, res){
+router.post('/signup', function(req, res){
    // const email = req.body.email
     //const password = req.body.password
-    const email = "qwerty@cd.com";
-    const password = "123456";
+    const email = req.body.email;
+    const password = req.body.password;
     var id = cryptoRandomString(20);
     connection = getMySQLConnection();
     connection.connect();
     connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(password) + ')', function(err, rows, fields) {
         if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+            res.send({
+            	type:'signup',
+            	success: false
+            });
         }
         else {
             res.send({
-                type: 'GET',
+                type: 'signup',
                 success: true
             });
         }
