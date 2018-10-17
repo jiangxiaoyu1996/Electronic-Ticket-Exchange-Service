@@ -24,13 +24,13 @@ router.get('/test', (req, res) => res.send({msg: 'User works'}));
 router.post('/login', function(req, res){
     const email = req.body.email
     const password = req.body.password
-    var bcrypt = require('bcryptjs');
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(password, salt);
+    ///var bcrypt = require('bcryptjs');
+    //var salt = bcrypt.genSaltSync(10);
+    //var hash = bcrypt.hashSync(password, salt);
 
     connection = getMySQLConnection();
     connection.connect();
-    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(hash), function(err, rows, fields) {
+    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
         if (err) {
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
