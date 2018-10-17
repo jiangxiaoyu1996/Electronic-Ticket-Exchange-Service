@@ -4,18 +4,29 @@ export const styles = theme => ({
     root: {
         width: '100%',
     },
+    appBar: {
+        backgroundColor: "#FF8C00",
+    },
     grow: {
         flexGrow: 1,
     },
     menuButton: {
         marginLeft: -12,
         marginRight: 20,
+        color: "#ffffff",
+    },
+    sectionButton: {
+        color: "#FFFFFF",
+        textTransform: "none",
+        fontSize: "16px"
     },
     title: {
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
+        fontSize: "25px",
+        color: "#ffffff"
     },
     search: {
         position: 'relative',
