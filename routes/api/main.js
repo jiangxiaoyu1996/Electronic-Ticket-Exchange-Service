@@ -55,6 +55,8 @@ router.get('/GetPopularEvents', function(req, res){
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
 
+
+
         else {
             res.send({
                 type: 'GET',
