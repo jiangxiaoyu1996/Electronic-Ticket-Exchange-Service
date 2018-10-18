@@ -5,7 +5,7 @@ import Card from "@material-ui/core/es/Card/Card";
 import { withStyles } from "@material-ui/core/styles/index";
 
 import Header from "../header";
-import styles from "./style";
+import { styles } from "./style";
 import image from "../../img/main.jpeg";
 
 class Main extends Component {
