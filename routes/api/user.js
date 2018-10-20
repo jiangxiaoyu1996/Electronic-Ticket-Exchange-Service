@@ -50,7 +50,7 @@ router.post('/login', function(req, res){
                 res.send({
                     type: 'POST',
                     email: email,
-                    password: hash,
+                    password: password,
                     loggedin: false
                 });
             }
