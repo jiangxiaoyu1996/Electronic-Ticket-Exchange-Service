@@ -21,32 +21,6 @@ function getMySQLConnection() {
     });
 }
 
-async function deleteDb(){
-	connection = getMySQLConnection();
-	connection.query('DROP TABLE IF EXISTS event', function(err, rows, fields){
-	});
-}
-
-async function createDb(){
-	connection = getMySQLConnection();
-	connection.query('CREATE TABLE IF event (event_ID VARCHAR(255), date VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, PRIMARY KEY event_ID)', function(err, rows, fields){
-	});
-}
-
-function setupDB(){
-	deleteDb();
-	createDb();
-}
-
-function search(text){
-	var filterStr = ""
-	for (var key in text){
-		filterStr = filterStr + " " + mysql.escapeId(key) + " = " + mysql.escape(text[key]) + " AND"
-	}
-	filterStr = filterStr.substring(0, filterStr.lastIndexOf(" AND"))
-	return filterStr
-}
-
 
 router.post('/search', function(req, res){
 	const index = search(req.body);
