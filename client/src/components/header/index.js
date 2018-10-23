@@ -1,32 +1,58 @@
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import SearchIcon from "@material-ui/icons/Search";
-import Button from '@material-ui/core/Button';
+import React, { Component }from 'react';
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import Button from "@material-ui/core/es/Button/Button";
+import { withStyles } from '@material-ui/core/styles';
 
-const Header = () => {
-    return (
-        <div>
-            <AppBar position="static" style={{backgroundColor: "#4169e1"}}>
-                <Toolbar>
-                    <Typography style={{color: "#FFFFFF", fontSize: "20px"}}>ETES</Typography>
-                    <div>
-                        <div style={{position: 'relative'}}>
-                            <SearchIcon/>
+import { styles } from "./style";
+
+class Header extends Component {
+
+    render() {
+        const { classes } = this.props;
+
+        return (
+            <div className={classes.root}>
+                <AppBar className={classes.appBar}>
+                    <Toolbar position="static">
+                        <IconButton className={classes.menuButton} href="/">
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography className={classes.title} noWrap>
+                            ETES
+                        </Typography>
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                                placeholder="Search events..."
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                            />
                         </div>
-                        <InputBase/>
-                    </div>
-                    <div/>
-                    <div style={{textAlign: "right"}}>
-                        <Button href={"/sign-in"} style={{color: "#FFFFFF"}}>Sign-in</Button>
-                        <Button href={"/login"} style={{color: "#FFFFFF"}}>Login</Button>
-                    </div>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+                        <div className={classes.grow} />
+                        <div className={classes.sectionDesktop}>
+                            <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
+                            <Button className={classes.sectionButton} href={"/login"}>Login</Button>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
+}
+
+Header.propTypes = {
+    classes: PropTypes.object.isRequired,
 };
 
-export default Header;
+export default withStyles(styles)(Header);

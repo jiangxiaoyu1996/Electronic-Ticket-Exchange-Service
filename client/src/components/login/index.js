@@ -5,19 +5,16 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 export default class Login extends Component {
-    constructor(props){
-	super(props);
-	this.state={
-	    username:'',
-	    password:''
-	}
-    }
+	state= {
+        username: '',
+        password: ''
+    };
     handleClick(event) {
     }
     render(){
 	const classes = this.props;
         return(
-            <div>
+            <div style={{marginTop: 65}}>
                 <Header />
 		<Grid container justify="center" spacing={256}>
 		<Grid item xs={12}>
