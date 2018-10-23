@@ -23,7 +23,7 @@ function getMySQLConnection() {
 
 async function deleteDb(){
 	connection = getMySQLConnection();
-	connection.query('DROP TABLE IF EXISTS ETES', function(err, rows, fields){
+	connection.query('DROP TABLE IF EXISTS event', function(err, rows, fields){
 		if (err) {
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
@@ -32,7 +32,7 @@ async function deleteDb(){
 
 async function createDb(){
 	connection = getMySQLConnection();
-	connection.query('CREATE TABLE IF ETES (event_ID VARCHAR(255), data VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, PRIMARY KEY event_ID)', function(err, rows, fields){
+	connection.query('CREATE TABLE IF event (event_ID VARCHAR(255), date VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, PRIMARY KEY event_ID)', function(err, rows, fields){
 		if (err) {
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
