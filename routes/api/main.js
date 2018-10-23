@@ -21,6 +21,28 @@ function getMySQLConnection() {
     });
 }
 
+async function deleteDb(){
+	connection = getMySQLConnection();
+	connection.query('DROP TABLE IF EXISTS ETES', function(err, rows, fields){
+		if (err) {
+            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+        }
+	});
+}
+
+async function createDb(){
+	connection = getMySQLConnection();
+	connection.query('CREATE TABLE IF ETES (event_ID VARCHAR(255), data VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, PRIMARY KEY event_ID)', function(err, rows, fields){
+		if (err) {
+            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+        }
+	});
+}
+
+function setupDB(){
+	deleteDb();
+	createDb();
+}
 
 function search(text){
 	var filterStr = ""
@@ -41,15 +63,15 @@ router.post('/search', function(req, res){
         }
         else{
 			if(rows.length > 0){
-				res.send({
+				res.json({
 					type: "search",
 					result: rows
 				});
 			}
 			else{
-				res.send({
+				res.json({
 					type: "search",
-					result: false,
+					result: false
 				});
 			}
 		}

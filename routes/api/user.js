@@ -3,6 +3,8 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
+const passport = require('passport');
+const jwt = require('passport');
 
 
 //@route GET api/user/test
@@ -24,7 +26,7 @@ router.get('/test', (req, res) => res.send({msg: 'User works'}));
 router.post('/login', function(req, res){
     const email = req.body.email
     const password = req.body.password
-    ///var bcrypt = require('bcryptjs');
+    //var bcrypt = require('bcryptjs');
     //var salt = bcrypt.genSaltSync(10);
     //var hash = bcrypt.hashSync(password, salt);
 
@@ -37,7 +39,7 @@ router.post('/login', function(req, res){
         else {
             // Check if the result is found or not
             if(rows.length > 0) {
-                res.send({
+                res.json({
                     type: 'POST',
                     id: rows[0].id,
                     email: rows[0].email,
@@ -47,7 +49,7 @@ router.post('/login', function(req, res){
             }
             else {
                 //Send back data provided, say wrong pass or id
-                res.send({
+                res.json({
                     type: 'POST',
                     email: email,
                     password: hash,
@@ -63,8 +65,6 @@ router.post('/login', function(req, res){
 
 
 router.post('/signup', function(req, res){
-   // const email = req.body.email
-    //const password = req.body.password
     const email = req.body.email;
     const password = req.body.password;
     var id = cryptoRandomString(20);
@@ -72,13 +72,13 @@ router.post('/signup', function(req, res){
     connection.connect();
     connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(password) + ')', function(err, rows, fields) {
         if (err) {
-            res.send({
+            res.json({
             	type:'signup',
             	success: false
             });
         }
         else {
-            res.send({
+            res.json({
                 type: 'signup',
                 success: true
             });
