@@ -34,20 +34,3 @@ Main.propTypes = {
 };
 
 export default withStyles(styles)(Main);
-
-/*
-<div style={{zIndex: -1}}>
-                        <Typography variant="h5" component="h2">
-                            Ready for fun
-                        </Typography>
-                        <Typography component="p">
-                            What you gonna plan today?
-                        </Typography>
-                    </div>
-                    <Card>
-                        <CardMedia className={classes.cardMedia}
-                            image={image}
-                            title="Ready for fun?"
-                        />
-                    </Card>
- */
