@@ -26,7 +26,7 @@ async function deleteDb(){
 
 async function createDb(){
 	connection = getMySQLConnection();
-	connection.query('CREATE TABLE IF event (event_name VARCHAR(255), event_ID VARCHAR(255), dat VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, description TEXT, PRIMARY KEY (event_name, event_ID))', function(err, rows, fields){
+	connection.query('CREATE TABLE IF NOT EXISTS event (event_name VARCHAR(255), event_ID VARCHAR(255), dat VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, description TEXT, PRIMARY KEY (event_name, event_ID))', function(err, rows, fields){
 	});
 }
 
