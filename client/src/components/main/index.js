@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles/index";
 
 import Header from "../header";
 import { styles } from "./style";
-import image from "../../img/main.jpeg";
+import image from "../../img/main.jpg";
 
 class Main extends Component {
     render(){
@@ -15,10 +15,10 @@ class Main extends Component {
         return(
             <div>
                 <Header />
-                <div style={{marginTop: 65}}>
-                    <Card style={{height: "100%"}}>
+                <div className={classes.image}>
+                    <Card>
                         <CardMedia
-                            style={{height: "-webkit-fill-available", width: "-webkit-fill-available"}}
+                            className={classes.cardMedia}
                             image={image}
                             title="Ready for fun?"
                         />
@@ -34,3 +34,20 @@ Main.propTypes = {
 };
 
 export default withStyles(styles)(Main);
+
+/*
+<div style={{zIndex: -1}}>
+                        <Typography variant="h5" component="h2">
+                            Ready for fun
+                        </Typography>
+                        <Typography component="p">
+                            What you gonna plan today?
+                        </Typography>
+                    </div>
+                    <Card>
+                        <CardMedia className={classes.cardMedia}
+                            image={image}
+                            title="Ready for fun?"
+                        />
+                    </Card>
+ */

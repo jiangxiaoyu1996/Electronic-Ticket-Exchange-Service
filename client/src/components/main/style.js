@@ -1,11 +1,13 @@
 import React from "react";
 
 export const styles = {
-    card: {
-        width: "100%",
-        height: "100%"
-    },
     image: {
-        height: "-webkit-fill-available",
+        marginTop: 65,
+        display: "initial"
     },
+    cardMedia: {
+        height: "-webkit-fill-available",
+        width: "-webkit-fill-available",
+        position: "absolute"
+    }
 };
