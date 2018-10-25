@@ -75,12 +75,14 @@ router.post('/signup', function(req, res){
         if (err) {
             res.json({
             	type:'signup',
+                email: email,
             	success: false
             });
         }
         else {
             res.json({
                 type: 'signup',
+                email: email,
                 success: true
             });
         }

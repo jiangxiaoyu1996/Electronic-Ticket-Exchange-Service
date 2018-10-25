@@ -17,6 +17,18 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
+        const btns = this.props.user === '' ? (
+            <div className={classes.sectionDesktop}>
+                <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
+                <Button className={classes.sectionButton} href={"/login"}>Login</Button>
+            </div>
+        ) : (
+            <div className={classes.sectionDesktop}>
+                <Button className={classes.sectionButton}>profile</Button>
+                <Button className={classes.sectionButton}>Logout</Button>
+            </div>
+        );
+
         return (
             <div className={classes.root}>
                 <AppBar className={classes.appBar}>
@@ -40,10 +52,7 @@ class Header extends Component {
                             />
                         </div>
                         <div className={classes.grow} />
-                        <div className={classes.sectionDesktop}>
-                            <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
-                            <Button className={classes.sectionButton} href={"/login"}>Login</Button>
-                        </div>
+                        {btns}
                     </Toolbar>
                 </AppBar>
             </div>

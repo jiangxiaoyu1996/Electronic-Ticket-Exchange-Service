@@ -7,7 +7,7 @@ class HeaderContainer extends Component{
     render(){
         return(
             <div>
-                <Header/>
+                <Header user={this.props.user}/>
             </div>
         )
     }

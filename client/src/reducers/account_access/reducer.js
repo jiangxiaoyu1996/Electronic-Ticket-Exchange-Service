@@ -1,9 +1,11 @@
+import * as ACTION from "../../static/action_type";
+
 export default function(state = '', action){
     console.log("promise:", action.payload);
     switch(action.type){
-        case "SIGN_IN":
+        case ACTION.SIGN_IN:
+            return action.payload.data.success === true ? action.payload.data.email : '';
         case 'LOGIN':
-            return action.payload.data;
         default:
             return state;
     }
