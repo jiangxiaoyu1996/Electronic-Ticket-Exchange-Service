@@ -43,6 +43,7 @@ class Header extends Component {
                         <div className={classes.sectionDesktop}>
                             <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
                             <Button className={classes.sectionButton} href={"/login"}>Login</Button>
+                            <Button className={classes.sectionButton} href={"/updatePopularity"}>test</Button>
                         </div>
                     </Toolbar>
                 </AppBar>
