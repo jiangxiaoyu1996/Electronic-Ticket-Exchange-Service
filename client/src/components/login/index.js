@@ -15,7 +15,6 @@ export default class Login extends Component {
 	const classes = this.props;
         return(
             <div style={{marginTop: 65, paddingLeft: "40%"}}>
-                <Header />
 		<Grid container justify="center" spacing={256}>
 		<Grid item xs={12}>
 		<TextField

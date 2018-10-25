@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Header from "../header";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Button from "@material-ui/core/es/Button/Button";
@@ -61,8 +60,10 @@ class SignIn extends Component {
         this.checkEmailFormat();
         this.checkPassword();
         this.checkConfirmedPassword();
+
         if(this.state.errorTextEmail === '' && this.state.errorTextPassword === ''){
-            console.log("perfect")
+            console.log("perfect");
+            this.props.signin(this.state.email, this.state.password);
         }
     }
 
@@ -83,7 +84,6 @@ class SignIn extends Component {
 
         return(
             <div className={classes.container}>
-                <Header/>
                 <Grid container justify="center" spacing={256}>
                     <Grid item xs={12}>
                         <FormControl>

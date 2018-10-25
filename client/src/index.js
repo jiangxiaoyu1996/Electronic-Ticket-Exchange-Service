@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom';
 import {applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import promise from 'redux-promise';
 import * as serviceWorker from './serviceWorker';
 
-import SignIn from "./components/sign-in";
-import Login from "./components/login";
+import SignIn from "./containers/sign-in/container";
+import Login from "./containers/login/container";
 import Main from "./components/main";
 import reducers from './reducers';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 const myApp = (
     <div>

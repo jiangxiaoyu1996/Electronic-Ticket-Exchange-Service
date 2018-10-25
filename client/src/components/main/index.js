@@ -4,7 +4,7 @@ import CardMedia from "@material-ui/core/es/CardMedia/CardMedia";
 import Card from "@material-ui/core/es/Card/Card";
 import { withStyles } from "@material-ui/core/styles/index";
 
-import Header from "../header";
+import HeaderContainer from "../../containers/header/container";
 import { styles } from "./style";
 import image from "../../img/main.jpg";
 
@@ -14,7 +14,7 @@ class Main extends Component {
 
         return(
             <div>
-                <Header />
+                <HeaderContainer/>
                 <div className={classes.image}>
                     <Card>
                         <CardMedia
