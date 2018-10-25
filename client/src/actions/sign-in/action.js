@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SIGN_IN } from "../../static/action_type";
+import * as ACTION from "../../static/action_type";
 
 const ROOT_URL = "http://localhost:8080/api/user";
 
@@ -11,7 +11,7 @@ export function signin(email, password){
     console.log("action request: ", request);
 
     return {
-        type: "SIGN_IN",
+        type: ACTION.SIGN_IN,
         payload: request
     };
 }

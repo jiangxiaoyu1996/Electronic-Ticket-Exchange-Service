@@ -76,12 +76,6 @@ class SignIn extends Component {
             marginLeft: 5
         };
 
-        console.log("original email: ", this.state.email);
-        console.log("original password: ", this.state.password);
-        console.log("original password2: ", this.state.password2);
-        console.log("original erroremail: ", this.state.errorTextEmail);
-        console.log("original errorpassword: ", this.state.errorTextPassword);
-
         return(
             <div className={classes.container}>
                 <Grid container justify="center" spacing={256}>
