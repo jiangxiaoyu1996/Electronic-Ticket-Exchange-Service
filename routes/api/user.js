@@ -34,29 +34,22 @@ router.post('/login', function(req, res){
     connection = getMySQLConnection();
     connection.connect();
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
-        if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+        if(rows.length > 0) {
+            res.json({
+                type: 'POST',
+                id: rows[0].id,
+                email: rows[0].email,
+                password: rows[0].password,
+                loggedin: true
+            });
         }
         else {
-            // Check if the result is found or not
-            if(rows.length > 0) {
-                res.json({
-                    type: 'POST',
-                    id: rows[0].id,
-                    email: rows[0].email,
-                    password: rows[0].password,
-                    loggedin: true
-                });
-            }
-            else {
-                //Send back data provided, say wrong pass or id
-                res.json({
-                    type: 'POST',
-                    email: email,
-                    password: hash,
-                    loggedin: false
-                });
-            }
+        res.json({
+                type: 'POST',
+                email: email,
+                password: hash,
+                loggedin: false
+            });
         }
     });
 
