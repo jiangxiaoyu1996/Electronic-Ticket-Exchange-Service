@@ -5,16 +5,22 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 export default class Login extends Component {
-	state= {
-        username: '',
-        password: ''
-    };
-    handleClick(event) {
+    constructor(props){
+	super(props);
+	this.state = {
+	    email: '',
+	    password: ''
+	};
+	this.handleClick = this.handleClick.bind(this);
     }
+    handleClick() {
+	this.props.login(this.state.email, this.state.password);
+    }
+
     render(){
 	const classes = this.props;
         return(
-            <div style={{marginTop: 65, paddingLeft: "40%"}}>
+		<div style={{marginTop: 65, paddingLeft: "40%"}}>
 		<Grid container justify="center" spacing={256}>
 		<Grid item xs={12}>
 		<TextField
@@ -24,7 +30,7 @@ export default class Login extends Component {
 	    margin="normal"
 	    variant="outlined"
 	    helperText="Enter your Username"
-	    onChange = {(event,newValue) => this.setState({username:newValue})}
+	    onChange = {(event) => this.setState({email:event.target.value})}
 		/>
 		</Grid>
 		<Grid item xs={12}>
@@ -36,15 +42,15 @@ export default class Login extends Component {
 	    margin="normal"
 	    variant="outlined"
 	    helperText="Enter your Password"
-	    onChange = {(event,newValue) => this.setState({password:newValue})}
+	    onChange = {(event) => this.setState({password:event.target.value})}
 		/>
 		</Grid>
 		<Grid item xs={12}><br/><br/></Grid>
 		<Grid item xs={12}>
-		<Button variant="outlined" className={classes.button} onClick={(event) => this.handleClick(event) } href={"../header"} >Log In</Button>
+		<Button variant="outlined" className={classes.button} onClick={() => this.handleClick() } >Log In</Button>
 		</Grid>
-	   </Grid>
-          </div>
+		</Grid>
+		</div>
         );
     }
 }
