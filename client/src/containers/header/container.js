@@ -2,21 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Header from "../../components/header/index";
+import { search } from "../../actions/search/action";
 
 class HeaderContainer extends Component{
     render(){
         return(
-            <div>
-                <Header user={this.props.user}/>
-            </div>
+		<div>
+		<Header search={this.props.search} user={this.props.user}/>
+		</div>
         )
     }
 }
 
 function mapStateToProps(state){
     return {
-        user: state.user
+	user: state.user
     }
 }
 
-export default connect(mapStateToProps)(HeaderContainer);
+export default connect(mapStateToProps, { search })(HeaderContainer);
