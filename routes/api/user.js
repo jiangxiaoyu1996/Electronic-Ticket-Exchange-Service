@@ -3,8 +3,6 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
-const passport = require('passport');
-const jwt = require('passport');
 
 
 //@route GET api/user/test
@@ -35,6 +33,7 @@ router.post('/login', function(req, res){
     connection.connect();
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
         if(rows.length > 0) {
+            res.cookie('Login', {data: [email, rows[0].id]});
             res.json({
                 type: 'POST',
                 id: rows[0].id,
@@ -73,6 +72,7 @@ router.post('/signup', function(req, res){
             });
         }
         else {
+            res.cookie('Login', {data: [email, id]}, {httpOnly: true});
             res.json({
                 type: 'signup',
                 email: email,
