@@ -3,6 +3,7 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 var user = require('./user')
+const cookieParser = require('cookie-parser');
 
 //@route GET api/profile/test
 //@desc Test profile route
@@ -22,14 +23,24 @@ function getMySQLConnection() {
     });
 }
 
+var authenticate = function(req, res, next){
+	if(req.cookies.name != null){
+		next()
+	}
+	res.json({
+		type: 'authenticate',
+		result: false
+	})
+}
 
 
-router.post('/', function(req, res){
+
+router.get('/', function(req, res){
+	var email = req.cookie.data.email
+	var id = req.cookie.data.id
 	connection = getMySQLConnection();
 	connection.connect();
-	var email = req.body.email
-	var username = req.body.username
-	connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(email) + ' OR buyer = ' + mysql.escape(username) + ' OR seller = ' + mysql.escape(email) + 'OR seller = ' + mysql.escape(username), function(err, rows, fields){
+	connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(email) + 'OR seller = ' + mysql.escape(id), function(err, rows, fields){
 		if(err){
 			res.json({
 					type: 'profile',
@@ -37,7 +48,7 @@ router.post('/', function(req, res){
 				})
 		}
 		else{
-			connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + 'AND username = ' + mysql.escape(username), function(err, userProfile, fields){
+			connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + 'AND id = ' + mysql.escape(id), function(err, userProfile, fields){
 				if(err){
 					res.json({
 						type: 'profile',

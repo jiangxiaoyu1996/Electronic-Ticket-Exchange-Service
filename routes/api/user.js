@@ -4,7 +4,6 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
 
-
 //@route GET api/user/test
 //@desc Test user route
 //@access Public
@@ -32,8 +31,14 @@ router.post('/login', function(req, res){
     connection = getMySQLConnection();
     connection.connect();
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
-        if(rows.length > 0) {
-            res.cookie('Login', {data: [email, rows[0].id]});
+        if(err){
+            res.json({
+                type: 'POST',
+                loggedin: false
+            });
+        }
+        else if(rows.length > 0) {
+            res.cookie('acount', {data: [email, rows[0].id]});
             res.json({
                 type: 'POST',
                 id: rows[0].id,
@@ -45,8 +50,6 @@ router.post('/login', function(req, res){
         else {
         res.json({
                 type: 'POST',
-                email: email,
-                password: hash,
                 loggedin: false
             });
         }
@@ -72,7 +75,7 @@ router.post('/signup', function(req, res){
             });
         }
         else {
-            res.cookie('Login', {data: [email, id]}, {httpOnly: true});
+            res.cookie('account', {data: [email, id]}, {httpOnly: true});
             res.json({
                 type: 'signup',
                 email: email,
@@ -83,5 +86,9 @@ router.post('/signup', function(req, res){
 
     connection.end();
 });
+
+router.get('/logout', function(req, res){
+    req.clearCookie('account');
+})
 
 module.exports = router;
