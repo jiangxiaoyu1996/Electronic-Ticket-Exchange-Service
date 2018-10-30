@@ -11,7 +11,8 @@ const profile = require('./routes/api/profile');
 const app = express();
 
 app.use(function(req,res, next){
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 })
@@ -37,8 +38,8 @@ function deleteDb(){
 function createDb(){
 	var connection = getMySQLConnection();
 	connection.query('CREATE TABLE event (event_name VARCHAR(255), event_ID VARCHAR(255), date VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, description TEXT, PRIMARY KEY (event_name, event_ID))', function(err, rows, fields){
-		connection.query('CREATE TABLE user (id VARCHAR(255), email TEXT, password TEXT, PRIMARY KEY (id))', function(err, rows, fields){
-			connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer TEXT, seller TEXT, PRIMARY KEY (id, event, row_Number, col_Number))', function(err, rows, fields){
+		connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), PRIMARY KEY (id, event, row_Number, col_Number, buyer, seller))', function(err, rows, fields){
+			connection.query('CREATE TABLE user (id VARCHAR(255), username TEXT, email TEXT, password TEXT, address TEXT, PRIMARY KEY (id))', function(err, rows, fields){
 				populateDb();
 			});
 		});;
@@ -56,14 +57,11 @@ function populateDb(){
 	'), (' + mysql.escape('Magnificent Mozart') + ', 1002, ' + mysql.escape('11/03/2018') + ', ' + mysql.escape('Santa Clara,CA') + ', 200, 20, 20, ' + mysql.escape('Mission College Chorus joins Mission College Symphony for a spectacular evening of Mozart, set in the beautiful Mission Santa Clara church at Santa Clara University.') + ')', function(err, rows, fields){
 	lock -= 1;
 	});
-	connection.query('INSERT INTO user (id, email, password) VALUES (1, ' + "'test@gmail.com'" + ', 123), (2, ' + "'user1@gmail.com'" + ', password), (500, ' + "'another1@gmail.com'" + ', ' + "'abc123456'" + ')', function(err, rows, fields){
+	connection.query('INSERT INTO user (id, username, email, password, address) VALUES (1, ' + "'test'" + ', ' + "'test@gmail.com'" + ', 123, ' + "'SanJose'" + '), (2, ' + "'time'" + ', ' + "'user1@gmail.com'" + ', ' + "'simple'" + ', ' + "'SanFrancisco'" + '), (500, NULL, ' + "'another1@gmail.com'" + ', ' + "'abc123456'" + ', ' + "'Sacramento'" + ')', function(err, rows, fields){
 	lock -= 1;
 	});
 	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller) VALUES (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 1, NULL, ' + "'test@gmail.com'" +
 	'), (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 20, 15, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ')' , function(err, rows, fields){
-	if(err){
-		console.log(err)
-	}
 	lock -= 1;
 	});
 	if(lock == 0){

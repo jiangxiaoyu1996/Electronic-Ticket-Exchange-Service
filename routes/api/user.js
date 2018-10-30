@@ -3,9 +3,6 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
-const passport = require('passport');
-const jwt = require('passport');
-
 
 //@route GET api/user/test
 //@desc Test user route
@@ -34,29 +31,27 @@ router.post('/login', function(req, res){
     connection = getMySQLConnection();
     connection.connect();
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
-        if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+        if(err){
+            res.json({
+                type: 'POST',
+                loggedin: false
+            });
+        }
+        else if(rows.length > 0) {
+            res.cookie('acount', {data: [email, rows[0].id]});
+            res.json({
+                type: 'POST',
+                id: rows[0].id,
+                email: rows[0].email,
+                password: rows[0].password,
+                loggedin: true
+            });
         }
         else {
-            // Check if the result is found or not
-            if(rows.length > 0) {
-                res.json({
-                    type: 'POST',
-                    id: rows[0].id,
-                    email: rows[0].email,
-                    password: rows[0].password,
-                    loggedin: true
-                });
-            }
-            else {
-                //Send back data provided, say wrong pass or id
-                res.json({
-                    type: 'POST',
-                    email: email,
-                    password: hash,
-                    loggedin: false
-                });
-            }
+        res.json({
+                type: 'POST',
+                loggedin: false
+            });
         }
     });
 
@@ -80,6 +75,7 @@ router.post('/signup', function(req, res){
             });
         }
         else {
+            res.cookie('account', {data: [email, id]}, {httpOnly: true});
             res.json({
                 type: 'signup',
                 email: email,
@@ -90,5 +86,9 @@ router.post('/signup', function(req, res){
 
     connection.end();
 });
+
+router.get('/logout', function(req, res){
+    req.clearCookie('account');
+})
 
 module.exports = router;
