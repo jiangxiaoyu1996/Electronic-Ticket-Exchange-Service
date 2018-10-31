@@ -20,6 +20,7 @@ class Header extends Component {
                 keyword: ''
 	    };
 	    this.handleSearch = this.handleSearch.bind(this);
+	    this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleSearch() {
@@ -41,7 +42,7 @@ class Header extends Component {
         ) : (
 		    <div className={classes.sectionDesktop}>
                 <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
-                <Button className={classes.sectionButton} href={"/"} onclick={this.handleLogout}>Logout</Button>
+                <Button className={classes.sectionButton} onClick={this.handleLogout} href={"/"}>Logout</Button>
 		    </div>
         );
 
