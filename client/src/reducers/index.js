@@ -6,10 +6,11 @@ import SearchReducer from './search/reducer';
 
 const rootReducer = (state, action) => {
     if(action.type === Action.LOG_OUT){
-        state = undefined
+        console.log("data: ", action.payload);
+        state = undefined;
     }
 
-    return appReducer(state, action)
+    return appReducer(state, action);
 };
 
 const appReducer = combineReducers({
