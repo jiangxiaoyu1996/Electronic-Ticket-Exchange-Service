@@ -10,7 +10,6 @@ import Login from "../../components/login";
 class LoginContainer extends Component{
     render(){
       if (this.props.user === '' || this.props.loggedin === false ){
-        //  console.log(this.login);
         return(
           <div>
               <HeaderContainer/>
