@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 //@route GET api/profile/test
 //@desc Test profile route
 //@access Public
+router.use(cookieParser);
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -34,21 +35,32 @@ var authenticate = function(req, res, next){
 }
 
 
+function getEmail(id){
+	connection.query()
+}
+
 
 router.get('/', function(req, res){
-	var email = req.cookie.data.email
-	var id = req.cookie.data.id
+	var id = req.cookie.session
+	var email
 	connection = getMySQLConnection();
 	connection.connect();
-	connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(email) + 'OR seller = ' + mysql.escape(id), function(err, rows, fields){
+	connection.query('SELECT * FROM user WHERE id = ' + mysql.escape(id), function(err, userProfile, fields){
 		if(err){
 			res.json({
 					type: 'profile',
 					result: false
 				})
 		}
+		else if (row.length < 0){
+			res.json({
+					type: 'profile',
+					result: false
+				})
+		}
 		else{
-			connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + 'AND id = ' + mysql.escape(id), function(err, userProfile, fields){
+			email = userProfile[0].email
+			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(email) + 'OR seller = ' + mysql.escape(id), function(err, transaction, fields){
 				if(err){
 					res.json({
 						type: 'profile',
@@ -58,7 +70,7 @@ router.get('/', function(req, res){
 				else{
 					res.json({
 						type: 'profile',
-						purchaseInfo: rows,
+						purchaseInfo: transaction,
 						userInfo: userProfile,
 						result: true
 					});
