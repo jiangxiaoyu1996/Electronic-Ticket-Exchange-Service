@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 
 import Header from "../../components/header/index";
 import { search } from "../../actions/search/action";
+import { logout } from "../../actions/logout/action";
 
 class HeaderContainer extends Component{
     render(){
         return(
 		    <div>
-		        <Header search={this.props.search} user={this.props.user}/>
+		        <Header search={this.props.search} logout={this.props.logout} user={this.props.user}/>
 		    </div>
         )
     }
@@ -20,4 +21,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { search })(HeaderContainer);
+export default connect(mapStateToProps, { search, logout })(HeaderContainer);

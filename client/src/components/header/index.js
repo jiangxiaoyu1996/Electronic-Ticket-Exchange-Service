@@ -26,6 +26,10 @@ class Header extends Component {
 	    this.props.search(this.state.keyword);
     }
 
+    handleLogout() {
+        this.props.logout();
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -37,7 +41,7 @@ class Header extends Component {
         ) : (
 		    <div className={classes.sectionDesktop}>
                 <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
-                <Button className={classes.sectionButton} href={"/"}>Logout</Button>
+                <Button className={classes.sectionButton} href={"/"} onclick={this.handleLogout}>Logout</Button>
 		    </div>
         );
 
