@@ -31,13 +31,13 @@ class Header extends Component {
 
         const btns = this.props.user === '' ? (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
+                <Button className={classes.sectionButton} href={"/sign-in"}>Sign up</Button>
                 <Button className={classes.sectionButton} href={"/login"}>Login</Button>
 		    </div>
         ) : (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton}>profile</Button>
-                <Button className={classes.sectionButton}>Logout</Button>
+                <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
+                <Button className={classes.sectionButton} href={"/"}>Logout</Button>
 		    </div>
         );
 
