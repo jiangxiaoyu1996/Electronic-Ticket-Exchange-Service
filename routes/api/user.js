@@ -87,8 +87,9 @@ router.post('/signup', function(req, res){
     connection.end();
 });
 
-router.get('/logout', function(req, res){
-    req.clearCookie('account');
+router.delete('/logout', function(req, res){
+    res.clearCookie('account');
+    res.json({'Logged out'});
 })
 
 module.exports = router;
