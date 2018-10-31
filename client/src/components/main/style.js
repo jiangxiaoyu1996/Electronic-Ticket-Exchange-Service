@@ -1,5 +1,3 @@
-import React from "react";
-
 export const styles = {
     image: {
         marginTop: 65,

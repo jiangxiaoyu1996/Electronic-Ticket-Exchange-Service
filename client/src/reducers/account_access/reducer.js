@@ -7,8 +7,6 @@ export default function(state = '', action){
         return action.payload.data.success === true ? action.payload.data.email : '';
     case ACTION.LOG_IN:
         return action.payload.data.loggedin === true ? action.payload.data.email : '';
-    case ACTION.SEARCH:
-        return action.payload.data.result;
     default:
         return state;
     }
