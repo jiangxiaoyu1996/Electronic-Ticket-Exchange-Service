@@ -38,7 +38,7 @@ router.post('/login', function(req, res){
             });
         }
         else if(rows.length > 0) {
-            res.cookie('acount', {data: [email, rows[0].id]});
+            res.cookie('session', rows[0].id, {httpOnly: true});
             res.json({
                 type: 'POST',
                 id: rows[0].id,
@@ -75,7 +75,7 @@ router.post('/signup', function(req, res){
             });
         }
         else {
-            res.cookie('account', {data: [email, id]}, {httpOnly: true});
+            res.cookie('session', id, {httpOnly: true});
             res.json({
                 type: 'signup',
                 email: email,
@@ -88,8 +88,8 @@ router.post('/signup', function(req, res){
 });
 
 router.delete('/logout', function(req, res){
-    res.clearCookie('account');
-    res.json({'Logged out'});
+    res.clearCookie('session');
+    res.json('Logged out');
 })
 
 module.exports = router;

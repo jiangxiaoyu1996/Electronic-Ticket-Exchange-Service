@@ -63,7 +63,6 @@ router.post('/event', function(req, res){
 	connection = getMySQLConnection();
 	connection.query('SELECT * FROM event WHERE event_name = ' + "'" + name + "'", function(err, rows, fields){
 		if(err){
-			console.log(err)
 			res.json({
 				type: 'event',
 				result: false
