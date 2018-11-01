@@ -8,71 +8,76 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from "@material-ui/core/es/Button/Button";
+
 import { withStyles } from '@material-ui/core/styles';
 
 import { styles } from "./style";
 
 class Header extends Component {
     constructor(props){
-	super(props);
-	this.state = {
-            keyword: ''
-	};
-	this.handleSearch = this.handleSearch.bind(this);
+	    super(props);
+	    this.state = {
+                keyword: ''
+	    };
+	    this.handleSearch = this.handleSearch.bind(this);
+	    this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleSearch() {
-	this.props.search(this.state.keyword);
+	    this.props.search(this.state.keyword);
+    }
+
+    handleLogout() {
+        this.props.logout();
     }
 
     render() {
         const { classes } = this.props;
 
         const btns = this.props.user === '' ? (
-		<div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/sign-in"}>Sign-in</Button>
+		    <div className={classes.sectionDesktop}>
+                <Button className={classes.sectionButton} href={"/sign-in"}>Sign up</Button>
                 <Button className={classes.sectionButton} href={"/login"}>Login</Button>
-		</div>
+		    </div>
         ) : (
-		<div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton}>profile</Button>
-                <Button className={classes.sectionButton}>Logout</Button>
-		</div>
+		    <div className={classes.sectionDesktop}>
+                <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
+                <Button className={classes.sectionButton} onClick={this.handleLogout} href={"/"}>Logout</Button>
+		    </div>
         );
 
         return (
 		<div className={classes.root}>
-                <AppBar className={classes.appBar}>
+            <AppBar className={classes.appBar}>
                 <Toolbar position="static">
-                <IconButton className={classes.menuButton} href="/">
-                <MenuIcon />
-                </IconButton>
-                <Typography className={classes.title} noWrap>
-                ETES
-            </Typography>
-                <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                <SearchIcon />
-                </div>
-                <InputBase
-            placeholder="Search events..."
-            classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-            }}
-            onChange = {(event) => this.setState({keyword:event.target.value})}
-            onKeyPress = {(event) => {
-                if (event.key === 'Enter') {
-                    this.handleSearch();
-                }
-            }}
-
-                />
-                </div>
-                <div className={classes.grow} />
-                {btns}
-            </Toolbar>
-                </AppBar>
+                    <IconButton className={classes.menuButton} href="/">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography className={classes.title} noWrap>
+                        ETES
+                    </Typography>
+                    <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                            <SearchIcon />
+                        </div>
+                        <InputBase
+                            placeholder="Search events..."
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput,
+                            }}
+                            onChange = {(event) => this.setState({keyword:event.target.value})}
+                            onKeyPress = {(event) => {
+                                if (event.key === 'Enter') {
+                                    this.handleSearch();
+                                }
+                            }}
+                        />
+                    </div>
+                    <div className={classes.grow} />
+                    {btns}
+                </Toolbar>
+            </AppBar>
 		</div>
         );
     }

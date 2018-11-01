@@ -1,5 +1,3 @@
-import React from "react";
-
 export const styles = ({
     container: {
         marginTop: 155,

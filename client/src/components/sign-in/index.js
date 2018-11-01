@@ -94,6 +94,7 @@ class SignIn extends Component {
                         <FormControl>
                         <TextField
                             label="Password"
+                            type="password"
                             margin="normal"
                             variant="outlined"
                             onChange = {(event) => this.setState({password: event.target.value})}
@@ -105,6 +106,7 @@ class SignIn extends Component {
                         <FormControl>
                         <TextField
                             label="Confirm Password"
+                            type="password"
                             margin="normal"
                             variant="outlined"
                             onChange = {(event) => this.setState({password2: event.target.value})}
