@@ -31,6 +31,8 @@ function search(text){
 	return filterStr
 }
 
+
+
 router.post('/search', function(req, res){
 	const index = search(req.body);
 	connection = getMySQLConnection();
@@ -76,6 +78,31 @@ router.post('/event', function(req, res){
 				type: 'event',
 				result: events
 			})
+		}
+		else{
+			res.json({
+				type: 'event',
+				result: false
+			});
+		}
+	});
+	connection.end()
+})
+
+router.get('/event', function(req, res){
+	connection = getMySQLConnection();
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, CONCAT(row_Number, ' + "','" + ', col_Number) AS ticket_location FROM event,ticket WHERE event_name = event', function(err, event, fields){
+		if(err){
+			res.json({
+				type: 'event',
+				result: false
+			});
+		}
+		else if(event.length > 0){
+			res.json({
+				type: 'event',
+				result: event
+			});
 		}
 		else{
 			res.json({
