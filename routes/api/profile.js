@@ -35,11 +35,6 @@ var authenticate = function(req, res, next){
 }
 
 
-function getEmail(id){
-	connection.query()
-}
-
-
 router.get('/', function(req, res){
 	var id = req.cookie.session
 	var email
