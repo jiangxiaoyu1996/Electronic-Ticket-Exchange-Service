@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const cryptoRandomString = require('crypto-random-string');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -31,6 +32,56 @@ function search(text){
 	return filterStr
 }
 
+router.post('/addTicket', function(req, res){
+	var id = cryptoRandomString(20);
+	var name = req.body.name
+	var row = req.body.row
+	var col = req.body.col
+	var buyer = req.body.buyer
+	var seller = req.body.seller
+	connection = getMySQLConnection();
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', ' + "'" + buyer + "'" + ', ' + "'" + seller + "'" + ')', function(err, rows, fields){
+		if(err){
+			res.json({
+				type: 'addTicket',
+				result: false
+			})
+		}
+		else{
+			res.json({
+				type: 'addTicket',
+				result: true
+			})
+		}
+	})
+	connection.end()
+})
+
+router.post('/addEvent', function(req,res){
+	var id = cryptoRandomString(20);
+	var name = req.body.name
+	var date = req.body.date
+	var location = req.body.location
+	var row = req.body.row
+	var col = req.body.col
+	var description = req.body.description
+	connection = getMySQLConnection();
+	connection.query('INSERT INTO event (event_name, event_ID, date, location, ticket_amount, max_rows, max_cols, description) VALUES (' + "'" + name + "'" + ', ' + id + ', ' + "'" + date + "'" + ', ' + "'" + location + "'" + ', ' + mysql.escape(ticket_amount) + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', ' + "'" + description + "'" + ')', function(err, rows, fields){
+		if(err){
+			res.json({
+				type: 'addEvent',
+				result: false
+			})
+		}
+		else{
+			res.json({
+				type: 'addEvent',
+				result: true
+			})
+		}
+	})
+	connection.end()
+})
 
 
 router.post('/search', function(req, res){
