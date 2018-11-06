@@ -7,6 +7,7 @@ import { logout } from "../../actions/logout/action";
 
 class HeaderContainer extends Component{
     render(){
+        console.log("test: ", this.props.test);
         return(
 		    <div>
 		        <Header search={this.props.search} logout={this.props.logout} user={this.props.user}/>
@@ -17,7 +18,8 @@ class HeaderContainer extends Component{
 
 function mapStateToProps(state){
     return {
-	    user: state.user
+	    user: state.user,
+        test: state
     }
 }
 

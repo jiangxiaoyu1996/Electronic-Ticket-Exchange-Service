@@ -25,7 +25,7 @@ function getMySQLConnection() {
 }
 
 var authenticate = function(req, res, next){
-	if(req.cookies.name != null){
+	if(req.cookies != null){
 		next()
 	}
 	res.json({
@@ -35,14 +35,8 @@ var authenticate = function(req, res, next){
 }
 
 
-function getEmail(id){
-	connection.query()
-}
-
-
 router.get('/', function(req, res){
-	var id = req.cookie.session
-	var email
+	var id = req.cookies
 	connection = getMySQLConnection();
 	connection.connect();
 	connection.query('SELECT * FROM user WHERE id = ' + mysql.escape(id), function(err, userProfile, fields){

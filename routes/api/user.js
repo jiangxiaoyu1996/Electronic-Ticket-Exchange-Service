@@ -40,8 +40,9 @@ router.post('/login', function(req, res){
             });
         }
         else if(rows.length > 0) {
+
             if(bcrypt.compareSync(password, rows[0].password)){
-                res.cookie('session', rows[0].id, {httpOnly: true});
+                res.cookie('session', rows[0].id, {httpOnly: true, encode: String});
                 res.json({
                     type: 'POST',
                     id: rows[0].id,
@@ -87,7 +88,8 @@ router.post('/signup', function(req, res){
         }
         else {
 
-            res.cookie('session', id, {httpOnly: true});
+            res.cookie('session', id, {httpOnly: true, encode: String});
+
             res.json({
                 type: 'signup',
                 email: email,
