@@ -34,7 +34,7 @@ class ProfileContent extends Component {
 
         return(
             <div className={classes.container}>
-                <Paper>
+                <Paper style={{boxShadow: "none"}} >
                     {temp}
                 </Paper>
             </div>

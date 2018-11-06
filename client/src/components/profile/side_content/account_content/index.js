@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from "@material-ui/core/styles/index";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 import {styles} from "../styles";
 
@@ -9,8 +10,16 @@ class AccountContent extends Component{
         const { classes } = this.props;
 
         return (
-            <div>
-                This is account information.
+            <div className={classes.content}>
+                <Typography style={{margin: 20}}>
+                    Email: TBD
+                </Typography>
+                <Typography style={{margin: 20}}>
+                    Display Name: TBD
+                </Typography>
+                <Typography style={{margin: 20}}>
+                    Address: TBD
+                </Typography>
             </div>
         );
     }

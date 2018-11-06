@@ -8,9 +8,9 @@ import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProg
 
 class ProfileContainer extends Component{
 
-    componentDidMount(){
+    /*componentDidMount(){
         this.props.getProfile();
-    }
+    }*/
 
     render(){
         if(this.props.profile === {} || this.props.profile === undefined){

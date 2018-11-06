@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from "@material-ui/core/styles/index";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 import {styles} from "./styles";
-import Typography from "@material-ui/core/es/Typography/Typography";
+
 
 class ProfileWelcome extends Component{
     render(){

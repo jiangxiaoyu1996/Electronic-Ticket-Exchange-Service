@@ -23,7 +23,7 @@ class ProfileNav extends Component {
 
         return(
             <div className={classes.container}>
-                <Paper>
+                <Paper style={{boxShadow: "none"}}>
                     <MenuList>
                         {this.renderMenuItem()}
                     </MenuList>
