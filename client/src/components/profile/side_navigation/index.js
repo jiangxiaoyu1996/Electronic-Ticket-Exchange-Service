@@ -8,28 +8,24 @@ import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 import MenuList from "@material-ui/core/es/MenuList/MenuList";
 
 class ProfileNav extends Component {
+    renderMenuItem(){
+        return this.props.menu.map((menuItem) => {
+            return (
+                <MenuItem onClick={event => this.props.updateCurrentNav(event, menuItem)}>
+                    {menuItem}
+                </MenuItem>
+            );
+        })
+    }
+
     render(){
         const { classes } = this.props;
 
         return(
-            <div>
-                <Paper style={{width: "30%", height: "100%"}}>
+            <div className={classes.container}>
+                <Paper>
                     <MenuList>
-                        <MenuItem style={{selected: "false"}}>
-                            Hi, {this.props.user}
-                        </MenuItem>
-                        <MenuItem>
-                            My Account
-                        </MenuItem>
-                        <MenuItem>
-                            Post Tickets
-                        </MenuItem>
-                        <MenuItem>
-                            Selling Record
-                        </MenuItem>
-                        <MenuItem>
-                            Purchase Record
-                        </MenuItem>
+                        {this.renderMenuItem()}
                     </MenuList>
                 </Paper>
             </div>

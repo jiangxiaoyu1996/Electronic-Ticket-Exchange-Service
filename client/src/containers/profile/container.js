@@ -23,44 +23,10 @@ class ProfileContainer extends Component{
                 </div>
             );
         }else{
-            const p = {
-                "SellRecord": [
-                    {
-                        "event": "Event Three",
-                        "description": "Here is the description",
-                        "row": "1",
-                        "column": "10",
-                    },
-                    {
-                        "event": "Event Four",
-                        "description": "Here is the description",
-                        "row": "2",
-                        "column": "9",
-                    }
-                ],
-                "PurchaseRecord": [
-                    {
-                        "event": "Event One",
-                        "description": "Here is the description",
-                        "row": "1",
-                        "column": "10",
-                    },
-                    {
-                        "event": "Event Two",
-                        "description": "Here is the description",
-                        "row": "2",
-                        "column": "9",
-                    }
-                ],
-                "UserInfo": {
-                    "email": "charlene@gmail.com",
-                    "display_name": "Charlene"
-                }
-            };
             return(
                 <div>
                     <HeaderContainer />
-                    <Profile user={this.props.user} profile={p}/>
+                    <Profile user={this.props.user}/>
                 </div>
             )
         }
@@ -75,3 +41,38 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, { getProfile })(ProfileContainer);
+
+const p = {
+    "SellRecord": [
+        {
+            "event": "Event Three",
+            "description": "Here is the description",
+            "row": "1",
+            "column": "10",
+        },
+        {
+            "event": "Event Four",
+            "description": "Here is the description",
+            "row": "2",
+            "column": "9",
+        }
+    ],
+    "PurchaseRecord": [
+        {
+            "event": "Event One",
+            "description": "Here is the description",
+            "row": "1",
+            "column": "10",
+        },
+        {
+            "event": "Event Two",
+            "description": "Here is the description",
+            "row": "2",
+            "column": "9",
+        }
+    ],
+    "UserInfo": {
+        "email": "charlene@gmail.com",
+        "display_name": "Charlene"
+    }
+};
