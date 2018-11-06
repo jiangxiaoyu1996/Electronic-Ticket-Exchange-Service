@@ -29,7 +29,7 @@ class LoginContainer extends Component{
 
 function mapStateToProps(state){
     return {
-        user: state.user
+        result: state.result
     }
 }
 

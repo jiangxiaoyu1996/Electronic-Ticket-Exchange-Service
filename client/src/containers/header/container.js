@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Redirect from "react-router-dom/es/Redirect";
 
 import Header from "../../components/header/index";
 import { search } from "../../actions/search/action";
 
 class HeaderContainer extends Component{
     render(){
-        return(
-		<div>
-		<Header search={this.props.search} user={this.props.user}/>
-		</div>
-        )
+	if (typeof this.props.result === 'undefined' || this.props.result == '' ) {
+	    return(
+		    <div>
+		    <Header search={this.props.search} result={this.props.result}/>
+		    </div>
+            )
+ 	}
+	else {
+          return(
+              <div>
+                  <Redirect to={'/search'} />
+              </div>
+          )
+	}
     }
 }
 
 function mapStateToProps(state){
     return {
-	user: state.user
+	result: state.result
     }
 }
 

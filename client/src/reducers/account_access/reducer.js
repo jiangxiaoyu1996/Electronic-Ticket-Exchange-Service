@@ -4,11 +4,11 @@ export default function(state = '', action){
     console.log("promise:", action.payload);
     switch(action.type){
     case ACTION.SIGN_IN:
-        return action.payload.data.success === true ? action.payload.data.email : '';
+        return action.payload.data.success === true  ? action.payload.data.email : '';
     case ACTION.LOG_IN:
         return action.payload.data.loggedin === true ? action.payload.data.email : '';
     case ACTION.SEARCH:
-        return action.payload.data.result;
+        return action.payload.data.result === true   ? JSON.stringify(action.payload.data.values) : '';
     default:
         return state;
     }
