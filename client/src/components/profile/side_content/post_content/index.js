@@ -17,7 +17,7 @@ class PostTicketContent extends Component{
 
     handleChange = name => event => {
         this.setState({
-            selectedEvent : event.target.value,
+            [name] : event.target.value,
         });
     };
 
