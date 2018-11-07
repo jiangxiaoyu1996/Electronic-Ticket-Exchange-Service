@@ -12,20 +12,28 @@ import Button from "@material-ui/core/es/Button/Button";
 import { withStyles } from '@material-ui/core/styles';
 
 import { styles } from "./style";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Link from "react-router-dom/es/Link";
 
 class Header extends Component {
     constructor(props){
 	    super(props);
 	    this.state = {
-                keyword: ''
+                keyword: '',
+		event_filter:  'event_name'
 	    };
 	    this.handleSearch = this.handleSearch.bind(this);
+	    this.handleFilter = this.handleFilter.bind(this);
 	    this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleSearch() {
-	    this.props.search(this.state.keyword);
+	this.props.search(this.state.event_filter, this.state.keyword);
+    }
+
+    handleFilter(event) {
+	this.setState ( { event_filter : event.target.value} );
     }
 
     handleLogout() {
@@ -74,7 +82,20 @@ class Header extends Component {
                                 }
                             }}
                         />
-                    </div>
+                   </div>
+		   <Select
+	              value={this.state.event_filter}
+	              onChange={this.handleFilter}
+	              inputProps={{
+		          name: 'event_filter',
+			  id  : 'event_id',
+	             }}
+	           >
+		    <MenuItem value={'event_name'}><em>Event Name</em></MenuItem>
+		    <MenuItem value={'location'}>Event Location</MenuItem>
+		    <MenuItem value={'event_date'}>Event Date</MenuItem>
+		    <MenuItem value={'event_ID'}>Event ID</MenuItem>
+		  </Select>
                     <div className={classes.grow} />
                     {btns}
                 </Toolbar>
