@@ -34,6 +34,20 @@ var authenticate = function(req, res, next){
 	})
 }
 
+async function purchaseInfo(ticket, event){
+	var array = ticket
+	var names = []
+	for(var i in event){
+		names.push(event[i].event_name)
+	}
+	for(var i in ticket){
+		var index = names.indexOf(ticket[i].event)
+		array[i].date = event[index].date
+		array[i].location = event[index].location
+	}
+	return array
+}
+
 
 router.get('/', function(req, res){
 	var id = req.cookies['session']
@@ -53,20 +67,44 @@ router.get('/', function(req, res){
 				})
 		}
 		else{
-			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(userProfile[0].email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(userProfile[0].email) + 'OR seller = ' + mysql.escape(id), function(err, transaction, fields){
+			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(userProfile[0].email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(userProfile[0].email) + 'OR seller = ' + mysql.escape(id), function(err, ticket, fields){
 				if(err){
 					res.json({
 						type: 'profile',
 						result: false
 					});
 				}
-				else{
+				else if (ticket.length < 0){
 					res.json({
 						type: 'profile',
-						purchaseInfo: transaction,
-						userInfo: userProfile,
-						result: true
+						result: false
 					});
+				}
+				else{
+					connection.query('SELECT * FROM event', function(err, event, fields){
+						if(err){
+							res.json({
+								type: 'profile',
+								result: false
+							});
+						}
+						else{
+							purchaseInfo(ticket, event).then(result =>{
+								res.json({
+									type: 'profile',
+									purchaseInfo: result,
+									userInfo: userProfile,
+									result: true
+								});
+							}).catch(err => {
+								console.log(err)
+								res.json({
+									type: 'profile',
+									result: false
+								});
+							})
+						}
+					})
 				}
 			});
 		}
