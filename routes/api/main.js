@@ -54,6 +54,31 @@ function search(text){
 	return filterStr
 }
 
+function calcRoute(startX, startY, endX, endY) {
+    var directionsService = new google.maps.DirectionsService();
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+    var start = new google.maps.LatLng(startX, startY);
+    var end = new google.maps.LatLng(endX, endY);
+    var mapOptions = {
+        zoom: 14,
+        center: start
+
+    }
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    directionsDisplay.setMap(map);
+    var request = {
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING'
+    };
+    directionsService.route(request, function(response, status) {
+        if (status == 'OK') {
+            directionsDisplay.setDirections(response);
+        }
+    });
+}
+
+
 router.post('/addTicket', function(req, res){
 	var id = cryptoRandomString(20);
 	var name = req.body.name
