@@ -37,7 +37,7 @@ function deleteDb(){
 }
 
 function createDb(){
-	var connection = getMySQLConnection();
+	var connection = getMySQLConnection();	
 	connection.query('CREATE TABLE event (event_name VARCHAR(255), event_ID VARCHAR(255), date VARCHAR(255), location VARCHAR(255), ticket_amount INTEGER, max_rows INTEGER, max_cols INTEGER, description TEXT, PRIMARY KEY (event_name, event_ID))', function(err, rows, fields){
 		connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), PRIMARY KEY (id, event, row_Number, col_Number, buyer, seller))', function(err, rows, fields){
 			connection.query('CREATE TABLE user (id VARCHAR(255), username TEXT, email TEXT, password TEXT, address TEXT, PRIMARY KEY (id))', function(err, rows, fields){
