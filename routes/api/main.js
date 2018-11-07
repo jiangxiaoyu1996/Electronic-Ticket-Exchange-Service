@@ -144,7 +144,6 @@ router.post('/event', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-
 			res.json({
 				type: 'event',
 				result: events

@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker';
 import SignIn from "./containers/sign-in/container";
 import Login from "./containers/login/container";
 import Profile from "./containers/profile/container";
+import Search from "./containers/search/container";
 import Main from "./components/main";
 import reducers from './reducers';
 
@@ -21,6 +22,7 @@ const myApp = (
                 <div>
                     <Switch>
                         <Route path="/profile" component={Profile}/>
+                        <Route path="/search" component={Search}/>
                         <Route path="/sign-in" component={SignIn}/>
                         <Route path="/login" component={Login}/>
                         <Route path="/" component={Main}/>
