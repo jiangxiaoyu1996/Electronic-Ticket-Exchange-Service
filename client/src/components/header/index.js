@@ -31,11 +31,7 @@ class Header extends Component {
     handleSearch() {
 	      this.props.search(this.state.event_filter, this.state.keyword);
     }
-
-    handleFilter(event) {
-	      this.setState ( { event_filter : event.target.value} );
-    }
-
+	
     handleFilter(event) {
 	this.setState ( { event_filter : event.target.value} );
     }
