@@ -13,6 +13,28 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.get('/test', (req, res) => res.json({msg: 'Main works'}));
 
 
+async function createArray(event){
+	var location = []
+	var array = []
+	var previous = 0
+	var index = 0
+	for(var i in event){
+		if(event[previous].event_name == event[i].event_name){
+			location.push([event[i].row_Number, event[i].col_Number])
+			index++
+		}
+		else{
+			array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
+			previous = i
+			index++
+			location = []
+			location.push([event[i].row_Number, event[i].col_Number])
+		}
+	}
+	array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
+	return array
+}
+
 function getMySQLConnection() {
     return mysql.createConnection({
         host     : 'localhost',
@@ -122,9 +144,7 @@ router.post('/event', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-			for(i = 0; i < rows.length; i++){
-				events.push(rows[i]);
-			}
+			
 			res.json({
 				type: 'event',
 				result: events
@@ -142,18 +162,27 @@ router.post('/event', function(req, res){
 
 router.get('/event', function(req, res){
 	connection = getMySQLConnection();
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, CONCAT(row_Number, ' + "','" + ', col_Number) AS ticket_location FROM event,ticket WHERE event_name = event', function(err, event, fields){
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
 		if(err){
+			console.log(err	)
 			res.json({
 				type: 'event',
 				result: false
 			});
 		}
 		else if(event.length > 0){
-			res.json({
-				type: 'event',
-				result: event
-			});
+			createArray(event).then(result =>{
+				res.json({
+					type: 'event',
+					result: result
+				});
+			}).catch(err => {
+				console.log(err)
+				res.json({
+					type: 'event',
+					result: false
+				});	
+			})
 		}
 		else{
 			res.json({
