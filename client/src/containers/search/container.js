@@ -64,7 +64,7 @@ class SearchContainer extends Component{
         return(
             <div>
   	      <div>
-		<Header search={this.props.search} result={this.props.result}/>
+		<Header search={this.props.search} result={this.props.result}  user={this.props.user}/>
 	      </div>
               <div style={{marginTop: 70}}>
 		{this.parseTableData()>0?"Seach Results":"Your search did not match anything."} <br/>
@@ -86,7 +86,8 @@ class SearchContainer extends Component{
 
 function mapStateToProps(state){
     return {
-        result: state.result
+        result: state.result,
+	user  : state.user
     }
 }
 
