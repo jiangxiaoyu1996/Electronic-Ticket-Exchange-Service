@@ -77,24 +77,48 @@ router.post('/signup', function(req, res){
     var hash = bcrypt.hashSync(password, salt);
     connection = getMySQLConnection();
     connection.connect();
-    connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(hash) + ')', function(err, rows, fields) {
+    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email), function(err, rows, fields) {
         if (err) {
             res.json({
-            	type:'signup',
+                type:'signup',
                 email: email,
-            	success: false
+                success: false
             });
+        }
+        else if(rows.length > 0) {
+            res.json({
+                type:'signup',
+                email: email,
+                success: false
+            });
+
         }
         else {
+            connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(hash) + ')', function(err, rows, fields) {
+                if (err) {
+                    res.json({
+                        type:'signup',
+                        email: email,
+                        success: false
+                    });
+                }
+                else {
 
-            res.cookie('session', id, {httpOnly: true});
-            res.json({
-                type: 'signup',
-                email: email,
-                success: true
+                    res.cookie('session', id, {httpOnly: true});
+                    res.json({
+                        type: 'signup',
+                        email: email,
+                        success: true
+                    });
+                }
             });
         }
+
+
+
     });
+
+
 
     connection.end();
 });
@@ -103,5 +127,7 @@ router.delete('/logout', function(req, res){
     res.clearCookie('session');
     res.json('Logged out');
 })
+
+
 
 module.exports = router;
