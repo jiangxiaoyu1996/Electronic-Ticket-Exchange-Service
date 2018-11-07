@@ -38,6 +38,7 @@ class Profile extends Component {
                         currentNav={this.state.currentNav}
                         userInfo={this.props.userInfo}
                         sellingRecord={this.props.sellingRecord}
+                        purchaseRecord={this.props.purchaseRecord}
                     />
                 </div>
             </div>

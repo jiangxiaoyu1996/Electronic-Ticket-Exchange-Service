@@ -35,6 +35,7 @@ class ProfileContainer extends Component{
                         user={this.props.user}
                         userInfo={this.props.profile.UserInfo[0]}
                         sellingRecord={findSellingRecord(this.props.profile.Record, this.props.user)}
+                        purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.user)}
                     />
                 </div>
             )
@@ -45,6 +46,12 @@ class ProfileContainer extends Component{
 function findSellingRecord(jsonArray, target){
     return jsonArray.filter((record) => {
         return record.seller === target;
+    });
+}
+
+function findPurchaseRecord(jsonArray, target){
+    return jsonArray.filter((record) => {
+        return record.buyer === target;
     });
 }
 
