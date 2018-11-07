@@ -20,7 +20,7 @@ async function createArray(event){
 	var index = 0
 	for(var i in event){
 		if(event[previous].event_name == event[i].event_name){
-			location.push([event[i].row_Number, event[i].col_Number])
+			location.push([event[i].row_Number, event[i].col_Number, event[previous].price])
 			index++
 		}
 		else{
@@ -28,7 +28,7 @@ async function createArray(event){
 			previous = i
 			index++
 			location = []
-			location.push([event[i].row_Number, event[i].col_Number])
+			location.push([event[i].row_Number, event[i].col_Number, event[previous].price])
 		}
 	}
 	array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
@@ -59,11 +59,12 @@ router.post('/addTicket', function(req, res){
 	var name = req.body.name
 	var row = req.body.row
 	var col = req.body.col
-	var buyer = req.body.buyer
 	var seller = req.body.seller
+	var price = req.body.price
 	connection = getMySQLConnection();
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', ' + "'" + buyer + "'" + ', ' + "'" + seller + "'" + ')', function(err, rows, fields){
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', NULL, ' + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
+			console.log(err)
 			res.json({
 				type: 'addTicket',
 				result: false
@@ -161,9 +162,8 @@ router.post('/event', function(req, res){
 
 router.get('/event', function(req, res){
 	connection = getMySQLConnection();
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
 		if(err){
-			console.log(err	)
 			res.json({
 				type: 'event',
 				result: false
@@ -176,7 +176,6 @@ router.get('/event', function(req, res){
 					result: result
 				});
 			}).catch(err => {
-				console.log(err)
 				res.json({
 					type: 'event',
 					result: false
