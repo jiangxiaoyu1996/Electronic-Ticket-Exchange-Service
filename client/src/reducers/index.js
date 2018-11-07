@@ -17,7 +17,7 @@ const rootReducer = (state, action) => {
 const appReducer = combineReducers({
     user: AccountReducer,
     profile: ProfileReducer,
-    search: SearchReducer
+    result: SearchReducer
 });
 
 export default rootReducer;
