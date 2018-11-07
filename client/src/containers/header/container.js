@@ -11,7 +11,7 @@ class HeaderContainer extends Component{
 	if (typeof this.props.result === 'undefined' || this.props.result == '' ) {
 	    return(
 		    <div>
-		    <Header search={this.props.search} result={this.props.result}/>
+		    <Header search={this.props.search} result={this.props.result} user={this.props.user}/>
 		    </div>
             )
  	}
@@ -27,7 +27,8 @@ class HeaderContainer extends Component{
 
 function mapStateToProps(state){
     return {
-	result: state.result
+	result: state.result,
+	user  : state.user
     }
 }
 
