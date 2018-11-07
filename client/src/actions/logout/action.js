@@ -9,7 +9,7 @@ export function logout(){
     const request = axios.delete(`${ROOT_URL}/logout`);
 
     return {
-        type: ACTION.SIGN_IN,
+        type: ACTION.LOG_OUT,
         payload: request
     };
 }
