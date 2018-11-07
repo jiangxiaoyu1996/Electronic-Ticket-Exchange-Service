@@ -144,7 +144,6 @@ router.post('/event', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-			
 			res.json({
 				type: 'event',
 				result: events
@@ -181,7 +180,7 @@ router.get('/event', function(req, res){
 				res.json({
 					type: 'event',
 					result: false
-				});	
+				});
 			})
 		}
 		else{

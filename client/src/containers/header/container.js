@@ -11,7 +11,7 @@ class HeaderContainer extends Component{
 	if (typeof this.props.result === 'undefined' || this.props.result == '' ) {
 	    return(
 		    <div>
-		    <Header search={this.props.search} result={this.props.result} user={this.props.user}/>
+		        <Header search={this.props.search} logout={this.props.logout} user={this.props.user} result={this.props.result}/
 		    </div>
             )
  	}

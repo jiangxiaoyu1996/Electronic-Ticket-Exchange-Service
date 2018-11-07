@@ -14,6 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { styles } from "./style";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Link from "react-router-dom/es/Link";
 
 class Header extends Component {
     constructor(props){
@@ -28,7 +29,11 @@ class Header extends Component {
     }
 
     handleSearch() {
-	this.props.search(this.state.event_filter, this.state.keyword);
+	      this.props.search(this.state.event_filter, this.state.keyword);
+    }
+
+    handleFilter(event) {
+	      this.setState ( { event_filter : event.target.value} );
     }
 
     handleFilter(event) {
@@ -44,13 +49,13 @@ class Header extends Component {
 
         const btns = this.props.user === '' ? (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/sign-in"}>Sign up</Button>
-                <Button className={classes.sectionButton} href={"/login"}>Login</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
 		    </div>
         ) : (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
-                <Button className={classes.sectionButton} onClick={this.handleLogout} href={"/"}>Logout</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/profile"}>Profile</Button>
+                <Button className={classes.sectionButton} onClick={this.handleLogout} component={Link} to={"/"}>Logout</Button>
 		    </div>
         );
 
@@ -58,7 +63,7 @@ class Header extends Component {
 		<div className={classes.root}>
             <AppBar className={classes.appBar}>
                 <Toolbar position="static">
-                    <IconButton className={classes.menuButton} href="/">
+                    <IconButton className={classes.menuButton}  component={Link} to="/">
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} noWrap>
