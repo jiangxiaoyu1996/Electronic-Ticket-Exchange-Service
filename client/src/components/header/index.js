@@ -92,7 +92,7 @@ class Header extends Component {
 	           >
 		    <MenuItem value={'event_name'}><em>Event Name</em></MenuItem>
 		    <MenuItem value={'location'}>Event Location</MenuItem>
-		    <MenuItem value={'event_date'}>Event Date</MenuItem>
+		    <MenuItem value={'date'}>Event Date</MenuItem>
 		    <MenuItem value={'event_ID'}>Event ID</MenuItem>
 		  </Select>
                     <div className={classes.grow} />
