@@ -8,12 +8,17 @@ import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProg
 
 class ProfileContainer extends Component{
 
-    /*componentDidMount(){
+    componentDidMount(){
         this.props.getProfile();
-    }*/
+    }
 
     render(){
-        if(this.props.profile === {} || this.props.profile === undefined){
+        console.log(this.props.profile);
+        console.log("User in profile: ", this.props.user);
+        if(this.props.profile === {
+                "UserInfo": [{}],
+                "Record": [{}]
+            } || this.props.profile === undefined){
             return (
                 <div>
                     <HeaderContainer />
@@ -26,11 +31,21 @@ class ProfileContainer extends Component{
             return(
                 <div>
                     <HeaderContainer />
-                    <Profile user={this.props.user}/>
+                    <Profile
+                        user={this.props.user}
+                        userInfo={this.props.profile.UserInfo[0]}
+                        sellingRecord={findSellingRecord(this.props.profile.Record, this.props.user)}
+                    />
                 </div>
             )
         }
     }
+}
+
+function findSellingRecord(jsonArray, target){
+    return jsonArray.filter((record) => {
+        return record.seller === target;
+    });
 }
 
 function mapStateToProps(state){
@@ -41,38 +56,3 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, { getProfile })(ProfileContainer);
-
-const p = {
-    "SellRecord": [
-        {
-            "event": "Event Three",
-            "description": "Here is the description",
-            "row": "1",
-            "column": "10",
-        },
-        {
-            "event": "Event Four",
-            "description": "Here is the description",
-            "row": "2",
-            "column": "9",
-        }
-    ],
-    "PurchaseRecord": [
-        {
-            "event": "Event One",
-            "description": "Here is the description",
-            "row": "1",
-            "column": "10",
-        },
-        {
-            "event": "Event Two",
-            "description": "Here is the description",
-            "row": "2",
-            "column": "9",
-        }
-    ],
-    "UserInfo": {
-        "email": "charlene@gmail.com",
-        "display_name": "Charlene"
-    }
-};

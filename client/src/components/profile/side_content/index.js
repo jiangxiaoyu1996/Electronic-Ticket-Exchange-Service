@@ -17,7 +17,7 @@ class ProfileContent extends Component {
         let temp = null;
         switch(this.props.currentNav){
             case ComponentString.MY_ACCOUNT:
-                temp = <AccountContent/>;
+                temp = <AccountContent userInfo={this.props.userInfo}/>;
                 break;
             case ComponentString.POST_TICKET:
                 temp = <PostTicketContent/>;
@@ -26,7 +26,7 @@ class ProfileContent extends Component {
                 temp = <PurchaseContent/>;
                 break;
             case ComponentString.SELLING_HISTORY:
-                temp = <SellingContent/>;
+                temp = <SellingContent sellingRecord={this.props.sellingRecord}/>;
                 break;
             default:
                 console.log("Unsupported navigation menu in profile page");

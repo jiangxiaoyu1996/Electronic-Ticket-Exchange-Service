@@ -9,16 +9,14 @@ class AccountContent extends Component{
     render(){
         const { classes } = this.props;
 
+        console.log("user: ", this.props.userInfo);
         return (
             <div className={classes.content}>
                 <Typography style={{margin: 20}}>
-                    Email: TBD
+                    Email: {this.props.userInfo.email}
                 </Typography>
                 <Typography style={{margin: 20}}>
-                    Display Name: TBD
-                </Typography>
-                <Typography style={{margin: 20}}>
-                    Address: TBD
+                    Address: {this.props.userInfo.address}
                 </Typography>
             </div>
         );

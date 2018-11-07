@@ -30,8 +30,15 @@ class Profile extends Component {
             <div className={classes.container}>
                 <ProfileWelcome user={this.props.user}/>
                 <div className={classes.navigation}>
-                    <ProfileNav menu={navMenu} updateCurrentNav={this.updateCurrentNav}/>
-                    <ProfileContent currentNav={this.state.currentNav}/>
+                    <ProfileNav
+                        menu={navMenu}
+                        updateCurrentNav={this.updateCurrentNav}
+                    />
+                    <ProfileContent
+                        currentNav={this.state.currentNav}
+                        userInfo={this.props.userInfo}
+                        sellingRecord={this.props.sellingRecord}
+                    />
                 </div>
             </div>
         );
