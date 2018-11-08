@@ -86,13 +86,13 @@ router.post('/sendEmail', function(req, res){
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'youremail@gmail.com',  //server email
-            pass: 'yourpassword'
+            user: 'ylbtester@gmail.com',  //server email
+            pass: 'ylb12345678'
         }
     });
     var mailOptions = {
-        from: 'youremail@gmail.com',
-        to: 'youremail@gmail.com',
+        from: 'ylbtester@gmail.com',
+        to: 'codyyu36@gmail.com',
         subject: 'testing',
         text: 'testing, ticket not found'
     };
