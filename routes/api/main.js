@@ -20,7 +20,7 @@ async function createArray(event){
 	var index = 0
 	for(var i in event){
 		if(event[previous].event_name == event[i].event_name){
-			location.push([event[i].row_Number, event[i].col_Number])
+			location.push([event[i].row_Number, event[i].col_Number, event[previous].price])
 			index++
 		}
 		else{
@@ -28,7 +28,7 @@ async function createArray(event){
 			previous = i
 			index++
 			location = []
-			location.push([event[i].row_Number, event[i].col_Number])
+			location.push([event[i].row_Number, event[i].col_Number, event[previous].price])
 		}
 	}
 	array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
@@ -226,7 +226,7 @@ router.post('/addTicket', function(req, res){
 	var buyer = req.body.buyer
 	var seller = req.body.seller
 	connection = getMySQLConnection();
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', ' + "'" + buyer + "'" + ', ' + "'" + seller + "'" + ')', function(err, rows, fields){
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', NULL, ' + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
 			res.json({
 				type: 'addTicket',
@@ -271,7 +271,7 @@ router.post('/addEvent', function(req,res){
 
 
 router.post('/search', function(req, res){
-	const index = search(req.body.keyword);
+	const index = search(req.body);
 	connection = getMySQLConnection();
 	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
 		if(err){
@@ -323,38 +323,66 @@ router.post('/event', function(req, res){
 	connection.end()
 })
 
-router.get('/event', function(req, res){
+router.get('/', function(req, res){
+	var id = req.cookies['session']
 	connection = getMySQLConnection();
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
+	connection.connect();
+	connection.query('SELECT * FROM user WHERE id = ' + mysql.escape(id), function(err, userProfile, fields){
 		if(err){
-			console.log(err	)
 			res.json({
-				type: 'event',
-				result: false
-			});
-		}
-		else if(event.length > 0){
-			createArray(event).then(result =>{
-				res.json({
-					type: 'event',
-					result: result
-				});
-			}).catch(err => {
-				console.log(err)
-				res.json({
-					type: 'event',
+					type: 'profile',
 					result: false
-				});
-			})
+				})
+		}
+		else if (userProfile.length < 0){
+			res.json({
+					type: 'profile',
+					result: false
+				})
 		}
 		else{
-			res.json({
-				type: 'event',
-				result: false
+			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(userProfile[0].email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(userProfile[0].email) + 'OR seller = ' + mysql.escape(id), function(err, ticket, fields){
+				if(err){
+					res.json({
+						type: 'profile',
+						result: false
+					});
+				}
+				else if (ticket.length < 0){
+					res.json({
+						type: 'profile',
+						result: false
+					});
+				}
+				else{
+					connection.query('SELECT * FROM event', function(err, event, fields){
+						if(err){
+							res.json({
+								type: 'profile',
+								result: false
+							});
+						}
+						else{
+							purchaseInfo(ticket, event).then(result =>{
+								res.json({
+									type: 'profile',
+									purchaseInfo: result,
+									userInfo: userProfile,
+									result: true
+								});
+							}).catch(err => {
+								console.log(err)
+								res.json({
+									type: 'profile',
+									result: false
+								});
+							})
+						}
+					})
+				}
 			});
 		}
 	});
-	connection.end()
-})
+});
 
 module.exports = router;
