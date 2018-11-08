@@ -78,6 +78,59 @@ function calcRoute(startX, startY, endX, endY) {
     });
 }
 
+router.post('/sendEmail', function(req, res){
+
+    const ticket = req.body.ticket; //front end sends ticket id,
+	//set up sender email
+    var nodemailer = require('nodemailer');
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'youremail@gmail.com',  //server email
+            pass: 'yourpassword'
+        }
+    });
+    var mailOptions = {
+        from: 'youremail@gmail.com',
+        to: 'youremail@gmail.com',
+        subject: 'testing',
+        text: 'testing, ticket not found'
+    };
+
+    connection = getMySQLConnection();
+    connection.connect();
+    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticket), function(err, rows, fields) {
+        if (err) {
+            res.json({
+                type: 'POST',
+                loggedin: false
+            });
+        }
+
+        else{
+        	var buyer_email = rows[0].buyer;
+        	//var deliver_option = rows[0]...;
+
+            mailOptions = {
+                from: 'youremail@gmail.com',
+                to: buyer_email,
+                subject: 'testing',
+                text: 'testing'
+            };
+		}
+    });
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+    connection.end();
+
+});
+
 
 router.post('/addTicket', function(req, res){
 	var id = cryptoRandomString(20);
