@@ -24,13 +24,12 @@ router.get('/test', (req, res) => res.send({msg: 'User works'}));
 router.post('/login', function(req, res){
     const email = req.body.email
     const password = req.body.password
-    //var bcrypt = require('bcryptjs');
-    //var salt = bcrypt.genSaltSync(10);
+
     //var hash = bcrypt.hashSync(password, salt);
 
     connection = getMySQLConnection();
     connection.connect();
-    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email) + ' AND password = ' + mysql.escape(password), function(err, rows, fields) {
+    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email), function(err, rows, fields) {
         if(err){
             res.json({
                 type: 'POST',
@@ -38,17 +37,25 @@ router.post('/login', function(req, res){
             });
         }
         else if(rows.length > 0) {
-            res.cookie('session', rows[0].id, {httpOnly: true, encode: String});
-            res.json({
-                type: 'POST',
-                id: rows[0].id,
-                email: rows[0].email,
-                password: rows[0].password,
-                loggedin: true
-            });
+            if(bcrypt.compareSync(password, rows[0].password)){
+                res.cookie('session', rows[0].id, {httpOnly: true, encode: String});
+                res.json({
+                    type: 'POST',
+                    id: rows[0].id,
+                    email: rows[0].email,
+                    password: rows[0].password,
+                    loggedin: true
+                });
+            }
+            else {
+                res.json({
+                    type: 'POST',
+                    loggedin: false
+                });
+            }
         }
         else {
-        res.json({
+            res.json({
                 type: 'POST',
                 loggedin: false
             });
@@ -58,32 +65,50 @@ router.post('/login', function(req, res){
     connection.end();
 });
 
-
-
 router.post('/signup', function(req, res){
     const email = req.body.email;
     const password = req.body.password;
     var id = cryptoRandomString(20);
+    var hash = bcrypt.hashSync(password, salt);
     connection = getMySQLConnection();
     connection.connect();
-    connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(password) + ')', function(err, rows, fields) {
+    connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email), function(err, rows, fields) {
         if (err) {
             res.json({
-            	type:'signup',
+                type:'signup',
                 email: email,
-            	success: false
+                success: false
             });
         }
-        else {
-            res.cookie('session', id, {httpOnly: true, encode: String});
+        else if(rows.length > 0) {
             res.json({
-                type: 'signup',
+                type:'signup',
                 email: email,
-                success: true
+                success: false
+            });
+
+        }
+        else {
+            connection.query('INSERT INTO user (id, email, password) VALUES (' + mysql.escape(id) + ', ' + mysql.escape(email) + ', ' + mysql.escape(hash) + ')', function(err, rows, fields) {
+                if (err) {
+                    res.json({
+                        type:'signup',
+                        email: email,
+                        success: false
+                    });
+                }
+                else {
+
+                    res.cookie('session', id, {httpOnly: true, encode: String});
+                    res.json({
+                        type: 'signup',
+                        email: email,
+                        success: true
+                    });
+                }
             });
         }
     });
-
     connection.end();
 });
 
