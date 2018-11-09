@@ -34,6 +34,20 @@ var authenticate = function(req, res, next){
 	})
 }
 
+async function purchaseInfo(ticket, event){
+	var array = ticket
+	var names = []
+	for(var i in event){
+		names.push(event[i].event_name)
+	}
+	for(var i in ticket){
+		var index = names.indexOf(ticket[i].event)
+		array[i].date = event[index].date
+		array[i].location = event[index].location
+	}
+	return array
+}
+
 
 router.get('/', function(req, res){
 	var id = req.cookies['session']
@@ -71,6 +85,7 @@ router.get('/', function(req, res){
 			});
 		}
 	});
+	connection.end()
 });
 
 module.exports = router;

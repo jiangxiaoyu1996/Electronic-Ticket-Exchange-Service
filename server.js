@@ -39,7 +39,7 @@ function deleteDb(){
 function createDb(){
 	var connection = getMySQLConnection();
     connection.query('CREATE TABLE event (event_name VARCHAR(255), event_ID VARCHAR(255), date VARCHAR(255),date_posted VARCHAR(255), location VARCHAR(255), pageviews INTEGER, ticket_amount INTEGER, ticket_amount_available INTEGER, max_rows INTEGER, max_cols INTEGER, pop_index DOUBLE, description TEXT, PRIMARY KEY (event_ID))', function(err, rows, fields){
-		connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), PRIMARY KEY (id, event, row_Number, col_Number, buyer, seller))', function(err, rows, fields){
+		connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), price INTEGER, status VARCHAR(255), PRIMARY KEY (id, event, row_Number, col_Number, buyer, seller))', function(err, rows, fields){
 			connection.query('CREATE TABLE user (id VARCHAR(255), username TEXT, email TEXT, password TEXT, address TEXT, PRIMARY KEY (id))', function(err, rows, fields){
 				populateDb();
 			});
@@ -61,9 +61,9 @@ function populateDb(){
 	connection.query('INSERT INTO user (id, username, email, password, address) VALUES (1, ' + "'test'" + ', ' + "'test@gmail.com'" + ', 123, ' + "'SanJose'" + '), (2, ' + "'time'" + ', ' + "'user1@gmail.com'" + ', ' + "'simple'" + ', ' + "'SanFrancisco'" + '), (500, NULL, ' + "'another1@gmail.com'" + ', ' + "'abc123456'" + ', ' + "'Sacramento'" + ')', function(err, rows, fields){
 	lock -= 1;
 	});
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller) VALUES (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 1, NULL, ' + "'test@gmail.com'" +
-	'), (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 20, 15, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ')' , function(err, rows, fields){
-	lock -= 1;
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 1, NULL, ' + "'test@gmail.com'" +
+	', 10, 0), (2, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 20, 15, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ', 20, 1)' , function(err, rows, fields){
+	lock -=1;
 	});
 	if(lock == 0){
 		connection.end()
