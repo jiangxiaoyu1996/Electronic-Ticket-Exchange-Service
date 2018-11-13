@@ -7,7 +7,6 @@ import { search } from "../../actions/search/action";
 import { logout } from "../../actions/logout/action";
 
 class HeaderContainer extends Component{
-    
     render() {
 	return(
 		<div>
