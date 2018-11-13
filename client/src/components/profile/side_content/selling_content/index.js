@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from "@material-ui/core/styles/index";
-import Paper from "@material-ui/core/es/Paper/Paper";
 
 import {styles} from "../styles";
 import Table from "@material-ui/core/es/Table/Table";
@@ -9,11 +8,36 @@ import TableHead from "@material-ui/core/es/TableHead/TableHead";
 import TableRow from "@material-ui/core/es/TableRow/TableRow";
 import TableCell from "@material-ui/core/es/TableCell/TableCell";
 import TableBody from "@material-ui/core/es/TableBody/TableBody";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 class SellingContent extends Component{
+
+    renderTableRow(){
+        return this.props.sellingRecord.map((record) => {
+            return (
+                <TableRow>
+                    <TableCell>{record.event}</TableCell>
+                    <TableCell>TBD</TableCell>
+                    <TableCell>TBD</TableCell>
+                    <TableCell>({record.row_Number}, {record.col_Number})</TableCell>
+                    <TableCell>TBD</TableCell>
+                </TableRow>
+            )
+        })
+    }
+
     render(){
         const { classes } = this.props;
 
+        if(this.props.sellingRecord.length === 0){
+            return (
+                <div className={classes.content}>
+                    <Typography>
+                        No Selling Record
+                    </Typography>
+                </div>
+            )
+        }
         return (
             <div className={classes.content}>
                 <Table>
@@ -27,20 +51,7 @@ class SellingContent extends Component{
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>SJSU2 Mentoring: There's More Power With Two</TableCell>
-                            <TableCell>11/06/2018</TableCell>
-                            <TableCell>San Jose State University</TableCell>
-                            <TableCell>Row#1 Col#1</TableCell>
-                            <TableCell>$10</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>IBM Female AI Conference</TableCell>
-                            <TableCell>11/13/2018</TableCell>
-                            <TableCell>San Jose State University</TableCell>
-                            <TableCell>Row#1 Col#1</TableCell>
-                            <TableCell>$10</TableCell>
-                        </TableRow>
+                        {this.renderTableRow()}
                     </TableBody>
                 </Table>
             </div>

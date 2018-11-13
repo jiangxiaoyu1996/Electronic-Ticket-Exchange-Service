@@ -14,6 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { styles } from "./style";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Link from "react-router-dom/es/Link";
 
 class Header extends Component {
     constructor(props){
@@ -34,7 +35,7 @@ class Header extends Component {
     handleFilter(event) {
 	this.setState ( { event_filter : event.target.value} );
     }
-    
+
     handleLogout() {
         this.props.logout();
     }
@@ -42,15 +43,15 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
-        const btns = this.props.user === '' ? (
+        const btns = this.props.user === '' || this.props.loggedin === false ? (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/sign-in"}>Sign up</Button>
-                <Button className={classes.sectionButton} href={"/login"}>Login</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
 		    </div>
         ) : (
 		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} href={"/profile"}>Profile</Button>
-                <Button className={classes.sectionButton} onClick={this.handleLogout} href={"/"}>Logout</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/profile"}>Profile</Button>
+                <Button className={classes.sectionButton} onClick={this.handleLogout} component={Link} to={"/"}>Logout</Button>
 		    </div>
         );
 
@@ -58,7 +59,7 @@ class Header extends Component {
 		<div className={classes.root}>
             <AppBar className={classes.appBar}>
                 <Toolbar position="static">
-                    <IconButton className={classes.menuButton} href="/">
+                    <IconButton className={classes.menuButton}  component={Link} to="/">
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} noWrap>
@@ -77,7 +78,7 @@ class Header extends Component {
                             onChange = {(event) => this.setState({keyword:event.target.value})}
                             onKeyPress = {(event) => {
                                 if (event.key === 'Enter') {
-                                    this.handleSearch();
+                                    //this.handleSearch();
                                 }
                             }}
                         />
@@ -95,6 +96,7 @@ class Header extends Component {
 		    <MenuItem value={'date'}>Event Date</MenuItem>
 		    <MenuItem value={'event_ID'}>Event ID</MenuItem>
 		  </Select>
+                  <Button className={classes.sectionButton} onClick={this.handleSearch} component={Link} to={"/search"}>Search</Button>
                     <div className={classes.grow} />
                     {btns}
                 </Toolbar>

@@ -46,7 +46,7 @@ router.get('/', function(req, res){
 					result: false
 				})
 		}
-		else if (userProfile.length < 0){
+		else if (userProfile.length <= 0){
 			res.json({
 					type: 'profile',
 					result: false

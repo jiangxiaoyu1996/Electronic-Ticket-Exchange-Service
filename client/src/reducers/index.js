@@ -10,12 +10,12 @@ const rootReducer = (state, action) => {
         console.log("data: ", action.payload);
         state = undefined;
     }
-
     return appReducer(state, action);
 };
 
 const appReducer = combineReducers({
     user: AccountReducer,
+    loggedin: AccountReducer,
     profile: ProfileReducer,
     result: SearchReducer
 });
