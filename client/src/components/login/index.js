@@ -22,11 +22,10 @@ class Login extends Component {
     }
 
     render(){
-		const { classes } = this.props;
-
+	const { classes } = this.props;
         return(
-			<div className={classes.container}>
-				<Grid container justify="center" spacing={256}>
+		<div className={classes.container}>
+		<Grid container justify="center" spacing={256}>
 				<Grid item xs={12}>
 					<TextField
 	    				id="outlined-name"
@@ -59,8 +58,9 @@ class Login extends Component {
 					>
 						Log In
 					</Button>
-				</Grid>
-				</Grid>
+		               </Grid>
+		</Grid>
+		{ (this.props.loggedin === false)?"Login failure, please try again.":"" }
 		</div>
         );
     }

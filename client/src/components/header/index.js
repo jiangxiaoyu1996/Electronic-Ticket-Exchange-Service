@@ -35,7 +35,7 @@ class Header extends Component {
     handleFilter(event) {
 	this.setState ( { event_filter : event.target.value} );
     }
-    
+
     handleLogout() {
         this.props.logout();
     }
@@ -43,7 +43,7 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
-        const btns = this.props.user === '' ? (
+        const btns = this.props.user === '' || this.props.loggedin === false ? (
 		    <div className={classes.sectionDesktop}>
                 <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
                 <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
@@ -78,7 +78,7 @@ class Header extends Component {
                             onChange = {(event) => this.setState({keyword:event.target.value})}
                             onKeyPress = {(event) => {
                                 if (event.key === 'Enter') {
-                                    this.handleSearch();
+                                    //this.handleSearch();
                                 }
                             }}
                         />
@@ -96,6 +96,7 @@ class Header extends Component {
 		    <MenuItem value={'date'}>Event Date</MenuItem>
 		    <MenuItem value={'event_ID'}>Event ID</MenuItem>
 		  </Select>
+                  <Button className={classes.sectionButton} onClick={this.handleSearch} component={Link} to={"/search"}>Search</Button>
                     <div className={classes.grow} />
                     {btns}
                 </Toolbar>

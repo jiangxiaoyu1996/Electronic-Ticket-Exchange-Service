@@ -7,21 +7,12 @@ import { search } from "../../actions/search/action";
 import { logout } from "../../actions/logout/action";
 
 class HeaderContainer extends Component{
-    render(){
-	if (typeof this.props.result === 'undefined' || this.props.result == '' ) {
-	    return(
-		    <div>
-		        <Header search={this.props.search} logout={this.props.logout} user={this.props.user} result={this.props.result}/>
-		    </div>
-            )
- 	}
-	else {
-          return(
-              <div>
-		  <Redirect to={'/search'} />
-              </div>
-          )
-	}
+    render() {
+	return(
+		<div>
+		<Header search={this.props.search} logout={this.props.logout} user={this.props.user} result={this.props.result}/>
+		</div>
+        )
     }
 }
 

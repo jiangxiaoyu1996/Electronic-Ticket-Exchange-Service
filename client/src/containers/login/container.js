@@ -9,11 +9,11 @@ import Login from "../../components/login";
 
 class LoginContainer extends Component{
     render(){
-      if (this.props.user === '' || this.props.loggedin === false ){
+      if (typeof this.props.loggedin === 'undefined' || this.props.loggedin === '' || this.props.loggedin === false ){
         return(
           <div>
               <HeaderContainer/>
-              <Login login={this.props.login} user={this.props.user}/>
+		<Login login={this.props.login} user={this.props.user} loggedin={this.props.loggedin}/>
           </div>
       )
     } else {
@@ -28,7 +28,8 @@ class LoginContainer extends Component{
 
 function mapStateToProps(state){
     return {
-        user: state.user
+        user: state.user,
+        loggedin: state.loggedin
     }
 }
 
