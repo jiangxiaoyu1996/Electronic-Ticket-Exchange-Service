@@ -13,8 +13,8 @@ class ProfileContainer extends Component{
     }
 
     render(){
-        console.log(this.props.profile);
-        console.log("User in profile: ", this.props.user);
+        console.log("Profile: ", this.props.profile);
+        //console.log("User in profile: ", this.props.user);
         if(this.props.profile === {
                 "UserInfo": [{}],
                 "Record": [{}]
@@ -32,10 +32,10 @@ class ProfileContainer extends Component{
                 <div>
                     <HeaderContainer />
                     <Profile
-                        user={this.props.user}
+                        user={this.props.profile.UserInfo[0].email}
                         userInfo={this.props.profile.UserInfo[0]}
-                        sellingRecord={findSellingRecord(this.props.profile.Record, this.props.user)}
-                        purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.user)}
+                        sellingRecord={findSellingRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
+                        purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
                     />
                 </div>
             )
@@ -57,7 +57,7 @@ function findPurchaseRecord(jsonArray, target){
 
 function mapStateToProps(state){
     return {
-        user: state.user,
+        //user: state.user,
         profile: state.profile
     }
 }

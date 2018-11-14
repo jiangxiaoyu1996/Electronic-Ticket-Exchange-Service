@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true;
 
 export function getProfile(){
     const request = axios.get(`${ROOT_URL}/profile`);
-    console.log("Action: ", request);
+    console.log("Profile Action: ", request);
 
     return {
         type: ACTION.PROFILE,

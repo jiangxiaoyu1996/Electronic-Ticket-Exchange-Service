@@ -4,7 +4,7 @@ export default function(state = {
     "UserInfo": [{}],
     "Record": [{}]
 }, action){
-    console.log("promise:", action.payload);
+    console.log("Profile promise:", action.payload);
 
     switch(action.type){
         case ACTION.PROFILE:
