@@ -13,6 +13,15 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.get('/test', (req, res) => res.json({msg: 'Main works'}));
 
 
+var connection = mysql.createPool({
+        host     : 'localhost',
+        user     : 'root',
+        password : '',
+        port     : '3307',
+        database : 'ETES'
+});
+
+
 async function createArray(event){
 	var location = []
 	var array = []
@@ -35,14 +44,6 @@ async function createArray(event){
 	return array
 }
 
-var connection = mysql.createPool({
-        host     : 'localhost',
-        user     : 'root',
-        password : '',
-        port     : '3307',
-        database : 'ETES'
-});
-
 function search(text){
 	var filterStr = ""
 	for (var key in text){
@@ -50,6 +51,33 @@ function search(text){
 	}
 	filterStr = filterStr.substring(0, filterStr.lastIndexOf(" AND"))
 	return filterStr
+}
+
+var authenticate = function(req, res, next){
+	var id = req.cookies['session']
+	if(id != null){
+		connection.query("SELECT * FROM user WHERE id = '" + id + "'", function(err, rows, fields){
+			if(err){
+				res.json({
+					type: 'authenticate',
+					result: false
+				})
+			}
+			else if (rows <= 0){
+				res.json({
+					type: 'authenticate',
+					result: false
+				})
+			}
+			else{
+				next()
+			}
+		})
+	}
+	res.json({
+		type: 'authenticate',
+		result: false
+	})
 }
 
 function calcRoute(startX, startY, endX, endY) {
@@ -125,8 +153,6 @@ router.get('/sendEmail', function(req, res){
         }
     });
 
-    connection.end();
-
 });
 
 router.get('/updatePopularity', function(req, res){
@@ -185,8 +211,6 @@ router.get('/updatePopularity', function(req, res){
 
 router.post('/GetPopularEvents', function(req, res){
 
-    connection = getMySQLConnection();
-    connection.connect();
     connection.query('SELECT 5 FROM event ORDER BY popularity', function(err, rows, fields) {
         if (err) {
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
@@ -312,8 +336,6 @@ router.post('/lockticket', function(req, res){
     //const ticketid = req.body.t_ID;
     const ticketid = 1; ///////////////////////////////////////////for testing
     var lock = 1;
-    connection = getMySQLConnection();
-    connection.connect();
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
         if (err) {
             console.log(err)
@@ -326,7 +348,6 @@ router.post('/lockticket', function(req, res){
         else if(rows.length > 0) {
             connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE id = ' + mysql.escape(ticketid)
                 , function(err, rows, fields) {
-                    lock -= 1
                     if (err) {
                         console.log(err)
                         res.status(500).json({"status_code": 500,"status_message": "internal server error"});
@@ -347,10 +368,6 @@ router.post('/lockticket', function(req, res){
             });
         }
     });
-    if(lock == 0) {
-        connection.end();
-    }
-
 });
 
 
@@ -359,8 +376,6 @@ router.post('/unlockticket', function(req, res){
     //const ticketid = req.body.t_ID;
     const ticketid = 1; ///////////////////////////////////////////for testing
     var lock = 1;
-    connection = getMySQLConnection();
-    connection.connect();
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
         if (err) {
             console.log(err)
