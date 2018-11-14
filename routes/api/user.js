@@ -3,6 +3,8 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
+const bcrypt = require('bcryptjs');
+const salt = require('../../server.js').salt;
 
 //@route GET api/user/test
 //@desc Test user route
@@ -10,25 +12,22 @@ const cryptoRandomString = require('crypto-random-string');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-function getMySQLConnection() {
-    return mysql.createConnection({
+var connection = mysql.createPool({
         host     : 'localhost',
         user     : 'root',
         password : '',
         port     : '3307',
         database : 'ETES'
-    });
-}
+});
+
+
 router.get('/test', (req, res) => res.send({msg: 'User works'}));
 
 router.post('/login', function(req, res){
     const email = req.body.email
     const password = req.body.password
 
-    //var hash = bcrypt.hashSync(password, salt);
-
-    connection = getMySQLConnection();
-    connection.connect();
+    var hash = bcrypt.hashSync(password, salt);
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email), function(err, rows, fields) {
         if(err){
             res.json({
@@ -61,8 +60,6 @@ router.post('/login', function(req, res){
             });
         }
     });
-
-    connection.end();
 });
 
 router.post('/signup', function(req, res){
@@ -70,8 +67,6 @@ router.post('/signup', function(req, res){
     const password = req.body.password;
     var id = cryptoRandomString(20);
     var hash = bcrypt.hashSync(password, salt);
-    connection = getMySQLConnection();
-    connection.connect();
     connection.query('SELECT * FROM user WHERE email = ' + mysql.escape(email), function(err, rows, fields) {
         if (err) {
             res.json({
@@ -109,7 +104,6 @@ router.post('/signup', function(req, res){
             });
         }
     });
-    connection.end();
 });
 
 router.delete('/logout', function(req, res){
