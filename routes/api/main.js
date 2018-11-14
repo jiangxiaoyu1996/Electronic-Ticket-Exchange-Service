@@ -308,4 +308,95 @@ router.get('/event', function(req, res){
 })
 
 
+router.post('/lockticket', function(req, res){
+    //const ticketid = req.body.t_ID;
+    const ticketid = 1; ///////////////////////////////////////////for testing
+    var lock = 1;
+    connection = getMySQLConnection();
+    connection.connect();
+    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
+        if (err) {
+            console.log(err)
+            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+            res.json({
+                type:'timestamp',
+                success: false
+            });
+        }
+        else if(rows.length > 0) {
+            connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE id = ' + mysql.escape(ticketid)
+                , function(err, rows, fields) {
+                    lock -= 1
+                    if (err) {
+                        console.log(err)
+                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+                    }
+                    else {
+                        res.send({
+                            type: 'timestamp',
+                            success: true
+                        });
+                    }
+                });
+        }
+        else {
+            res.json({
+                type:'timestamp',
+                success: false,
+                msg: 'no such ticket'
+            });
+        }
+    });
+    if(lock == 0) {
+        connection.end();
+    }
+
+});
+
+
+
+router.post('/unlockticket', function(req, res){
+    //const ticketid = req.body.t_ID;
+    const ticketid = 1; ///////////////////////////////////////////for testing
+    var lock = 1;
+    connection = getMySQLConnection();
+    connection.connect();
+    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
+        if (err) {
+            console.log(err)
+            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+            res.json({
+                type:'timestamp',
+                success: false
+            });
+        }
+        else if(rows.length > 0) {
+            connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE id = ' + mysql.escape(ticketid)
+                , function(err, rows, fields) {
+                    lock -= 1
+                    if (err) {
+                        console.log(err)
+                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+                    }
+                    else {
+                        res.send({
+                            type: 'timestamp',
+                            success: true
+                        });
+                    }
+                });
+        }
+        else {
+            res.json({
+                type:'timestamp',
+                success: false,
+                msg: 'no such ticket'
+            });
+        }
+    });
+    if(lock == 0) {
+        connection.end();
+    }
+});
+
 module.exports = router;
