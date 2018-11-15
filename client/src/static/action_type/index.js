@@ -6,3 +6,6 @@ export const PROFILE = 'profile';
 
 //search
 export const SEARCH = "search";
+
+//post ticket event list
+export const POST_LIST = "post_list";

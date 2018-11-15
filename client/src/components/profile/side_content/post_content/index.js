@@ -24,17 +24,8 @@ class PostTicketContent extends Component{
     render(){
         const { classes } = this.props;
         console.log("state: ", this.state.selectedEvent);
-        const events = [
-            {
-                name: "Event 1"
-            },
-            {
-                name: "Event 2"
-            },
-            {
-                name: "Event 3"
-            }
-        ];
+        console.log("event: ", getEventNames(this.props.eventlist));
+        const events = getEventNames(this.props.eventlist);
 
         return (
             <div className={classes.content}>
@@ -54,14 +45,24 @@ class PostTicketContent extends Component{
                     onChange={this.handleChange('selectedEvent')}
                 >
                     {events.map(option => (
-                        <MenuItem key={option.name} value={option.name}>
-                            {option.name}
+                        <MenuItem key={option} value={option}>
+                            {option}
                         </MenuItem>
                     ))}
                 </TextField>
             </div>
         );
     }
+}
+
+function getEventNames(array){
+    let result = [];
+    if(array !== undefined){
+        array.forEach(event => {
+            result.push(event.name)
+        });
+    }
+    return result;
 }
 
 PostTicketContent.propTypes = {

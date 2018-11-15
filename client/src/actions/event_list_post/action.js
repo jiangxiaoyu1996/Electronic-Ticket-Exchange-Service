@@ -5,11 +5,12 @@ const ROOT_URL = "http://localhost:8080/api";
 
 axios.defaults.withCredentials = true;
 
-export function getProfile(){
-    const request = axios.get(`${ROOT_URL}/profile`);
+export function getEventListForPosting(){
+    const request = axios.get(`${ROOT_URL}/main/event`);
+    console.log("Event Action: ", request);
 
     return {
-        type: ACTION.PROFILE,
+        type: ACTION.POST_LIST,
         payload: request
     };
 }

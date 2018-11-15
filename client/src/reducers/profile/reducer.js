@@ -4,8 +4,6 @@ export default function(state = {
     "UserInfo": [{}],
     "Record": [{}]
 }, action){
-    console.log("Profile promise:", action.payload);
-
     switch(action.type){
         case ACTION.PROFILE:
             if(action.payload.data.result === true ) {
