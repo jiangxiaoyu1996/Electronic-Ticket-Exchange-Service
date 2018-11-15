@@ -82,6 +82,8 @@ router.get('/sendEmail', function(req, res){
 
     const ticket = req.body.ticket; //front end sends ticket id,
 	//set up sender email
+    const type = req.body.deliverType;
+    var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -90,12 +92,50 @@ router.get('/sendEmail', function(req, res){
             pass: 'ylb12345678'
         }
     });
-    var mailOptions = {
-        from: 'ylbtester@gmail.com',
-        to: 'codyyu36@gmail.com',
-        subject: 'testing',
-        text: 'testing, ticket not found'
-    };
+    if(type == 'FedEx') {
+        var mailOptions = {
+            from: 'ylbtester@gmail.com',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: fedex' + tracking
+        };
+    }
+
+    else if (type == 'UPS') {
+        var mailOptions = {
+            from: 'ylbtester@gmail.com',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: ups' + tracking
+        };
+    }
+
+    else if (type == 'Uber') {
+        var mailOptions = {
+            from: 'ylbtester@gmail.com',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by Uber'
+        };
+
+    }
+    //e-ticket
+    else {
+        var mailOptions = {
+            from: 'ylbtester@gmail.com',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.'
+
+        };
+    }
+
+
+
+
 
     connection = getMySQLConnection();
     connection.connect();
