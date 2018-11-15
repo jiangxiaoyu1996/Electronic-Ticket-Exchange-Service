@@ -39,7 +39,7 @@ function getMySQLConnection() {
     return mysql.createConnection({
         host     : 'localhost',
         user     : 'root',
-        password : '',
+				password : '',
 		port     : '3307',
         database : 'ETES'
     });
@@ -271,7 +271,7 @@ router.post('/addEvent', function(req,res){
 
 
 router.post('/search', function(req, res){
-	const index = search(req.body);
+	const index = search(req.body.keyword);
 	connection = getMySQLConnection();
 	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
 		if(err){
