@@ -14,15 +14,13 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/test', (req, res) => res.json({msg: 'Profile works'}));
 
-function getMySQLConnection() {
-    return mysql.createConnection({
+var connection = mysql.createPool({
         host     : 'localhost',
         user     : 'root',
         password : '',
         port     : '3307',
         database : 'ETES'
-    });
-}
+});
 
 var authenticate = function(req, res, next){
 	if(req.cookies['session'] != null){
@@ -51,8 +49,6 @@ async function purchaseInfo(ticket, event){
 
 router.get('/', function(req, res){
 	var id = req.cookies['session']
-	connection = getMySQLConnection();
-	connection.connect();
 	connection.query('SELECT * FROM user WHERE id = ' + mysql.escape(id), function(err, userProfile, fields){
 		if(err){
 			res.json({
@@ -67,25 +63,48 @@ router.get('/', function(req, res){
 				})
 		}
 		else{
-			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(userProfile[0].email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(userProfile[0].email) + 'OR seller = ' + mysql.escape(id), function(err, transaction, fields){
+			connection.query('SELECT * FROM ticket WHERE buyer = ' + mysql.escape(userProfile[0].email) + ' OR buyer = ' + mysql.escape(id) + ' OR seller = ' + mysql.escape(userProfile[0].email) + 'OR seller = ' + mysql.escape(id), function(err, ticket, fields){
 				if(err){
 					res.json({
 						type: 'profile',
 						result: false
 					});
 				}
-				else{
+				else if (ticket.length < 0){
 					res.json({
 						type: 'profile',
-						purchaseInfo: transaction,
-						userInfo: userProfile,
-						result: true
+						result: false
 					});
+				}
+				else{
+					connection.query('SELECT * FROM event', function(err, event, fields){
+						if(err){
+							res.json({
+								type: 'profile',
+								result: false
+							});
+						}
+						else{
+							purchaseInfo(ticket, event).then(result =>{
+								res.json({
+									type: 'profile',
+									purchaseInfo: result,
+									userInfo: userProfile,
+									result: true
+								});
+							}).catch(err => {
+								console.log(err)
+								res.json({
+									type: 'profile',
+									result: false
+								});
+							})
+						}
+					})
 				}
 			});
 		}
 	});
-	connection.end()
 });
 
 module.exports = router;

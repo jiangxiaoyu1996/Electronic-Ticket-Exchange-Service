@@ -4,21 +4,21 @@ import HeaderContainer from "../header/container";
 import Profile from "../../components/profile";
 
 import { getProfile } from "../../actions/profile/action";
+import { getEventListForPosting } from "../../actions/event_list_post/action";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
 
 class ProfileContainer extends Component{
 
     componentDidMount(){
         this.props.getProfile();
+        this.props.getEventListForPosting();
     }
 
     render(){
-        console.log(this.props.profile);
-        console.log("User in profile: ", this.props.user);
         if(this.props.profile === {
                 "UserInfo": [{}],
                 "Record": [{}]
-            } || this.props.profile === undefined){
+            } || this.props.profile === undefined || this.props.eventListPosting === {} || this.props.eventListPosting === undefined){
             return (
                 <div>
                     <HeaderContainer />
@@ -28,14 +28,17 @@ class ProfileContainer extends Component{
                 </div>
             );
         }else{
+            //console.log("Profile: ", this.props.profile);
+            //console.log("List: ", makeList(this.props.eventListPosting));
             return(
                 <div>
                     <HeaderContainer />
                     <Profile
-                        user={this.props.user}
+                        user={this.props.profile.UserInfo[0].email}
                         userInfo={this.props.profile.UserInfo[0]}
-                        sellingRecord={findSellingRecord(this.props.profile.Record, this.props.user)}
-                        purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.user)}
+                        sellingRecord={findSellingRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
+                        purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
+                        eventlist={makeList(this.props.eventListPosting)}
                     />
                 </div>
             )
@@ -55,11 +58,35 @@ function findPurchaseRecord(jsonArray, target){
     });
 }
 
+function makeList(list){
+    console.log("here:", list);
+    let jsonObject = [];
+    if(list !== {} && list.length >= 1){
+        list.forEach(event =>
+            {
+                jsonObject.push(
+                    {
+                        "name": event[0],
+                        "date": event[1],
+                        "location": event[2],
+                        "totalTicket": event[3],
+                        "maxRow": event[4],
+                        "maxCol": event[5],
+                        "description": event[6],
+                        "notSellableSeat": event[7]
+                    }
+                )
+            }
+        );
+    }
+    return jsonObject;
+}
+
 function mapStateToProps(state){
     return {
-        user: state.user,
-        profile: state.profile
+        profile: state.profile,
+        eventListPosting: state.eventListPosting
     }
 }
 
-export default connect(mapStateToProps, { getProfile })(ProfileContainer);
+export default connect(mapStateToProps, { getProfile, getEventListForPosting })(ProfileContainer);
