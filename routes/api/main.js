@@ -82,7 +82,8 @@ router.get('/sendEmail', function(req, res){
 
     const ticket = req.body.ticket; //front end sends ticket id,
 	//set up sender email
-    const type = req.body.deliverType;
+   // const type = req.body.deliverType;
+    var type = 'FedEx';
     var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
@@ -94,8 +95,9 @@ router.get('/sendEmail', function(req, res){
     });
     if(type == 'FedEx') {
         var mailOptions = {
-            from: 'ylbtester@gmail.com',
+
             to: 'codyyu36@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' +
                 'Your ticket will be delivered by FedEx. Your tracking number is: fedex' + tracking
@@ -104,7 +106,7 @@ router.get('/sendEmail', function(req, res){
 
     else if (type == 'UPS') {
         var mailOptions = {
-            from: 'ylbtester@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
             to: 'codyyu36@gmail.com',
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' +
@@ -114,7 +116,7 @@ router.get('/sendEmail', function(req, res){
 
     else if (type == 'Uber') {
         var mailOptions = {
-            from: 'ylbtester@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
             to: 'codyyu36@gmail.com',
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' +
@@ -125,16 +127,13 @@ router.get('/sendEmail', function(req, res){
     //e-ticket
     else {
         var mailOptions = {
-            from: 'ylbtester@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
             to: 'codyyu36@gmail.com',
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.'
 
         };
     }
-
-
-
 
 
     connection = getMySQLConnection();
