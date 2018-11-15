@@ -17,10 +17,10 @@ class SellingContent extends Component{
             return (
                 <TableRow>
                     <TableCell>{record.event}</TableCell>
-                    <TableCell>TBD</TableCell>
-                    <TableCell>TBD</TableCell>
+                    <TableCell>{record.date}</TableCell>
+                    <TableCell>{record.location}</TableCell>
                     <TableCell>({record.row_Number}, {record.col_Number})</TableCell>
-                    <TableCell>TBD</TableCell>
+                    <TableCell>${record.price}</TableCell>
                 </TableRow>
             )
         })

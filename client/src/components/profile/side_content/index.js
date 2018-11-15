@@ -20,7 +20,7 @@ class ProfileContent extends Component {
                 temp = <AccountContent userInfo={this.props.userInfo}/>;
                 break;
             case ComponentString.POST_TICKET:
-                temp = <PostTicketContent/>;
+                temp = <PostTicketContent eventlist={this.props.eventlist}/>;
                 break;
             case ComponentString.PURCHASE_HISTORY:
                 temp = <PurchaseContent purchaseRecord={this.props.purchaseRecord}/>;

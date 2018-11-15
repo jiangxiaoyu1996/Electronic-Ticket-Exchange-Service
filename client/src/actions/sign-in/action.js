@@ -10,7 +10,6 @@ export function signin(email, password){
             email: email,
             password: password
     });
-    console.log("action request: ", request);
 
     return {
         type: ACTION.SIGN_IN,

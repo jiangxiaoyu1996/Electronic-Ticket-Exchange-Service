@@ -9,7 +9,6 @@ class AccountContent extends Component{
     render(){
         const { classes } = this.props;
 
-        console.log("user: ", this.props.userInfo);
         return (
             <div className={classes.content}>
                 <Typography style={{margin: 20}}>
