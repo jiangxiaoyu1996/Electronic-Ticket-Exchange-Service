@@ -5,7 +5,7 @@ export default function(state = '', action){
         case ACTION.SIGN_IN:
             return action.payload.data.success === true ? action.payload.data.email : '';
         case ACTION.LOG_IN:
-            return action.payload.data.loggedin === true ? action.payload.data.loggedin : false;
+            return typeof action.payload.data !== 'undefined' && action.payload.data.loggedin === true ? action.payload.data.loggedin : false;
         default:
             return state;
     }
