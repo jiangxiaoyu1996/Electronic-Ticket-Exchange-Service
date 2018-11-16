@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const salt = require('../../server.js').salt;
 
 //@route GET api/user/test
-//@desc Test user route
+//@desc Test user routeb
 //@access Public
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -20,8 +20,56 @@ var connection = mysql.createPool({
         database : 'ETES'
 });
 
+var authenticate = function(req, res, next){
+    var id = req.cookies['session']
+    if(id != null){
+        connection.query("SELECT * FROM user WHERE id = '" + id + "'", function(err, rows, fields){
+            if(err){
+                res.json({
+                    type: 'authenticate',
+                    result: false
+                })
+            }
+            else if (rows <= 0){
+                res.json({
+                    type: 'authenticate',
+                    result: false
+                })
+            }
+            else{
+                next()
+            }
+        })
+    }
+    else{
+        res.json({
+            type: 'authenticate',
+            result: false
+        })
+    }
+}
 
 router.get('/test', (req, res) => res.send({msg: 'User works'}));
+
+
+router.post('/updateAddress', authenticate, function(req, res){
+    const address = req.body.address
+    connection.query("UPDATE user SET address ='" + mysql.escape(address) + "WHERE id = '" + req.cookies['session'], function(err, rows, fields){
+        if(err){
+            res.json({
+                type: updateAddress,
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: updateAddress,
+                result: true
+            })
+        }
+    })
+})
+
 
 router.post('/login', function(req, res){
     const email = req.body.email
