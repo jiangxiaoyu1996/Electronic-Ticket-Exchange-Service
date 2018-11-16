@@ -95,6 +95,7 @@ class Header extends Component {
 		    <MenuItem value={'location'}>Event Location</MenuItem>
 		    <MenuItem value={'date'}>Event Date</MenuItem>
 		    <MenuItem value={'event_ID'}>Event ID</MenuItem>
+		    <MenuItem value={'pop_index'}>Event Popularity</MenuItem>
 		  </Select>
                   <Button className={classes.sectionButton} onClick={this.handleSearch} component={Link} to={"/search"}>Search</Button>
                     <div className={classes.grow} />

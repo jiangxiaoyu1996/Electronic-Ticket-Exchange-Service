@@ -12,7 +12,7 @@ class LoginContainer extends Component{
       if (typeof this.props.loggedin === 'undefined' || this.props.loggedin === '' || this.props.loggedin === false ){
         return(
           <div>
-              <HeaderContainer/>
+              <HeaderContainer user={this.props.user} loggedin={this.props.loggedin}/>
 		<Login login={this.props.login} user={this.props.user} loggedin={this.props.loggedin}/>
           </div>
       )

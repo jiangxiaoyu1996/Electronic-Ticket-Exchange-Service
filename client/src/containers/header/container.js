@@ -10,7 +10,7 @@ class HeaderContainer extends Component{
     render() {
 	return(
 		<div>
-		<Header search={this.props.search} logout={this.props.logout} user={this.props.user} result={this.props.result}/>
+		<Header search={this.props.search} logout={this.props.logout} user={this.props.user} result={this.props.result} loggedin={this.props.loggedin} />
 		</div>
         )
     }
