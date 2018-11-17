@@ -10,3 +10,4 @@ export const SEARCH = "search";
 //post ticket event list
 export const POST_LIST = "post_list";
 export const SELL_TICKET = "sell_ticket";
+export const SELL_TICKET_RESET = "sell_ticket_reset";

@@ -42,6 +42,7 @@ class Profile extends Component {
                         eventlist={this.props.eventlist}
                         sellTicket={this.props.sellTicket}
                         sellingTicketResult={this.props.sellingTicketResult}
+                        sellTicketReset={this.props.sellTicketReset}
                     />
                 </div>
             </div>

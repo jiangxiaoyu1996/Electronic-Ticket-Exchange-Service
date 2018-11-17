@@ -26,6 +26,10 @@ class PostTicketContent extends Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
+    componentDidMount(){
+        this.props.sellTicketReset();
+    }
+
     handleChange = name => event => {
         this.setState({
             [name] : event.target.value,
@@ -68,12 +72,12 @@ class PostTicketContent extends Component{
     renderEventInfo(){
         const { classes } = this.props;
 
-        console.log("row: ", this.state.selectedRow);
+        /*console.log("row: ", this.state.selectedRow);
         console.log("column: ", this.state.selectedColumn);
         console.log("price: ", this.state.price);
         console.log("postingFailure: ", this.state.postingFailureOpen);
         console.log("postingSuccess: ", this.state.postingSuccess);
-        console.log("postingresult:", this.props.sellingTicketResult);
+        console.log("postingresult:", this.props.sellingTicketResult);*/
 
         if(this.state.selectedEvent !== ""){
             const targetEvent = findTargetEvent(this.props.eventlist, this.state.selectedEvent)[0];
@@ -160,7 +164,8 @@ class PostTicketContent extends Component{
             else{
                 return (
                     <div className={classes.content}>
-                        Success!
+                        You sold a ticket on "{this.state.selectedEvent}" event with price ${this.state.price},
+                        seat location ({this.state.selectedRow},{this.state.selectedColumn}).
                     </div>
                 )
             }

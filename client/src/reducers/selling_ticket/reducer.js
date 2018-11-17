@@ -5,6 +5,8 @@ export default function(state = null, action){
         case ACTION.SELL_TICKET:
             console.log("reducer: ", action);
             return action.payload.data.result;
+        case ACTION.SELL_TICKET_RESET:
+            return null;
         default:
             return state;
     }
