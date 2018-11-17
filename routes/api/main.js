@@ -236,6 +236,7 @@ router.post('/addTicket', function(req, res){
 	var col = req.body.col
 	var buyer = req.body.buyer
 	var seller = req.body.seller
+    var price = req.body.price
 	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', NULL, ' + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
 			res.json({

@@ -5,6 +5,8 @@ import Profile from "../../components/profile";
 
 import { getProfile } from "../../actions/profile/action";
 import { getEventListForPosting } from "../../actions/event_list_post/action";
+import { sellTicket } from "../../actions/selling_ticket/action";
+import { sellTicketReset } from "../../actions/selling_result_reset/action";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
 
 class ProfileContainer extends Component{
@@ -39,6 +41,9 @@ class ProfileContainer extends Component{
                         sellingRecord={findSellingRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
                         purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
                         eventlist={makeList(this.props.eventListPosting)}
+                        sellTicket={this.props.sellTicket}
+                        sellingTicketResult={this.props.sellingTicketResult}
+                        sellTicketReset={this.props.sellTicketReset}
                     />
                 </div>
             )
@@ -85,8 +90,9 @@ function makeList(list){
 function mapStateToProps(state){
     return {
         profile: state.profile,
-        eventListPosting: state.eventListPosting
+        eventListPosting: state.eventListPosting,
+        sellingTicketResult: state.sellingTicketResult
     }
 }
 
-export default connect(mapStateToProps, { getProfile, getEventListForPosting })(ProfileContainer);
+export default connect(mapStateToProps, { getProfile, getEventListForPosting, sellTicket, sellTicketReset })(ProfileContainer);

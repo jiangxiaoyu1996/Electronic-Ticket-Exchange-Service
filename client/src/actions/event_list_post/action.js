@@ -7,7 +7,6 @@ axios.defaults.withCredentials = true;
 
 export function getEventListForPosting(){
     const request = axios.get(`${ROOT_URL}/main/event`);
-    console.log("Event Action: ", request);
 
     return {
         type: ACTION.POST_LIST,
