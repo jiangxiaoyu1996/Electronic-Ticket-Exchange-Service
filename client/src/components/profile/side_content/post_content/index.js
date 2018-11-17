@@ -8,6 +8,11 @@ import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 import {styles} from "../styles";
 import SeatSelection from "../../../seatSelection"
 import Button from "@material-ui/core/es/Button/Button";
+import Dialog from "@material-ui/core/es/Dialog/Dialog";
+import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
+import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
+import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 
 class PostTicketContent extends Component{
     constructor(props){
@@ -16,7 +21,8 @@ class PostTicketContent extends Component{
             selectedEvent: "",
             selectedRow: "TBD",
             selectedColumn: "TBD",
-            price: ""
+            price: "",
+            open: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -43,6 +49,20 @@ class PostTicketContent extends Component{
             price: event.target.value
         })
     }
+
+    handlePost(){
+        if(this.state.selectedEvent !== "" && this.state.selectedRow !== "TBD" && this.state.selectedColumn !== "TBD"
+            && this.state.price !== ""){
+            this.props.sellTicket(this.state.selectedEvent, this.state.selectedRow,
+                this.state.selectedColumn, this.props.user, this.state.price);
+        }else{
+            this.setState({ open: true });
+        }
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
 
     renderEventInfo(){
         const { classes } = this.props;
@@ -107,7 +127,12 @@ class PostTicketContent extends Component{
                         variant="outlined"
                     />
                     <div>
-                        <Button className={classes.postingButton} variant="outlined" size={"medium"}>
+                        <Button
+                            className={classes.postingButton}
+                            variant="outlined"
+                            size={"medium"}
+                            onClick={() => this.handlePost()}
+                        >
                             Post Ticket
                         </Button>
                     </div>
@@ -144,6 +169,26 @@ class PostTicketContent extends Component{
                     ))}
                 </TextField>
                 {this.renderEventInfo()}
+                <div>
+                    <Dialog
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Posting Requirement Incompletion"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Please check event and seat selection as well as price input field before posting action.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClose} autoFocus>
+                                OK
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </div>
         );
     }
