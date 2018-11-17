@@ -30,10 +30,16 @@ class ProfileContent extends Component {
                 />;
                 break;
             case ComponentString.PURCHASE_HISTORY:
-                temp = <PurchaseContent purchaseRecord={this.props.purchaseRecord}/>;
+                temp = <PurchaseContent
+                            purchaseRecord={this.props.purchaseRecord}
+                            getProfile={this.props.getProfile}
+                        />;
                 break;
             case ComponentString.SELLING_HISTORY:
-                temp = <SellingContent sellingRecord={this.props.sellingRecord}/>;
+                temp = <SellingContent
+                            sellingRecord={this.props.sellingRecord}
+                            getProfile={this.props.getProfile}
+                        />;
                 break;
             default:
                 console.log("Unsupported navigation menu in profile page");
