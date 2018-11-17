@@ -237,8 +237,9 @@ router.post('/addTicket', function(req, res){
 	var buyer = req.body.buyer
 	var seller = req.body.seller
     var price = req.body.price
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', NULL, ' + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ", '" + mysql.escape(buyer) + "', " + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
+			console.log(err)
 			res.json({
 				type: 'addTicket',
 				result: false
@@ -279,9 +280,7 @@ router.post('/addEvent', function(req,res){
 
 
 router.post('/search', function(req, res){
-
 	const index = search(req.body.keyword);
-	connection = getMySQLConnection();
 	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
 
 		if(err){
