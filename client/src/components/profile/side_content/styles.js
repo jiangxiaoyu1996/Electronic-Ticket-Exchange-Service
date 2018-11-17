@@ -7,12 +7,16 @@ export const styles = theme => ({
         borderStyle: "outset",
         borderColor: "#FF8C00"
     },
-
     content: {
         margin: 10,
     },
-
     textField: {
         margin: 20,
+    },
+    eventDetailTitle: {
+        color: "#FF8C00"
+    },
+    eventDetailContent: {
+        margin: 10,
     }
 });

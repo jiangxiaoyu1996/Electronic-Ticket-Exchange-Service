@@ -4,18 +4,20 @@ import {withStyles} from "@material-ui/core/styles/index";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from '@material-ui/core/Typography';
 import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
+/*import Grid from "@material-ui/core/es/Grid/Grid";
+import FormControl from "@material-ui/core/es/FormControl/FormControl";
+import FormHelperText from "@material-ui/core/es/FormHelperText/FormHelperText";*/
 
 import {styles} from "../styles";
-import Grid from "@material-ui/core/es/Grid/Grid";
-import Button from "@material-ui/core/es/Button/Button";
+import SeatSelection from "../../../seatSelection"
 
 class PostTicketContent extends Component{
     constructor(props){
         super(props);
         this.state = {
             selectedEvent: "",
-            selectedRow: "",
-            selectedColumn: "",
+            selectedRow: "TBD",
+            selectedColumn: "TBD",
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -24,6 +26,8 @@ class PostTicketContent extends Component{
     handleChange = name => event => {
         this.setState({
             [name] : event.target.value,
+            selectedRow: "TBD",
+            selectedColumn: "TBD",
         });
     };
 
@@ -37,53 +41,52 @@ class PostTicketContent extends Component{
     renderEventInfo(){
         const { classes } = this.props;
 
+        console.log("row: ", this.state.selectedRow);
+        console.log("column: ", this.state.selectedColumn);
+
         if(this.state.selectedEvent !== ""){
             const targetEvent = findTargetEvent(this.props.eventlist, this.state.selectedEvent)[0];
-            //const avaiableSeatForSelling = findAvaiableSeatForSelling(targetEvent.maxRow, targetEvent.maxCol, targetEvent.notSellableSeat);
+            const avaiableSeatForSelling = findAvaiableSeatForSelling(targetEvent.maxRow, targetEvent.maxCol, targetEvent.notSellableSeat);
+            console.log(avaiableSeatForSelling);
             return (
                 <div className={classes.textField}>
-                    <Typography variant="h6" color={"#FF8C00"}>
+                    <Typography variant="h6">
                         Event Name:
                     </Typography>
-                    <Typography>
-                        {"     "}  {   targetEvent.name}
+                    <Typography className={classes.eventDetailContent}>
+                       {targetEvent.name}
                     </Typography>
-                    <Typography variant="h6" color={"#FF8C00"}>
+                    <Typography variant="h6">
                         Event Description:
                     </Typography>
-                    <Typography>
-                        {"     "} {   targetEvent.description}
+                    <Typography className={classes.eventDetailContent}>
+                        {targetEvent.description}
                     </Typography>
-                    <Typography variant="h6" color={"#FF8C00"}>
+                    <Typography variant="h6">
                         Event Location:
                     </Typography>
-                    <Typography>
-                        {"     "} {   targetEvent.location}
+                    <Typography className={classes.eventDetailContent}>
+                        {targetEvent.location}
                     </Typography>
-                    <Typography variant="h6" color={"#FF8C00"}>
+                    <Typography variant="h6">
                         Event Date:
                     </Typography>
-                    <Typography>
-                        {"     "} {   targetEvent.date}
+                    <Typography className={classes.eventDetailContent}>
+                        {targetEvent.date}
                     </Typography>
-                    <Grid container spacing={24}>
-                    </Grid>
+                    <Typography variant="h6">
+                        Event Sellable Seats:
+                    </Typography>
+                    <div className={classes.eventDetailContent}>
+                        <SeatSelection list={avaiableSeatForSelling} handleClick={this.handleClick}/>
+                    </div>
+                    <Typography className={classes.eventDetailContent}>
+                        Your Seat Selection: ({this.state.selectedRow},{this.state.selectedColumn})
+                    </Typography>
                 </div>
             )
         }
     }
-
-    /*static renderSeat(list){
-        return list.map((row, rIndex) => {
-            return row.map((cell, cIndex) => {
-                return (
-                    <Grid item xs={1}>
-                        <Button onClick={this.handleClick(rIndex, cIndex)}/>
-                    </Grid>
-                )
-            })
-        })
-    }*/
 
     render(){
         const { classes } = this.props;
@@ -142,7 +145,6 @@ function findAvaiableSeatForSelling(row, col, avoid){
     });
     //console.log(set);
     let result = [];
-    let result2 = [];
     for(let i = 0; i < row; i++){
         result[i] = [];
         for(let j = 0; j < col; j++){
@@ -155,7 +157,6 @@ function findAvaiableSeatForSelling(row, col, avoid){
                     result[i][j] = false;break;
                 }else{
                     result[i][j] = true;
-                    result2.push([s[0] - 1, s[1] - 1]);
                 }
                 //console.log(i,j,result[i][j]);
             }
