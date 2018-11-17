@@ -8,6 +8,7 @@ import FormControl from "@material-ui/core/es/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/es/FormHelperText/FormHelperText";
 
 import { styles } from "./styles";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 class SignIn extends Component {
     constructor(props){
@@ -123,6 +124,9 @@ class SignIn extends Component {
                         >
                             Create Account
                         </Button>
+                        <Typography style={errorStyle}>
+                            {this.props.error}
+                        </Typography>
                     </Grid>
                 </Grid>
             </div>
