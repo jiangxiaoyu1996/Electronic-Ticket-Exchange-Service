@@ -43,6 +43,7 @@ class ProfileContainer extends Component{
                         sellTicket={this.props.sellTicket}
                         sellingTicketResult={this.props.sellingTicketResult}
                         sellTicketReset={this.props.sellTicketReset}
+                        getEventListForPosting={this.props.getEventListForPosting}
                     />
                 </div>
             )
