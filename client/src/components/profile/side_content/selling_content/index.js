@@ -11,6 +11,9 @@ import TableBody from "@material-ui/core/es/TableBody/TableBody";
 import Typography from "@material-ui/core/es/Typography/Typography";
 
 class SellingContent extends Component{
+    componentDidMount(){
+        this.props.getProfile();
+    }
 
     renderTableRow(){
         return this.props.sellingRecord.map((record) => {
