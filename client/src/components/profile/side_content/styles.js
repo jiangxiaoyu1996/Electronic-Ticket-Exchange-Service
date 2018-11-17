@@ -18,5 +18,9 @@ export const styles = theme => ({
     },
     eventDetailContent: {
         margin: 10,
+    },
+    postingButton: {
+        textTransform: "none",
+        marginLeft: "90%"
     }
 });

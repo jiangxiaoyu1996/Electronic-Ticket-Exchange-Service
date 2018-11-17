@@ -4,12 +4,10 @@ import {withStyles} from "@material-ui/core/styles/index";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from '@material-ui/core/Typography';
 import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
-/*import Grid from "@material-ui/core/es/Grid/Grid";
-import FormControl from "@material-ui/core/es/FormControl/FormControl";
-import FormHelperText from "@material-ui/core/es/FormHelperText/FormHelperText";*/
 
 import {styles} from "../styles";
 import SeatSelection from "../../../seatSelection"
+import Button from "@material-ui/core/es/Button/Button";
 
 class PostTicketContent extends Component{
     constructor(props){
@@ -18,6 +16,7 @@ class PostTicketContent extends Component{
             selectedEvent: "",
             selectedRow: "TBD",
             selectedColumn: "TBD",
+            price: ""
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -28,6 +27,7 @@ class PostTicketContent extends Component{
             [name] : event.target.value,
             selectedRow: "TBD",
             selectedColumn: "TBD",
+            price: ""
         });
     };
 
@@ -38,11 +38,18 @@ class PostTicketContent extends Component{
         })
     }
 
+    handlePrice(event){
+        this.setState({
+            price: event.target.value
+        })
+    }
+
     renderEventInfo(){
         const { classes } = this.props;
 
         console.log("row: ", this.state.selectedRow);
         console.log("column: ", this.state.selectedColumn);
+        console.log("price: ", this.state.price);
 
         if(this.state.selectedEvent !== ""){
             const targetEvent = findTargetEvent(this.props.eventlist, this.state.selectedEvent)[0];
@@ -83,6 +90,27 @@ class PostTicketContent extends Component{
                     <Typography className={classes.eventDetailContent}>
                         Your Seat Selection: ({this.state.selectedRow},{this.state.selectedColumn})
                     </Typography>
+                    <Typography variant="h6">
+                        Seat Price:
+                    </Typography>
+                    <TextField
+                        id="outlined-number"
+                        label="Price"
+                        value={this.state.price}
+                        onChange={(event) => this.handlePrice(event)}
+                        type="number"
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        margin="normal"
+                        variant="outlined"
+                    />
+                    <div>
+                        <Button className={classes.postingButton} variant="outlined" size={"medium"}>
+                            Post Ticket
+                        </Button>
+                    </div>
                 </div>
             )
         }
