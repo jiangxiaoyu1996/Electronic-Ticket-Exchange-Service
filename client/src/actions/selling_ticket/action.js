@@ -8,11 +8,11 @@ axios.defaults.withCredentials = true;
 export function sellTicket(eventName, seatRow, seatCol, userEmail, price){
     const request = axios.post(`${ROOT_URL}/main/addTicket`, {
         name: eventName,
-        row_Number: seatRow,
-        col_Number: seatCol,
+        row: seatRow,
+        col: seatCol,
         buyer: "",
         seller: userEmail,
-        price: price
+        price: parseInt(price, 10)
     });
     console.log("Event Action: ", request);
 

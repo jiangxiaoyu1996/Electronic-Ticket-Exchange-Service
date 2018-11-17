@@ -41,6 +41,7 @@ class ProfileContainer extends Component{
                         purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
                         eventlist={makeList(this.props.eventListPosting)}
                         sellTicket={this.props.sellTicket}
+                        sellingTicketResult={this.props.sellingTicketResult}
                     />
                 </div>
             )
@@ -87,7 +88,8 @@ function makeList(list){
 function mapStateToProps(state){
     return {
         profile: state.profile,
-        eventListPosting: state.eventListPosting
+        eventListPosting: state.eventListPosting,
+        sellingTicketResult: state.sellingTicketResult
     }
 }
 

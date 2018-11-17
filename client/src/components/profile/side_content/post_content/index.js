@@ -4,15 +4,11 @@ import {withStyles} from "@material-ui/core/styles/index";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import Typography from '@material-ui/core/Typography';
 import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
+import Button from "@material-ui/core/es/Button/Button";
 
 import {styles} from "../styles";
-import SeatSelection from "../../../seatSelection"
-import Button from "@material-ui/core/es/Button/Button";
-import Dialog from "@material-ui/core/es/Dialog/Dialog";
-import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
-import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
-import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
+import SeatSelection from "../../../seatSelection";
+import AlertDialog from "../../../alert_dialog";
 
 class PostTicketContent extends Component{
     constructor(props){
@@ -22,7 +18,9 @@ class PostTicketContent extends Component{
             selectedRow: "TBD",
             selectedColumn: "TBD",
             price: "",
-            open: false
+            validationOpen: false,
+            postingFailureOpen: false,
+            postingSuccess: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -33,7 +31,8 @@ class PostTicketContent extends Component{
             [name] : event.target.value,
             selectedRow: "TBD",
             selectedColumn: "TBD",
-            price: ""
+            price: "",
+            validationOpen: false,
         });
     };
 
@@ -56,12 +55,14 @@ class PostTicketContent extends Component{
             this.props.sellTicket(this.state.selectedEvent, this.state.selectedRow,
                 this.state.selectedColumn, this.props.user, this.state.price);
         }else{
-            this.setState({ open: true });
+            this.setState({ validationOpen: true });
         }
     }
 
-    handleClose = () => {
-        this.setState({ open: false });
+    handleClose = name => {
+        this.setState({
+            [name]: false
+        });
     };
 
     renderEventInfo(){
@@ -70,11 +71,14 @@ class PostTicketContent extends Component{
         console.log("row: ", this.state.selectedRow);
         console.log("column: ", this.state.selectedColumn);
         console.log("price: ", this.state.price);
+        console.log("postingFailure: ", this.state.postingFailureOpen);
+        console.log("postingSuccess: ", this.state.postingSuccess);
+        console.log("postingresult:", this.props.sellingTicketResult);
 
         if(this.state.selectedEvent !== ""){
             const targetEvent = findTargetEvent(this.props.eventlist, this.state.selectedEvent)[0];
             const avaiableSeatForSelling = findAvaiableSeatForSelling(targetEvent.maxRow, targetEvent.maxCol, targetEvent.notSellableSeat);
-            console.log(avaiableSeatForSelling);
+
             return (
                 <div className={classes.textField}>
                     <Typography variant="h6">
@@ -145,6 +149,23 @@ class PostTicketContent extends Component{
         const { classes } = this.props;
         const events = getEventNames(this.props.eventlist);
 
+        if(this.props.sellingTicketResult !== null){
+            if(this.props.sellingTicketResult === false){
+                return (
+                    <div className={classes.content}>
+                        We have server error for now and cannot make your selling request. Sorry for the inconvenience.
+                    </div>
+                )
+            }
+            else{
+                return (
+                    <div className={classes.content}>
+                        Success!
+                    </div>
+                )
+            }
+        }
+
         return (
             <div className={classes.content}>
                 <TextField
@@ -169,26 +190,13 @@ class PostTicketContent extends Component{
                     ))}
                 </TextField>
                 {this.renderEventInfo()}
-                <div>
-                    <Dialog
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{"Posting Requirement Incompletion"}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Please check event and seat selection as well as price input field before posting action.
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.handleClose} autoFocus>
-                                OK
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
+                <AlertDialog
+                    open={this.state.validationOpen}
+                    handleClose={this.handleClose}
+                    type={"validationOpen"}
+                    title={"Posting Requirement Incompletion"}
+                    content={" Please check event and seat selection as well as price input field before posting action."}
+                />
             </div>
         );
     }
@@ -245,3 +253,26 @@ PostTicketContent.propTypes = {
 };
 
 export default withStyles(styles)(PostTicketContent);
+
+/*
+<div>
+                    <Dialog
+                        open={this.state.open}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Posting Requirement Incompletion"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Please check event and seat selection as well as price input field before posting action.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClose} autoFocus>
+                                OK
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+ */
