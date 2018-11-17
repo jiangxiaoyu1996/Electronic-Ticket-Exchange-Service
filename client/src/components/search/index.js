@@ -88,7 +88,7 @@ class Search extends Component {
 		    return (<TableRow>{row.map(d=>{
 			++cIdx;
 			if ( this.eventNameColId === cIdx ) {
-			    return (<TableCell ><Button variant = "outlined" component={Link} to="/">{d}</Button></TableCell>);
+			    return (<TableCell ><Button variant = "outlined" component={Link} to="/event">{d}</Button></TableCell>);
 			}
 			else {
 			    return (<TableCell>{d}</TableCell>);
