@@ -28,6 +28,7 @@ class PostTicketContent extends Component{
 
     componentDidMount(){
         this.props.sellTicketReset();
+        this.props.getEventListForPosting();
     }
 
     handleChange = name => event => {
