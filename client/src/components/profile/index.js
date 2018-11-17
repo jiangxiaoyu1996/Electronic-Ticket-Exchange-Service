@@ -28,7 +28,7 @@ class Profile extends Component {
 
         return(
             <div className={classes.container}>
-                <ProfileWelcome user={this.props.user}/>
+                <ProfileWelcome userInfo={this.props.userInfo}/>
                 <div className={classes.navigation}>
                     <ProfileNav
                         menu={navMenu}

@@ -36,7 +36,6 @@ class ProfileContainer extends Component{
                 <div>
                     <HeaderContainer />
                     <Profile
-                        user={this.props.profile.UserInfo[0].email}
                         userInfo={this.props.profile.UserInfo[0]}
                         sellingRecord={findSellingRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}
                         purchaseRecord={findPurchaseRecord(this.props.profile.Record, this.props.profile.UserInfo[0].email)}

@@ -70,6 +70,24 @@ router.post('/updateAddress', authenticate, function(req, res){
     })
 })
 
+router.post('/updateUsername', authenticate, function(req, res){
+    const username = req.body.username
+    connection.query("UPDATE user SET username ='" + mysql.escape(username) + "WHERE id = '" + req.cookies['session'], function(err, rows, fields){
+        if(err){
+            res.json({
+                type: updateUsername,
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: updateUsername,
+                result: true
+            })
+        }
+    })
+})
+
 
 router.post('/login', function(req, res){
     const email = req.body.email
