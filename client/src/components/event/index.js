@@ -62,9 +62,13 @@ class EventDetail extends Component {
     }
 
     handleClose = name => {
-        this.setState({
-            [name]: false
-        });
+        if(name === "timestampAlertOpen"){
+            this.props.lockTicketReset();
+        }else{
+            this.setState({
+                [name]: false
+            });
+        }
     };
 
     handleCheckoutClose(){
@@ -165,6 +169,13 @@ class EventDetail extends Component {
                         type={"addressAlertOpen"}
                         title={"Address Requirement Incompletion"}
                         content={" Please specify address in account profile before checkout process."}
+                    />
+                    <AlertDialog
+                        open={this.props.lockTicket === null ? false : !this.props.lockTicket}
+                        handleClose={this.handleClose}
+                        type={"timestampAlertOpen"}
+                        title={"Timestamp Error"}
+                        content={" Please try again later or select a different seat."}
                     />
                     <CheckoutDialog
                         open={this.props.lockTicket === null ? false : this.props.lockTicket}

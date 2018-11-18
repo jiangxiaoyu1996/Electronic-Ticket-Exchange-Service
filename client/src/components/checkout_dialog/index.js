@@ -29,7 +29,7 @@ export default class CheckoutDialog extends Component {
                 >
                     <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
                     <DialogContent>
-                        <Countdown date={Date.now() + 20000}>
+                        <Countdown date={Date.now() + 90000}>
                             <CheckoutClose/>
                         </Countdown>
                         <DialogContentText>

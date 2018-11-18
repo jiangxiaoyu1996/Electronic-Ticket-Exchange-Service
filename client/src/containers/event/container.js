@@ -8,6 +8,7 @@ import { getEventListForBuying } from "../../actions/event_list_buy/action";
 import { lockTicketForBuying } from "../../actions/lock_ticket/action";
 import { unlockTicketForBuying } from "../../actions/unlock_ticket/action";
 import { buyTicket } from "../../actions/buying_ticket/action";
+import { lockTicketReset } from "../../actions/lock_result_reset/action";
 
 class EventContainer extends Component {
     componentDidMount(){
@@ -30,6 +31,7 @@ class EventContainer extends Component {
                         lockTicketForBuying={this.props.lockTicketForBuying}
                         unlockTicketForBuying={this.props.unlockTicketForBuying}
                         buyTicket={this.props.buyTicket}
+                        lockTicketReset={this.props.lockTicketReset}
                     />
                 </div>
             )
@@ -84,5 +86,5 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying,
+export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying, lockTicketReset,
     unlockTicketForBuying, buyTicket})(EventContainer);
