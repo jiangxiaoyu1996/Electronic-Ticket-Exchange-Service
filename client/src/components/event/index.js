@@ -84,6 +84,7 @@ class EventDetail extends Component {
 
     render(){
         const { classes } = this.props;
+        //console.log("error: ", this.props.selectedEvent);
 
         if(this.props.selectedEvent !== undefined){
             const avaiableSeatForBuying = findAvaiableSeatForBuying(this.props.selectedEvent[0].maxRow,this.props.selectedEvent[0].maxCol,

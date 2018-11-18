@@ -230,27 +230,37 @@ function findAvaiableSeatForSelling(row, col, avoid){
         seatLocation.push(seat[1]);
         set.add(seatLocation);
     });
-    //console.log(set);
+    console.log("set: ",set);
     let result = [];
-    for(let i = 0; i < row; i++){
-        result[i] = [];
-        for(let j = 0; j < col; j++){
-            const temp = [i, j];
-            //console.log("temp: ", temp);
-            for(let s of set){
-                const r = [s[0] - 1, s[1] - 1];
-                //console.log("r: ", r);
-                if(JSON.stringify(r) === JSON.stringify(temp)){
-                    result[i][j] = false;break;
-                }else{
-                    result[i][j] = true;
-                }
-                //console.log(i,j,result[i][j]);
-            }
 
+    if(set.size === 0){
+        for(let i = 0; i < row; i++){
+            result[i] = [];
+            for(let j = 0; j < col; j++){
+                result[i][j] = true;
+            }
+        }
+    }else{
+        for(let i = 0; i < row; i++){
+            result[i] = [];
+            for(let j = 0; j < col; j++){
+                const temp = [i, j];
+                //console.log("temp: ", temp);
+                for(let s of set){
+                    const r = [s[0] - 1, s[1] - 1];
+                    //console.log("r: ", r);
+                    if(JSON.stringify(r) === JSON.stringify(temp)){
+                        result[i][j] = false;break;
+                    }else{
+                        result[i][j] = true;
+                    }
+                    //console.log(i,j,result[i][j]);
+                }
+
+            }
         }
     }
-    //console.log(result);
+    console.log("result: ", result);
     return result;
 }
 
