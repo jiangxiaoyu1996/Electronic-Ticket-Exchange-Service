@@ -8,6 +8,8 @@ import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProg
 import SeatSelection from "../seatSelection";
 import Button from "@material-ui/core/es/Button/Button";
 import AlertDialog from "../alert_dialog";
+import CheckoutDialog from "../checkout_dialog";
+import Redirect from "react-router-dom/es/Redirect";
 
 class EventDetail extends Component {
     constructor(props){
@@ -62,6 +64,12 @@ class EventDetail extends Component {
             [name]: false
         });
     };
+
+    handleCheckoutClose(){
+        return (
+            <Redirect to={'/'} />
+        );
+    }
 
     render(){
         const { classes } = this.props;
@@ -119,7 +127,7 @@ class EventDetail extends Component {
                             size={"medium"}
                             onClick={() => this.handleCheckout()}
                         >
-                            Checkout
+                            Make an Order
                         </Button>
                     </div>
                     <AlertDialog
@@ -150,12 +158,12 @@ class EventDetail extends Component {
                         title={"Address Requirement Incompletion"}
                         content={" Please specify address in account profile before checkout process."}
                     />
-                    <AlertDialog
+                    <CheckoutDialog
                         open={this.props.lockTicket === null ? false : this.props.lockTicket}
-                        handleClose={this.handleClose}
-                        type={"checkoutDialogOpen"}
-                        title={"Checkout Success"}
-                        content={" Yes!!!!!!!"}
+                        selectedRow={this.state.selectedRow}
+                        selectedColumn={this.state.selectedColumn}
+                        price={this.state.price}
+                        handleClose={this.handleCheckoutClose}
                     />
                 </div>
             );
