@@ -22,15 +22,6 @@ var connection = mysql.createPool({
         database : 'ETES'
 });
 
-var authenticate = function(req, res, next){
-	if(req.cookies['session'] != null){
-		next()
-	}
-	res.json({
-		type: 'authenticate',
-		result: false
-	})
-}
 
 async function purchaseInfo(ticket, event){
 	var array = ticket
