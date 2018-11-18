@@ -2,10 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { search } from "../../actions/search/action";
-import {eventSelectionFromSearch} from "../../actions/event_selection/action";
+import { eventSelectionFromSearch } from "../../actions/event_selection/action";
+import { eventSelectionReset } from "../../actions/event_selection_reset/action";
+import { eventListBuyingReset } from "../../actions/event_list_buy_reset/action";
 import Search from "../../components/search";
 
 class SearchContainer extends Component{
+    componentDidMount(){
+        this.props.eventSelectionReset();
+        this.props.eventListBuyingReset();
+    }
     render(){
         return (
           <div>
@@ -28,4 +34,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { search, eventSelectionFromSearch })(SearchContainer);
+export default connect(mapStateToProps, { search, eventSelectionFromSearch, eventSelectionReset, eventListBuyingReset })(SearchContainer);
