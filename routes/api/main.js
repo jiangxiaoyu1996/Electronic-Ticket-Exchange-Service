@@ -406,44 +406,24 @@ router.get('/event_buying', function(req, res){
 
 router.post('/buyticket', authenticate, function(req, res){
 	var id = req.cookies['session'];
-	var username = req.user.username;
 	var email = req.user.email;
 	var eventname = req.body.event;
     var row = req.body.row;
     var col = req.body.col;
-	if(typeof username !== undefined){
-		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
-			if(err){
-				res.json({
-					type: 'buyTicket',
-					result: false
-				})
-			}
-			else{
-				res.json({
-					type: 'buyTicket',
-					result: true
-				})
-			}
-		})
-	}
-	else{
-		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
-			if(err){
-				res.json({
-					type: 'buyTicket',
-					result: false
-				})
-			}
-			else{
-				res.json({
-					type: 'buyTicket',
-					result: true
-				})
-			}
-		})
-	}
-
+    connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
+        if(err){
+            res.json({
+                type: 'buyTicket',
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: 'buyTicket',
+                result: true
+            })
+        }
+    })
 })
 
 

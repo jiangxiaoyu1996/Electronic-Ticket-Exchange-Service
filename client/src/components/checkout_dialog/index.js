@@ -8,9 +8,19 @@ import Button from "@material-ui/core/es/Button/Button";
 import Countdown from 'react-countdown-now';
 
 export default class CheckoutDialog extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            cancel: false,
+            confirm: false,
+        }
+    }
+
     render() {
         console.log("checkoutOpen: ", this.props.open);
+
         const CheckoutClose = () => this.props.handleCheckoutClose();
+        const ConfirmOrder = () => this.props.handleOrderConfimation();
         return (
             <div>
                 <Dialog
@@ -37,12 +47,14 @@ export default class CheckoutDialog extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => this.props.handleCheckoutClose()} color="primary">
+                        <Button onClick={() => this.setState({cancel: true})} color="primary">
                             Cancel
                         </Button>
-                        <Button color="primary">
+                        {this.state.cancel === true ? <CheckoutClose/> : null}
+                        <Button onClick={() => this.setState({confirm: true})} color="primary">
                             Confirm Order
                         </Button>
+                        {this.state.confirm === true ? <ConfirmOrder/> : null}
                     </DialogActions>
                 </Dialog>
             </div>

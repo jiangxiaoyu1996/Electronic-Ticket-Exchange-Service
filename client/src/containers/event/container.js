@@ -7,6 +7,7 @@ import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProg
 import { getEventListForBuying } from "../../actions/event_list_buy/action";
 import { lockTicketForBuying } from "../../actions/lock_ticket/action";
 import { unlockTicketForBuying } from "../../actions/unlock_ticket/action";
+import { buyTicket } from "../../actions/buying_ticket/action";
 
 class EventContainer extends Component {
     componentDidMount(){
@@ -25,6 +26,7 @@ class EventContainer extends Component {
                         lockTicket={this.props.lockTicket}
                         lockTicketForBuying={this.props.lockTicketForBuying}
                         unlockTicketForBuying={this.props.unlockTicketForBuying}
+                        buyTicket={this.props.buyTicket}
                     />
                 </div>
             )
@@ -79,4 +81,5 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying, unlockTicketForBuying})(EventContainer);
+export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying,
+    unlockTicketForBuying, buyTicket})(EventContainer);

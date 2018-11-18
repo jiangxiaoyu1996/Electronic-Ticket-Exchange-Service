@@ -21,3 +21,5 @@ export const BUY_LIST_RESET = "buy_list_reset";
 //checkout
 export const LOCK_TICKET = "lock_ticket";
 export const UNLOCK_TICKET = "unlock_ticket";
+export const BUY_TICKET = "buy_ticket";
+export const BUY_TICKET_RESET = "buy_ticket_reset";
