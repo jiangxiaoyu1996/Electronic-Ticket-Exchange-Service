@@ -305,7 +305,7 @@ router.post('/search', function(req, res){
 });
 
 router.get('/event', function(req, res){
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, seller, price FROM event,ticket WHERE event_name = event and buyer is null and status = 0 ORDER BY event_name', function(err, event, fields){
 		if(err){
 			res.json({
 				type: 'event',

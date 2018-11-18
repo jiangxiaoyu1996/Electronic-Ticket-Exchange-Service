@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
+import {connect} from "react-redux";
 
 import HeaderContainer from "../header/container";
 import EventDetail from "../../components/event";
 
-export default class EventContainer extends Component {
+class EventContainer extends Component {
     render(){
         return (
             <div>
                 <HeaderContainer />
-                <EventDetail />
+                <EventDetail selectedEvent={this.props.selectedEvent}/>
             </div>
         )
     }
 }
+
+function mapStateToProps(state){
+    return {
+        selectedEvent: state.selectedEvent,
+    }
+}
+
+export default connect(mapStateToProps, null)(EventContainer);

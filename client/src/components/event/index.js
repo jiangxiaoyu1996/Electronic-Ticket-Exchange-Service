@@ -14,7 +14,7 @@ class EventDetail extends Component {
 
         return(
             <div className={classes.container}>
-               event detail!
+                {this.props.selectedEvent}
             </div>
         );
     }

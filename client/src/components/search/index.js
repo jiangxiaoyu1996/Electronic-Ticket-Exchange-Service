@@ -10,6 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Header from "../../components/header/index";
 import Button from "@material-ui/core/es/Button/Button";
 import Link from "react-router-dom/es/Link";
+import {eventSelectionFromSearch} from "../../actions/event_selection/action";
 
 class Search extends Component {
     constructor(props){
@@ -88,7 +89,16 @@ class Search extends Component {
 		    return (<TableRow>{row.map(d=>{
 			++cIdx;
 			if ( this.eventNameColId === cIdx ) {
-			    return (<TableCell ><Button variant = "outlined" component={Link} to="/event">{d}</Button></TableCell>);
+			    return (
+			        <TableCell >
+                        <Button
+                            variant = "outlined"
+                            component={Link} to="/event"
+                            onClick={() => this.props.eventSelectionFromSearch(d)}
+                        >
+                            {d}
+                            </Button>
+                    </TableCell>);
 			}
 			else {
 			    return (<TableCell>{d}</TableCell>);
