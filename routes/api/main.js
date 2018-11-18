@@ -3,7 +3,9 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
+const cookieParser = require('cookie-parser');
 
+router.use(cookieParser());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -55,7 +57,7 @@ function search(text){
 
 var authenticate = function(req, res, next){
 	var id = req.cookies['session']
-	if(id != null){
+	if(typeof id !== undefined){
 		connection.query("SELECT * FROM user WHERE id = '" + id + "'", function(err, rows, fields){
 			if(err){
 				res.json({
@@ -70,15 +72,22 @@ var authenticate = function(req, res, next){
 				})
 			}
 			else{
+				req.user = {
+					username : rows[0].username,
+					email : rows[0].email
+				}
 				next()
 			}
 		})
 	}
-	res.json({
-		type: 'authenticate',
-		result: false
-	})
+	else{
+		res.json({
+			type: 'authenticate',
+			result: false
+		})
+	}
 }
+
 
 function calcRoute(startX, startY, endX, endY) {
     var directionsService = new google.maps.DirectionsService();
@@ -239,7 +248,6 @@ router.post('/addTicket', function(req, res){
     var price = req.body.price
 	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ", '" + mysql.escape(buyer) + "', " + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
-			console.log(err)
 			res.json({
 				type: 'addTicket',
 				result: false
@@ -281,8 +289,7 @@ router.post('/addEvent', function(req,res){
 
 router.post('/search', function(req, res){
 	const index = search(req.body.keyword);
-	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
-
+	connection.query('SELECT * FROM event WHERE' + index + 'AND status = 0', function(err, rows, fields){
 		if(err){
 			res.json({
 				type: 'search',
@@ -335,14 +342,53 @@ router.get('/event', function(req, res){
 })
 
 
-router.post('/lockticket', function(req, res){
-    //const ticketid = req.body.t_ID;
-    const ticketid = 1; ///////////////////////////////////////////for testing
-    var lock = 1;
+//bug will return true even though ticket id does not exist
+router.post('/buyticket', authenticate, function(req, res){
+	var id = req.cookies['session'];
+	var username = req.user.username;
+	var email = req.user.email;
+	var ticketid = req.body.id;
+	if(typeof username !== undefined){
+		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields){
+			if(err){
+				res.json({
+					type: 'buyTicket',
+					result: false
+				})
+			}
+			else{
+				res.json({
+					type: 'buyTicket',
+					result: true
+				})
+			}
+		})
+	}
+	else{
+		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ' WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields){
+			if(err){
+				res.json({
+					type: 'buyTicket',
+					result: false
+				})
+			}
+			else{
+				res.json({
+					type: 'buyTicket',
+					result: true
+				})
+			}
+		})
+	}
+
+})
+
+
+router.post('/lockticket', authenticate, function(req, res){
+    const ticketid = req.body.id;
+    //const ticketid = 1;
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
         if (err) {
-            console.log(err)
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
             res.json({
                 type:'timestamp',
                 success: false
@@ -376,13 +422,10 @@ router.post('/lockticket', function(req, res){
 
 
 router.post('/unlockticket', function(req, res){
-    //const ticketid = req.body.t_ID;
-    const ticketid = 1; ///////////////////////////////////////////for testing
-    var lock = 1;
+    const ticketid = req.body.id;
+    //const ticketid = 1;
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
         if (err) {
-            console.log(err)
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
             res.json({
                 type:'timestamp',
                 success: false
@@ -391,10 +434,11 @@ router.post('/unlockticket', function(req, res){
         else if(rows.length > 0) {
             connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE id = ' + mysql.escape(ticketid)
                 , function(err, rows, fields) {
-                    lock -= 1
                     if (err) {
-                        console.log(err)
-                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+                        res.json({
+                			type:'timestamp',
+                			success: false
+          				});
                     }
                     else {
                         res.send({
@@ -412,9 +456,6 @@ router.post('/unlockticket', function(req, res){
             });
         }
     });
-    if(lock == 0) {
-        connection.end();
-    }
 });
 
 module.exports = router;
