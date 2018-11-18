@@ -39,7 +39,9 @@ async function createArray(event){
 			previous = i
 			index++
 			location = []
-			location.push([event[i].row_Number, event[i].col_Number, event[i].price])
+            if(event[previous].row_Number != null){
+			 location.push([event[i].row_Number, event[i].col_Number, event[i].price])
+            }
 		}
 	}
 	array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
@@ -53,6 +55,29 @@ function search(text){
 	}
 	filterStr = filterStr.substring(0, filterStr.lastIndexOf(" AND"))
 	return filterStr
+}
+
+var checkifExist = function(req, res, next){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
+        if(err){
+            res.json({
+                type: 'checkifExist',
+                result: false
+            })
+        }
+        else if (rows.length > 0){
+            next()
+        }
+        else{
+            res.json({
+                type: 'checkifExist',
+                result: false
+            })
+        }
+    })
 }
 
 var authenticate = function(req, res, next){
@@ -289,7 +314,7 @@ router.post('/addEvent', function(req,res){
 
 router.post('/search', function(req, res){
 	const index = search(req.body.keyword);
-	connection.query('SELECT * FROM event WHERE' + index + 'AND status = 0', function(err, rows, fields){
+	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
 		if(err){
 			res.json({
 				type: 'search',
@@ -312,7 +337,7 @@ router.post('/search', function(req, res){
 });
 
 router.get('/event', function(req, res){
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event LEFT OUTER JOIN ticket ON event_name = event ORDER BY event_name', function(err, event, fields){
 		if(err){
 			res.json({
 				type: 'event',
@@ -372,15 +397,15 @@ router.get('/event_buying', function(req, res){
 })
 
 
-
-//bug will return true even though ticket id does not exist
-router.post('/buyticket', authenticate, function(req, res){
+router.post('/buyticket', authenticate, checkifExist, function(req, res){
 	var id = req.cookies['session'];
 	var username = req.user.username;
 	var email = req.user.email;
-	var ticketid = req.body.id;
+	var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
 	if(typeof username !== undefined){
-		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields){
+		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
 			if(err){
 				res.json({
 					type: 'buyTicket',
@@ -396,7 +421,7 @@ router.post('/buyticket', authenticate, function(req, res){
 		})
 	}
 	else{
-		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ' WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields){
+		connection.query('UPDATE ticket SET buyer = ' + mysql.escape(username) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
 			if(err){
 				res.json({
 					type: 'buyTicket',
@@ -415,36 +440,23 @@ router.post('/buyticket', authenticate, function(req, res){
 })
 
 
-router.post('/lockticket', authenticate, function(req, res){
-    const ticketid = req.body.id;
+router.post('/lockticket', authenticate, checkifExist, function(req, res){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
     //const ticketid = 1;
-    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
+    connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col)
+                , function(err, rows, fields) {
         if (err) {
-            res.json({
-                type:'timestamp',
+            res.send({
+                type: 'timestamp',
                 success: false
             });
         }
-        else if(rows.length > 0) {
-            connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE id = ' + mysql.escape(ticketid)
-                , function(err, rows, fields) {
-                    if (err) {
-                        console.log(err)
-                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
-                    }
-                    else {
-                        res.send({
-                            type: 'timestamp',
-                            success: true
-                        });
-                    }
-                });
-        }
         else {
-            res.json({
-                type:'timestamp',
-                success: false,
-                msg: 'no such ticket'
+            res.send({
+                type: 'timestamp',
+                success: true
             });
         }
     });
@@ -453,37 +465,22 @@ router.post('/lockticket', authenticate, function(req, res){
 
 
 router.post('/unlockticket', function(req, res){
-    const ticketid = req.body.id;
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
     //const ticketid = 1;
-    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
+    connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col)
+                , function(err, rows, fields) {
         if (err) {
             res.json({
                 type:'timestamp',
                 success: false
-            });
-        }
-        else if(rows.length > 0) {
-            connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE id = ' + mysql.escape(ticketid)
-                , function(err, rows, fields) {
-                    if (err) {
-                        res.json({
-                			type:'timestamp',
-                			success: false
-          				});
-                    }
-                    else {
-                        res.send({
-                            type: 'timestamp',
-                            success: true
-                        });
-                    }
-                });
-        }
+          		});
+            }
         else {
-            res.json({
-                type:'timestamp',
-                success: false,
-                msg: 'no such ticket'
+            res.send({
+                type: 'timestamp',
+                success: true
             });
         }
     });
