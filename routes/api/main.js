@@ -341,6 +341,37 @@ router.get('/event', function(req, res){
 	});
 })
 
+router.get('/event_buying', function(req, res){
+    connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, seller, price FROM event,ticket WHERE event_name = event and buyer is null and status = 0 ORDER BY event_name', function(err, event, fields){
+        if(err){
+            res.json({
+                type: 'event',
+                result: false
+            });
+        }
+        else if(event.length > 0){
+            createArray(event).then(result =>{
+                res.json({
+                    type: 'event',
+                    result: result
+                });
+            }).catch(err => {
+                res.json({
+                    type: 'event',
+                    result: false
+                });
+            })
+        }
+        else{
+            res.json({
+                type: 'event',
+                result: false
+            });
+        }
+    });
+})
+
+
 
 //bug will return true even though ticket id does not exist
 router.post('/buyticket', authenticate, function(req, res){

@@ -11,3 +11,9 @@ export const SEARCH = "search";
 export const POST_LIST = "post_list";
 export const SELL_TICKET = "sell_ticket";
 export const SELL_TICKET_RESET = "sell_ticket_reset";
+
+//event detail
+export const EVENT_SELECTION = "event_selection";
+export const EVENT_SELECTION_RESET = "event_selection_reset";
+export const BUY_LIST = "buy_list";
+export const BUY_LIST_RESET = "buy_list_reset";

@@ -65,7 +65,6 @@ function findPurchaseRecord(jsonArray, target){
 }
 
 function makeList(list){
-    console.log("here:", list);
     let jsonObject = [];
     if(list !== {} && list.length >= 1){
         list.forEach(event =>
