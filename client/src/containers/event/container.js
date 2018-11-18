@@ -3,20 +3,31 @@ import {connect} from "react-redux";
 
 import HeaderContainer from "../header/container";
 import EventDetail from "../../components/event";
-import {getEventListForBuying} from "../../actions/event_list_buy/action";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import { getEventListForBuying } from "../../actions/event_list_buy/action";
+import { lockTicketForBuying } from "../../actions/lock_ticket/action";
+import { unlockTicketForBuying } from "../../actions/unlock_ticket/action";
+import { buyTicket } from "../../actions/buying_ticket/action";
 
 class EventContainer extends Component {
     componentDidMount(){
         this.props.getEventListForBuying();
     }
     render(){
+        console.log("containerLevel: ", this.props.unlockTicketForBuying);
         if(this.props.selectedEvent !== undefined && this.props.selectedEvent !== '' && this.props.eventListBuying !== undefined
             && this.props.eventListBuying !== {}){
             return (
                 <div>
                     <HeaderContainer />
-                    <EventDetail selectedEvent={findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent)}/>
+                    <EventDetail
+                        selectedEvent={findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent)}
+                        profile={this.props.profile}
+                        lockTicket={this.props.lockTicket}
+                        lockTicketForBuying={this.props.lockTicketForBuying}
+                        unlockTicketForBuying={this.props.unlockTicketForBuying}
+                        buyTicket={this.props.buyTicket}
+                    />
                 </div>
             )
         }else{
@@ -64,8 +75,11 @@ function findTarget(list, name){
 function mapStateToProps(state){
     return {
         selectedEvent: state.selectedEvent,
-        eventListBuying: state.eventListBuying
+        eventListBuying: state.eventListBuying,
+        profile: state.profile,
+        lockTicket: state.lockTicket
     }
 }
 
-export default connect(mapStateToProps, { getEventListForBuying})(EventContainer);
+export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying,
+    unlockTicketForBuying, buyTicket})(EventContainer);

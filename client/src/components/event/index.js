@@ -7,6 +7,9 @@ import {styles} from "./styles";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
 import SeatSelection from "../seatSelection";
 import Button from "@material-ui/core/es/Button/Button";
+import AlertDialog from "../alert_dialog";
+import CheckoutDialog from "../checkout_dialog";
+import Redirect from "react-router-dom/es/Redirect";
 
 class EventDetail extends Component {
     constructor(props){
@@ -14,9 +17,39 @@ class EventDetail extends Component {
         this.state = {
             selectedRow: 'TBD',
             selectedColumn: 'TBD',
-            price: 0
+            price: 0,
+            validationOpen: false,
+            loginAlertOpen: false,
+            addressAlertOpen: false,
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleCheckout = this.handleCheckout.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleCheckoutClose = this.handleCheckoutClose.bind(this);
+        this.handleOrderConfimation = this.handleOrderConfimation.bind(this);
+    }
+
+    handleCheckout(){
+        if(this.state.selectedRow === "TBD" || this.state.selectedColumn === "TBD" || this.state.price === 0){
+            this.setState({
+                validationOpen: true
+            })
+        }else if(JSON.stringify(this.props.profile) === JSON.stringify(
+                {
+                    "UserInfo": [{}],
+                    "Record": [{}]
+                }
+            )){
+            this.setState({
+                loginAlertOpen: true
+            })
+        }else if(this.props.profile.UserInfo[0].address === null || this.props.profile.UserInfo[0].address.length < 1){
+            this.setState({
+                addressAlertOpen: true
+            })
+        }else{
+            this.props.lockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        }
     }
 
     handleClick(row, column){
@@ -28,11 +61,31 @@ class EventDetail extends Component {
         })
     }
 
+    handleClose = name => {
+        this.setState({
+            [name]: false
+        });
+    };
+
+    handleCheckoutClose(){
+        this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        return (
+            <Redirect to={'/'} />
+        );
+    }
+
+    handleOrderConfimation(){
+        this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn)
+        return (
+            <Redirect to={'/profile'} />
+        );
+    }
+
     render(){
         const { classes } = this.props;
 
         if(this.props.selectedEvent !== undefined){
-            console.log("l:", this.props.selectedEvent);
             const avaiableSeatForBuying = findAvaiableSeatForBuying(this.props.selectedEvent[0].maxRow,this.props.selectedEvent[0].maxCol,
                 this.props.selectedEvent[0].buyableSeat);
 
@@ -79,10 +132,49 @@ class EventDetail extends Component {
                             className={classes.checkoutButton}
                             variant="outlined"
                             size={"medium"}
+                            onClick={() => this.handleCheckout()}
                         >
-                            Checkout
+                            Make an Order
                         </Button>
                     </div>
+                    <AlertDialog
+                        open={this.state.validationOpen}
+                        handleClose={this.handleClose}
+                        type={"validationOpen"}
+                        title={"Purchase Requirement Incompletion"}
+                        content={" Please check seat selection before checkout action."}
+                    />
+                    <AlertDialog
+                        open={this.state.loginAlertOpen}
+                        handleClose={this.handleClose}
+                        type={"loginAlertOpen"}
+                        title={"Account Requirement Incompletion"}
+                        content={" Please log in or sign up before checkout process."}
+                    />
+                    <AlertDialog
+                        open={this.state.addressAlertOpen}
+                        handleClose={this.handleClose}
+                        type={"addressAlertOpen"}
+                        title={"Address Requirement Incompletion"}
+                        content={" Please specify address in account profile before checkout process."}
+                    />
+                    <AlertDialog
+                        open={this.state.addressAlertOpen}
+                        handleClose={this.handleClose}
+                        type={"addressAlertOpen"}
+                        title={"Address Requirement Incompletion"}
+                        content={" Please specify address in account profile before checkout process."}
+                    />
+                    <CheckoutDialog
+                        open={this.props.lockTicket === null ? false : this.props.lockTicket}
+                        handleCheckoutClose={this.handleCheckoutClose}
+                        handleOrderConfimation={this.handleOrderConfimation}
+                        name={this.props.selectedEvent[0].name}
+                        selectedRow={this.state.selectedRow}
+                        selectedColumn={this.state.selectedColumn}
+                        price={this.state.price}
+
+                    />
                 </div>
             );
         }else{
