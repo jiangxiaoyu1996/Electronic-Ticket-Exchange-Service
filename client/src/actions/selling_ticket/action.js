@@ -10,9 +10,8 @@ export function sellTicket(eventName, seatRow, seatCol, userEmail, price){
         name: eventName,
         row: seatRow,
         col: seatCol,
-        buyer: "",
         seller: userEmail,
-        price: parseInt(price, 10)
+        price: parseInt(price, 10) * 1.05
     });
     console.log("Event Action: ", request);
 

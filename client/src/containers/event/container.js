@@ -17,6 +17,9 @@ class EventContainer extends Component {
         console.log("containerLevel: ", this.props.unlockTicketForBuying);
         if(this.props.selectedEvent !== undefined && this.props.selectedEvent !== '' && this.props.eventListBuying !== undefined
             && this.props.eventListBuying !== {}){
+            console.log("reduxResult: ", this.props.eventListBuying);
+            console.log("list: ", makeList(this.props.eventListBuying));
+            console.log("target: ", findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent));
             return (
                 <div>
                     <HeaderContainer />
