@@ -9,17 +9,18 @@ import Countdown from 'react-countdown-now';
 
 export default class CheckoutDialog extends Component {
     render() {
+        console.log("checkoutOpen: ", this.props.open);
+        const CheckoutClose = () => this.props.handleCheckoutClose();
         return (
             <div>
                 <Dialog
                     open={this.props.open}
-                    onClose={this.props.handleClose()}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
                     <DialogContent>
-                        <Countdown date={Date.now() + 6000000}>
-                            {this.props.handleClose()}
+                        <Countdown date={Date.now() + 20000}>
+                            <CheckoutClose/>
                         </Countdown>
                         <DialogContentText>
                             Please complete registration within 10:00 minutes.
@@ -36,10 +37,10 @@ export default class CheckoutDialog extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.props.handleClose()} color="primary">
+                        <Button onClick={() => this.props.handleCheckoutClose()} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.props.handleClose()} color="primary">
+                        <Button color="primary">
                             Confirm Order
                         </Button>
                     </DialogActions>

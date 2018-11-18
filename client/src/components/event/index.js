@@ -25,6 +25,7 @@ class EventDetail extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleCheckout = this.handleCheckout.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleCheckoutClose = this.handleCheckoutClose.bind(this);
     }
 
     handleCheckout(){
@@ -66,6 +67,8 @@ class EventDetail extends Component {
     };
 
     handleCheckoutClose(){
+        console.log("componentLevel: ", this);
+        this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
         return (
             <Redirect to={'/'} />
         );
@@ -74,11 +77,7 @@ class EventDetail extends Component {
     render(){
         const { classes } = this.props;
 
-        console.log("timestampAlertOpen: ", this.state.timestampAlertOpen);
-        console.log("checkoutDialogOpen: ", this.state.checkoutDialogOpen);
-
         if(this.props.selectedEvent !== undefined){
-            console.log("l:", this.props.selectedEvent);
             const avaiableSeatForBuying = findAvaiableSeatForBuying(this.props.selectedEvent[0].maxRow,this.props.selectedEvent[0].maxCol,
                 this.props.selectedEvent[0].buyableSeat);
 
@@ -160,10 +159,12 @@ class EventDetail extends Component {
                     />
                     <CheckoutDialog
                         open={this.props.lockTicket === null ? false : this.props.lockTicket}
+                        handleCheckoutClose={this.handleCheckoutClose}
+                        name={this.props.selectedEvent[0].name}
                         selectedRow={this.state.selectedRow}
                         selectedColumn={this.state.selectedColumn}
                         price={this.state.price}
-                        handleClose={this.handleCheckoutClose}
+
                     />
                 </div>
             );
