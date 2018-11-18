@@ -69,7 +69,14 @@ var checkifExist = function(req, res, next){
             })
         }
         else if (rows.length > 0){
-            next()
+            if(rows[0].status === 1){
+                res.json({
+                    type: 'checkifExist',
+                    result: false
+                })
+            }else{
+                next()
+            }
         }
         else{
             res.json({
@@ -397,7 +404,7 @@ router.get('/event_buying', function(req, res){
 })
 
 
-router.post('/buyticket', authenticate, checkifExist, function(req, res){
+router.post('/buyticket', authenticate, function(req, res){
 	var id = req.cookies['session'];
 	var username = req.user.username;
 	var email = req.user.email;

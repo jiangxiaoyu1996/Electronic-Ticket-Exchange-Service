@@ -4,7 +4,9 @@ import {connect} from "react-redux";
 import HeaderContainer from "../header/container";
 import EventDetail from "../../components/event";
 import {getEventListForBuying} from "../../actions/event_list_buy/action";
+import {lockTicketForBuying} from "../../actions/lock_ticket/action";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+
 
 class EventContainer extends Component {
     componentDidMount(){
@@ -16,7 +18,12 @@ class EventContainer extends Component {
             return (
                 <div>
                     <HeaderContainer />
-                    <EventDetail selectedEvent={findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent)}/>
+                    <EventDetail
+                        selectedEvent={findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent)}
+                        profile={this.props.profile}
+                        lockTicket={this.props.lockTicket}
+                        lockTicketForBuying={this.props.lockTicketForBuying}
+                    />
                 </div>
             )
         }else{
@@ -64,8 +71,10 @@ function findTarget(list, name){
 function mapStateToProps(state){
     return {
         selectedEvent: state.selectedEvent,
-        eventListBuying: state.eventListBuying
+        eventListBuying: state.eventListBuying,
+        profile: state.profile,
+        lockTicket: state.lockTicket
     }
 }
 
-export default connect(mapStateToProps, { getEventListForBuying})(EventContainer);
+export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying})(EventContainer);

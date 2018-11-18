@@ -8,6 +8,7 @@ import SellingTicketReducer from "./selling_ticket/reducer";
 import SearchReducer from './search/reducer';
 import EventSelectionReducer from './event_selection/reducer';
 import EventListBuyingReducer from './event_list_buy/reducer';
+import LockTicketReducer from './lock_ticket/reducer';
 
 const rootReducer = (state, action) => {
     if(action.type === Action.LOG_OUT){
@@ -26,6 +27,7 @@ const appReducer = combineReducers({
     result: SearchReducer,
     selectedEvent: EventSelectionReducer,
     eventListBuying: EventListBuyingReducer,
+    lockTicket: LockTicketReducer,
 });
 
 export default rootReducer;
