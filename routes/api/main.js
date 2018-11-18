@@ -322,10 +322,27 @@ router.post('/search', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-			res.json({
-				type: 'search',
-				result: rows
-			});
+			connection.query("SELECT * FROM ticket WHERE event = '" + rows[0].event_name + "'", function (err, hasTicket, fields){
+                if(err){
+                    console.log(err)
+                    res.json({
+                        type: 'search',
+                        result: false
+                    })
+                }
+                else if(hasTicket.length > 0){
+                    res.json({
+                        type: 'search',
+                        result: rows
+                    })
+                }
+                else{
+                    res.json({
+                        type: 'search',
+                        result: false
+                    })
+                }
+            })
 		}
 		else{
 			res.json({
