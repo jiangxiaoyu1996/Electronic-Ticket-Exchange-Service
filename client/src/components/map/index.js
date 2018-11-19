@@ -7,6 +7,7 @@ export default class Map extends Component {
         super(props)
     }
     render() {
+        console.log('dest: ', JSON.stringify(this.props.dest));
         const Directions = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?",
@@ -19,8 +20,8 @@ export default class Map extends Component {
             lifecycle({
                 componentDidMount() {
                     var geocoder = new google.maps.Geocoder();
-                    var src="San Jose State University, San Jose, CA";
-                    var dest="Golden Gate Bridge, San Francisco, CA";
+                    var src="Golden Gate Bridge, San Francisco, CA";
+                    var dest="San Jose State University, San Jose, CA";
                     //var src=this.props.src;
                     //var dest=this.props.dest;
                     geocoder.geocode( { 'address': src}, function(resultsSrc, status) {

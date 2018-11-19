@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 import Map from "../map";
 import {styles} from "./styles";
 import {withStyles} from "@material-ui/core/styles/index";
+import AlertDialog from "../alert_dialog";
 
 class CheckoutDialog extends Component {
     constructor(props){
@@ -19,9 +20,16 @@ class CheckoutDialog extends Component {
         this.state = {
             cancel: false,
             confirm: false,
-            delivery: ''
+            delivery: '',
+            deliveryErrorOpen: false
         }
     }
+
+    handleClose = name => {
+            this.setState({
+                [name]: false
+            });
+    };
 
     render() {
         console.log("checkoutOpen: ", this.props.open);
@@ -75,7 +83,8 @@ class CheckoutDialog extends Component {
                                     </MenuItem>
                                 ))}
                             </TextField>
-                            {this.state.delivery === 'Uber: Same day delivery' ? <Map /> : null}
+                            {this.state.delivery === 'Uber: Same day delivery' ?
+                                <Map dest={this.props.dest}/> : null}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -83,13 +92,28 @@ class CheckoutDialog extends Component {
                             Cancel
                         </Button>
                         {this.state.cancel === true ? <CheckoutClose/> : null}
-                        <Button onClick={() => this.setState({confirm: true})} color="primary">
+                        <Button onClick={() => {
+                            if(this.state.delivery !== ''){
+                                this.setState({confirm: true})
+                            }else{
+                                this.setState({deliveryErrorOpen: true})
+                            }
+                        }
+                        } color="primary">
                             Confirm Order
                         </Button>
                         {this.state.confirm === true ? <ConfirmOrder/> : null}
                     </DialogActions>
                 </Dialog>
+                <AlertDialog
+                    open={this.state.deliveryErrorOpen}
+                    handleClose={this.handleClose}
+                    type={"deliveryErrorOpen"}
+                    title={"Delivery Requirement Incompletion"}
+                    content={" Please specify delivery option."}
+                />
             </div>
+
         );
     }
 }
