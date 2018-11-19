@@ -6,6 +6,10 @@ import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer} from 'react-
 export default class Map extends Component {
     constructor(props){
         super(props)
+	this.state = {
+	    distance:0,
+	    time:0
+	};
     }
     render() {
         console.log('dest: ', JSON.stringify(this.props.dest));
@@ -37,6 +41,9 @@ export default class Map extends Component {
                                         travelMode: google.maps.TravelMode.DRIVING,
                                     }, (res, status) => {
                                         if (status === google.maps.DirectionsStatus.OK) {
+					    this.setState({distance:res.routes[0].legs[0].distance.text,
+							   time:res.routes[0].legs[0].duration.text})
+					    //console.log("DISTANCE: "+this.state.distance+", Travel Time "+this.state.time);
                                             this.setState({
                                                 directions: {...res},
                                                 markers: true
@@ -63,7 +70,10 @@ export default class Map extends Component {
             </GoogleMap>
         );
         return (
-            <Directions />
+		<div>		
+		<Directions />
+		<h4>DISTANCE: {this.state.distance}, Travel Time {this.state.time}</h4>;
+	        </div>
         )
     }
 }
