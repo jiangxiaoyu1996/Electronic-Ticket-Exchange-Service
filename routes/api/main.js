@@ -471,4 +471,47 @@ router.post('/unlockticket', function(req, res){
     });
 });
 
+
+router.post('/getSeller', function(req, res){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, event, fields) {
+        if (err) {
+            res.json({
+                type: 'getSeller',
+                result: false
+                });
+            }
+        else if(event.length > 0){
+            connection.query("SELECT * FROM user WHERE username = '" + event[0].seller + "' OR email = '" + event[0].seller + "'", function(err, user, fields){
+                if (err){
+                    res.json({
+                        type: 'getSeller',
+                        result: false
+                    })
+                }
+                else if (user.length > 0){
+                    res.json({
+                        type: 'getSeller',
+                        result: user[0].address
+                    })
+                }
+                else{
+                    res.json({
+                        type: 'getSeller',
+                        result: false
+                    })
+                }
+            })
+        }
+        else {
+            res.send({
+                type: 'getSeller',
+                result: false
+            });
+        }
+    });
+})
+
 module.exports = router;
