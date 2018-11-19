@@ -61,7 +61,7 @@ var checkifExist = function(req, res, next){
     var eventname = req.body.event;
     var row = req.body.row;
     var col = req.body.col;
-    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col) + ' AND status = 0', function(err, rows, fields){
+    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col) + ' AND status = 0 AND buyer is NULL', function(err, rows, fields){
         if(err){
             res.json({
                 type: 'checkifExist',
@@ -310,7 +310,7 @@ router.post('/search', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-			connection.query("SELECT * FROM ticket WHERE event = '" + rows[0].event_name + "'", function (err, hasTicket, fields){
+			connection.query("SELECT * FROM ticket WHERE event = '" + rows[0].event_name + "' and status = 0 and buyer is NULL", function (err, hasTicket, fields){
                 if(err){
                     console.log(err)
                     res.json({
