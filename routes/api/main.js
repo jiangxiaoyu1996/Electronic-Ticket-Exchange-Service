@@ -138,12 +138,12 @@ function calcRoute(startX, startY, endX, endY) {
     });
 }
 
-router.get('/sendEmail', function(req, res){
+router.post('/sendEmail', function(req, res){
     var eventname = req.body.event;
     var row = req.body.row;
     var col = req.body.col;
-    //var type = req.body.deliverType;
-    var type = 'FedEx'; // change this!!
+    var type = req.body.delivery;
+
     var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
