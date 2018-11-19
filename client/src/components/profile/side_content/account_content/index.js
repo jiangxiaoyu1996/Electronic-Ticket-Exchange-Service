@@ -16,8 +16,9 @@ class AccountContent extends Component{
         this.state = {
             address: '',
             username: '',
-            addressAlertOpen: false
-        }
+            addressAlertOpen: false,
+            usernameAlertOpen: false,
+        };
         this.handleUpdateAddress = this.handleUpdateAddress.bind(this);
     }
 
@@ -32,7 +33,16 @@ class AccountContent extends Component{
             this.setState({addressAlertOpen: true})
         }else{
             this.props.updateAddress(this.state.address);
-            this.props.getProfile();
+            //this.props.getProfile();
+        }
+    }
+
+    handleUpdateUsername(){
+        if(this.state.username === ''){
+            this.setState({usernameAlertOpen: true})
+        }else{
+            this.props.updateUsername(this.state.username);
+            //this.props.getProfile();
         }
     }
 
@@ -62,16 +72,19 @@ class AccountContent extends Component{
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
-                                Username
+                                Username: {this.props.userInfo.username}
                             </Typography>
                             <TextField
                                 id="outlined-name"
                                 className={classes.textField}
-                                value={this.props.userInfo.username}
+                                value={this.state.username}
                                 margin="normal"
                                 variant="outlined"
                                 onChange = {(event) => this.setState({username: event.target.value})}
                             />
+                            <Button onClick={() => this.handleUpdateUsername()}>
+                                Update username
+                            </Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography>
@@ -96,6 +109,13 @@ class AccountContent extends Component{
                         type={"addressAlertOpen"}
                         title={"Address Requirement Incompletion"}
                         content={" Please enter nonempty address."}
+                    />
+                    <AlertDialog
+                        open={this.state.usernameAlertOpen}
+                        handleClose={this.handleClose}
+                        type={"usernameAlertOpen"}
+                        title={"Username Requirement Incompletion"}
+                        content={" Please enter nonempty username."}
                     />
                 </div>
             );

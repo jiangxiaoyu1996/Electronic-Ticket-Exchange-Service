@@ -20,6 +20,7 @@ class ProfileContent extends Component {
                 temp = <AccountContent
                             userInfo={this.props.userInfo}
                             updateAddress={this.props.updateAddress}
+                            updateUsername={this.props.updateUsername}
                             getProfile={this.props.getProfile}
                         />;
                 break;

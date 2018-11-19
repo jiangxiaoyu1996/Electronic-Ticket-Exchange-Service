@@ -27,3 +27,4 @@ export const BUY_TICKET_RESET = "buy_ticket_reset";
 
 //profile
 export const UPDATE_ADDRESS = "update_address";
+export const UPDATE_USERNAME = "update_username";
