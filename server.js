@@ -47,8 +47,6 @@ function createDb(){
 	});
 }
 
-
-
 function populateDb(){
     connection.query('INSERT INTO event (event_name, event_ID, date, date_posted, location, ticket_amount,ticket_amount_available, max_rows, max_cols, description) VALUES (' +
         mysql.escape('Bay Area Taco & Beer Festival') + ', 1000, ' + mysql.escape('11/02/2018') + ', ' + mysql.escape('10/02/2018') + ', ' + mysql.escape('San Jose,CA') + ', 100, 20, 10, 10, ' + mysql.escape('Guests will experience unlimited pours of craft beer from local and regional breweries as well as unlimited taco tastings from some of the top restaurants & food trucks in California. In addition to the free unlimited taco tastings, restaurants & food trucks will be selling additional food and beverage items. While sampling beer and tacos, make sure to stop by our boutique vendors where you can purchase orginal art. There will also be DJs, games, and more!)') +
@@ -67,7 +65,58 @@ function setupDb(){
 	deleteDb();
 }
 
+function updatePop(){
+    var d = new Date();
+
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDay();
+    connection.query('SELECT * FROM event ', function(err, rows, fields) {
+        if (err) {
+            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+        }
+        else {
+            for(var i = 0; i < rows.length; i++) {
+
+                var _date = rows[i].date_posted;
+                var _year = _date.substring(6);
+                var _month = _date.substring(0, 2);
+                var _day = _date.substring(3, 5);
+                var l = (rows[i].ticket_amount - rows[i].ticket_amount_available + rows[i].pageviews / 4) / rows[i].ticket_amount;
+                var days =  year * 365 + month * 30 + day - _year * 365 - _month * 30 - _day;
+                var rate = (100 - days) / 100
+                var popularity = l * rate;      //UPDATE `event` SET `pop_index` = '0.1' WHERE `event`.`event_ID` = '1000'
+                //connection.query('UPDATE users SET Name = :Name WHERE UserID = :UserID',
+                //                      {UserID: userId, Name: name})
+
+                //console.log(rows[i].event_ID);
+                /**  connection.query('UPDATE event SET pop_index = 0.2 WHERE event_ID = 1000' , function(err, rows, fields) {
+                    lock -= 1
+                    if (err) {
+                        console.log(err)
+                    }
+                    }); **/
+                connection.query('UPDATE event SET pop_index = ' + mysql.escape(popularity)  + ' WHERE event_ID = ' + mysql.escape(1000 + i)
+                    , function(err, rows, fields) {
+                        if (err) {
+                            console.log(err)
+                            res.status(500).json({"status_code": 500,"status_message": "internal server error2"});
+                        }
+                    });
+
+            }
+
+
+        }
+    });
+    console.log('popularity updated');
+}
+
 setupDb();
+
+
+
+setInterval(updatePop, 1000);
 
 app.get('/', (req, res) => res.send('Hello there!'));
 //Use Routes

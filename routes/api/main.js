@@ -141,7 +141,10 @@ function calcRoute(startX, startY, endX, endY) {
 router.get('/sendEmail', function(req, res){
 
     const ticket = req.body.ticket; //front end sends ticket id,
-	//set up sender email
+    //set up sender email
+    // const type = req.body.deliverType;
+    var type = 'FedEx';
+    var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -150,13 +153,51 @@ router.get('/sendEmail', function(req, res){
             pass: 'ylb12345678'
         }
     });
-    var mailOptions = {
-        from: 'ylbtester@gmail.com',
-        to: 'codyyu36@gmail.com',
-        subject: 'testing',
-        text: 'testing, ticket not found'
-    };
+    if(type == 'FedEx') {
+        var mailOptions = {
 
+            to: 'codyyu36@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: fedex' + tracking
+        };
+    }
+
+    else if (type == 'UPS') {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: ups' + tracking
+        };
+    }
+
+    else if (type == 'Uber') {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by Uber'
+        };
+
+    }
+    //e-ticket
+    else {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.'
+
+        };
+    }
+
+
+    connection = getMySQLConnection();
+    connection.connect();
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticket), function(err, rows, fields) {
         if (err) {
             res.json({
@@ -166,7 +207,7 @@ router.get('/sendEmail', function(req, res){
         }
 
         else{
-        	if(rows.length > 0) {
+            if(rows.length > 0) {
                 var buyer_email = rows[0].buyer;
                 //var deliver_option = rows[0]...;
 
@@ -177,7 +218,7 @@ router.get('/sendEmail', function(req, res){
                     text: 'testing'
                 };
             }
-		}
+        }
     });
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -187,60 +228,8 @@ router.get('/sendEmail', function(req, res){
         }
     });
 
-});
+    connection.end();
 
-router.get('/updatePopularity', function(req, res){
-    var d = new Date();
-
-    var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getDay();
-    connection.query('SELECT * FROM event ', function(err, rows, fields) {
-        if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
-        }
-        else {
-            for(var i = 0; i < rows.length; i++) {
-
-                var _date = rows[i].date_posted;
-                var _year = _date.substring(6);
-                var _month = _date.substring(0, 2);
-                var _day = _date.substring(3, 5);
-
-
-                var l = (rows[i].ticket_amount - rows[i].ticket_amount_available + rows[i].pageviews / 4) / rows[i].ticket_amount;
-                var days =  year * 365 + month * 30 + day - _year * 365 - _month * 30 - _day;
-                var rate = (100 - days) / 100
-                var popularity = l * rate;      //UPDATE `event` SET `pop_index` = '0.1' WHERE `event`.`event_ID` = '1000'
-                //connection.query('UPDATE users SET Name = :Name WHERE UserID = :UserID',
-                //                      {UserID: userId, Name: name})
-
-                console.log(rows[i].event_ID);
-                /**  connection.query('UPDATE event SET pop_index = 0.2 WHERE event_ID = 1000' , function(err, rows, fields) {
-                    lock -= 1
-                    if (err) {
-                        console.log(err)
-                    }
-                    }); **/
-                connection.query('UPDATE event SET pop_index = ' + mysql.escape(popularity)  + ' WHERE event_ID = ' + mysql.escape(1000 + i)
-                    , function(err, rows, fields) {
-                        if (err) {
-                            console.log(err)
-                            res.status(500).json({"status_code": 500,"status_message": "internal server error2"});
-                        }
-                        else {
-                            res.send({
-                                type: 'POST',
-                                success: true
-                            });
-                        }
-                    });
-
-            }
-
-
-        }
-    });
 });
 
 router.post('/GetPopularEvents', function(req, res){
