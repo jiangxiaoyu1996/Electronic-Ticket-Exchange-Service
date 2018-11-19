@@ -112,7 +112,6 @@ var authenticate = function(req, res, next){
 	}
 }
 
-
 function calcRoute(startX, startY, endX, endY) {
     var directionsService = new google.maps.DirectionsService();
     var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -137,12 +136,13 @@ function calcRoute(startX, startY, endX, endY) {
     });
 }
 
-router.get('/sendEmail', function(req, res){
+router.post('/sendEmail', function(req, res){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    var type = req.body.delivery;
+    var email = req.body.email;
 
-    const ticket = req.body.ticket; //front end sends ticket id,
-    //set up sender email
-    // const type = req.body.deliverType;
-    var type = 'FedEx';
     var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
@@ -155,10 +155,11 @@ router.get('/sendEmail', function(req, res){
     if(type == 'FedEx') {
         var mailOptions = {
 
-            to: 'codyyu36@gmail.com',
+            to: email,
             from: 'ETES Support Team <ylbtester@gmail.com>',
             subject: 'Order Confirmation and Tracking',
-            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
+            + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
                 'Your ticket will be delivered by FedEx. Your tracking number is: fedex' + tracking
         };
     }
@@ -166,20 +167,22 @@ router.get('/sendEmail', function(req, res){
     else if (type == 'UPS') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
-            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
-                'Your ticket will be delivered by FedEx. Your tracking number is: ups' + tracking
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
+                + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: UPS' + tracking
         };
     }
 
     else if (type == 'Uber') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
-            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
-                'Your ticket will be delivered by Uber'
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
+                + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: Uber' + tracking
         };
 
     }
@@ -187,38 +190,15 @@ router.get('/sendEmail', function(req, res){
     else {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
-            text: 'Thank you for your business! We have received your order and it is currently being processed.'
-
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
+                + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
+                'Here is your ticket identification number: ' + tracking +'  (please do not lose this number which will be used for checking in.'
         };
     }
 
 
-    connection = getMySQLConnection();
-    connection.connect();
-    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticket), function(err, rows, fields) {
-        if (err) {
-            res.json({
-                type: 'POST',
-                loggedin: false
-            });
-        }
-
-        else{
-            if(rows.length > 0) {
-                var buyer_email = rows[0].buyer;
-                //var deliver_option = rows[0]...;
-
-                mailOptions = {
-                    from: 'youremail@gmail.com',
-                    to: buyer_email,
-                    subject: 'testing',
-                    text: 'testing'
-                };
-            }
-        }
-    });
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error);
