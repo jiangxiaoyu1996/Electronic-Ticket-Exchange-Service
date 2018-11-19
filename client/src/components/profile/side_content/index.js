@@ -17,12 +17,18 @@ class ProfileContent extends Component {
         let temp = null;
         switch(this.props.currentNav){
             case ComponentString.MY_ACCOUNT:
-                temp = <AccountContent userInfo={this.props.userInfo}/>;
+                temp = <AccountContent
+                            userInfo={this.props.userInfo}
+                            updateAddress={this.props.updateAddress}
+                            updateUsername={this.props.updateUsername}
+                            getProfile={this.props.getProfile}
+                        />;
                 break;
             case ComponentString.POST_TICKET:
                 temp = <PostTicketContent
                         eventlist={this.props.eventlist}
                         user={this.props.userInfo.email}
+                        address={this.props.userInfo.address}
                         sellTicket={this.props.sellTicket}
                         sellingTicketResult={this.props.sellingTicketResult}
                         sellTicketReset={this.props.sellTicketReset}
