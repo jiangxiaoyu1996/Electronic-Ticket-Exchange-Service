@@ -17,7 +17,11 @@ class ProfileContent extends Component {
         let temp = null;
         switch(this.props.currentNav){
             case ComponentString.MY_ACCOUNT:
-                temp = <AccountContent userInfo={this.props.userInfo}/>;
+                temp = <AccountContent
+                            userInfo={this.props.userInfo}
+                            updateAddress={this.props.updateAddress}
+                            getProfile={this.props.getProfile}
+                        />;
                 break;
             case ComponentString.POST_TICKET:
                 temp = <PostTicketContent

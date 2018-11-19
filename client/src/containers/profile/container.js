@@ -8,6 +8,7 @@ import { getEventListForPosting } from "../../actions/event_list_post/action";
 import { sellTicket } from "../../actions/selling_ticket/action";
 import { sellTicketReset } from "../../actions/selling_result_reset/action";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import {updateAddress} from "../../actions/update_address/action";
 
 class ProfileContainer extends Component{
 
@@ -45,6 +46,7 @@ class ProfileContainer extends Component{
                         sellTicketReset={this.props.sellTicketReset}
                         getEventListForPosting={this.props.getEventListForPosting}
                         getProfile={this.props.getProfile}
+                        updateAddress={this.props.updateAddress}
                     />
                 </div>
             )
@@ -95,4 +97,5 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getProfile, getEventListForPosting, sellTicket, sellTicketReset })(ProfileContainer);
+export default connect(mapStateToProps, { getProfile, getEventListForPosting, sellTicket, sellTicketReset,
+    updateAddress})(ProfileContainer);
