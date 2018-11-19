@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
@@ -6,18 +7,26 @@ import DialogContentText from "@material-ui/core/es/DialogContentText/DialogCont
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import Button from "@material-ui/core/es/Button/Button";
 import Countdown from 'react-countdown-now';
+import TextField from "@material-ui/core/es/TextField/TextField";
+import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
+import Map from "../map";
+import {styles} from "./styles";
+import {withStyles} from "@material-ui/core/styles/index";
 
-export default class CheckoutDialog extends Component {
+class CheckoutDialog extends Component {
     constructor(props){
         super(props);
         this.state = {
             cancel: false,
             confirm: false,
+            delivery: ''
         }
     }
 
     render() {
         console.log("checkoutOpen: ", this.props.open);
+        const { classes } = this.props;
+        const methods = ['Uber: Same day delivery', 'FedEx: One business day delivery', 'UPS: Two business days delivery'];
 
         const CheckoutClose = () => this.props.handleCheckoutClose();
         const ConfirmOrder = () => this.props.handleOrderConfimation();
@@ -45,6 +54,29 @@ export default class CheckoutDialog extends Component {
                         <DialogContentText>
                             Please select your delivery plan:
                         </DialogContentText>
+                        <DialogContentText>
+                            <TextField
+                                id="outlined-select-currency"
+                                select
+                                label="Select"
+                                value={this.state.delivery}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                                helperText="Please select a event for posting"
+                                margin="normal"
+                                onChange={(event) => this.setState({delivery: event.target.value})}
+                            >
+                                {methods.map(option => (
+                                    <MenuItem key={option} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            {this.state.delivery === 'Uber: Same day delivery' ? <Map /> : null}
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => this.setState({cancel: true})} color="primary">
@@ -61,3 +93,9 @@ export default class CheckoutDialog extends Component {
         );
     }
 }
+
+CheckoutDialog.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CheckoutDialog);
