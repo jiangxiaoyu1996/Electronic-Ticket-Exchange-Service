@@ -60,7 +60,7 @@ router.get('/test', (req, res) => res.send({msg: 'User works'}));
 
 router.post('/updateAddress', authenticate, function(req, res){
     const address = req.body.address
-    connection.query('UPDATE user SET address = ' + mysql.escape(address) + 'WHERE id = ' + req.cookies['session'], function(err, rows, fields){
+    connection.query('UPDATE user SET address = ' + mysql.escape(address) + "WHERE id = '" + req.cookies['session'] + "'", function(err, rows, fields){
         if(err){
             res.json({
                 type: 'updateAddress',
@@ -78,7 +78,7 @@ router.post('/updateAddress', authenticate, function(req, res){
 
 router.post('/updateUsername', authenticate, function(req, res){
     const username = req.body.username
-    connection.query('UPDATE user SET username = ' + mysql.escape(username) + 'WHERE id = ' + req.cookies['session'], function(err, rows, fields){
+    connection.query('UPDATE user SET username = ' + mysql.escape(username) + "WHERE id = '" + req.cookies['session'] + "'", function(err, rows, fields){
         if(err){
             res.json({
                 type: 'updateUsername',
