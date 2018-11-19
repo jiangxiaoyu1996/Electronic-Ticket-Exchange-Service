@@ -43,16 +43,19 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
-        const btns = this.props.user === '' || this.props.loggedin === false || this.props.user === 'error' ? (
-		    <div className={classes.sectionDesktop}>
-                <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
-                <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
-		    </div>
-        ) : (
-		    <div className={classes.sectionDesktop}>
+        console.log("logheader: ", this.props.loggedin);
+        console.log("signHeadr: ", this.props.user);
+
+        let btns = (this.props.user !== '' && this.props.user !== 'error' && this.props.user !== false) || this.props.loggedin === true  ? (
+            <div className={classes.sectionDesktop}>
                 <Button className={classes.sectionButton} component={Link} to={"/profile"}>Profile</Button>
                 <Button className={classes.sectionButton} onClick={this.handleLogout} component={Link} to={"/"}>Logout</Button>
-		    </div>
+            </div>
+        ) : (
+            <div className={classes.sectionDesktop}>
+                <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
+                <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
+            </div>
         );
 
         return (
