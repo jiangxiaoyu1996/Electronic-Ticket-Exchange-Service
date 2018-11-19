@@ -55,6 +55,12 @@ class EventDetail extends Component {
                     sellerAddress: this.props.sellerAddress
                 });
                 this.props.lockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+            }else{
+                return(
+                    <div>
+                        <CircularProgress size={50} style={{ color: "#FF8C00" }} thickness={7} />
+                    </div>
+                )
             }
         }
     }
@@ -80,6 +86,7 @@ class EventDetail extends Component {
 
     handleCheckoutClose(){
         this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        this.props.sellerAddressReset();
         return (
             <Redirect to={'/'} />
         );
@@ -87,7 +94,8 @@ class EventDetail extends Component {
 
     handleOrderConfimation(){
         this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
-        this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn)
+        this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        this.props.sellerAddressReset();
         return (
             <Redirect to={'/profile'} />
         );

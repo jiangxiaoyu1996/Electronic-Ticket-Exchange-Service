@@ -5,6 +5,8 @@ export default function(state = null, action){
         case ACTION.SELLER_ADDRESS:
             //console.log("reducer: ", action);
             return action.payload.data.result;
+        case ACTION.SELLER_ADDRESS_RESET:
+            return null;
         default:
             return state;
     }
