@@ -19,25 +19,49 @@ class SeatSelection extends Component{
             const column = cIndex + 1;
 
             let button = null;
-            if(cell === false){
-                button = <Button
-                    className={classes.unselectableSeatButton}
-                    size="small"
-                    variant="outlined"
-                    disabled={true}
-                >
-                    ({row},{column})
-                </Button>
+
+            if(Number.isInteger(cell)){
+                if(cell === 0){
+                    button = <Button
+                        className={classes.unselectableSeatButton}
+                        size="small"
+                        variant="outlined"
+                        disabled={true}
+                    >
+                        ({row},{column})
+                    </Button>
+                }else{
+                    button = <Button
+                        className={classes.selectableSeatButton}
+                        size="small"
+                        variant="outlined"
+                        onClick={() => this.handleClick(row, column)}
+                    >
+                        ({row},{column})
+                    </Button>
+                }
             }else{
-                button = <Button
-                    className={classes.selectableSeatButton}
-                    size="small"
-                    variant="outlined"
-                    onClick={() => this.handleClick(row, column)}
-                >
-                    ({row},{column})
-                </Button>
+                if(cell === false){
+                    button = <Button
+                        className={classes.unselectableSeatButton}
+                        size="small"
+                        variant="outlined"
+                        disabled={true}
+                    >
+                        ({row},{column})
+                    </Button>
+                }else{
+                    button = <Button
+                        className={classes.selectableSeatButton}
+                        size="small"
+                        variant="outlined"
+                        onClick={() => this.handleClick(row, column)}
+                    >
+                        ({row},{column})
+                    </Button>
+                }
             }
+
             return (
                 <Grid item xs={"auto"}>
                     {button}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Redirect from "react-router-dom/es/Redirect";
 
 import Header from "../../components/header/index";
 import { search } from "../../actions/search/action";

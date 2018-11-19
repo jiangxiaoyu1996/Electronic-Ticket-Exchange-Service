@@ -5,10 +5,12 @@ const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
 const bcrypt = require('bcryptjs');
 const salt = require('../../server.js').salt;
+const cookieParser = require('cookie-parser');
 
 //@route GET api/user/test
 //@desc Test user routeb
 //@access Public
+router.use(cookieParser());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -22,7 +24,7 @@ var connection = mysql.createPool({
 
 var authenticate = function(req, res, next){
     var id = req.cookies['session']
-    if(id != null){
+    if(typeof id !== undefined){
         connection.query("SELECT * FROM user WHERE id = '" + id + "'", function(err, rows, fields){
             if(err){
                 res.json({
@@ -37,6 +39,10 @@ var authenticate = function(req, res, next){
                 })
             }
             else{
+                req.user = {
+                    username : rows[0].username,
+                    email : rows[0].email
+                }
                 next()
             }
         })
@@ -64,6 +70,24 @@ router.post('/updateAddress', authenticate, function(req, res){
         else{
             res.json({
                 type: updateAddress,
+                result: true
+            })
+        }
+    })
+})
+
+router.post('/updateUsername', authenticate, function(req, res){
+    const username = req.body.username
+    connection.query("UPDATE user SET username ='" + mysql.escape(username) + "WHERE id = '" + req.cookies['session'], function(err, rows, fields){
+        if(err){
+            res.json({
+                type: updateUsername,
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: updateUsername,
                 result: true
             })
         }

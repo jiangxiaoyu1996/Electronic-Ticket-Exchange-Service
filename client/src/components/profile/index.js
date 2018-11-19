@@ -28,7 +28,7 @@ class Profile extends Component {
 
         return(
             <div className={classes.container}>
-                <ProfileWelcome user={this.props.user}/>
+                <ProfileWelcome userInfo={this.props.userInfo}/>
                 <div className={classes.navigation}>
                     <ProfileNav
                         menu={navMenu}
@@ -43,6 +43,8 @@ class Profile extends Component {
                         sellTicket={this.props.sellTicket}
                         sellingTicketResult={this.props.sellingTicketResult}
                         sellTicketReset={this.props.sellTicketReset}
+                        getEventListForPosting={this.props.getEventListForPosting}
+                        getProfile={this.props.getProfile}
                     />
                 </div>
             </div>

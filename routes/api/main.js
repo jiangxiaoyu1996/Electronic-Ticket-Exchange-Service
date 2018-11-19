@@ -3,7 +3,9 @@ const router = express.Router();
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
+const cookieParser = require('cookie-parser');
 
+router.use(cookieParser());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,7 +39,9 @@ async function createArray(event){
 			previous = i
 			index++
 			location = []
-			location.push([event[i].row_Number, event[i].col_Number, event[i].price])
+            if(event[previous].row_Number != null){
+			 location.push([event[i].row_Number, event[i].col_Number, event[i].price])
+            }
 		}
 	}
 	array.push([event[previous].event_name, event[previous].date, event[previous].location, event[previous].ticket_amount, event[previous].max_rows, event[previous].max_cols, event[previous].description, location])
@@ -53,9 +57,32 @@ function search(text){
 	return filterStr
 }
 
+var checkifExist = function(req, res, next){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col) + ' AND status = 0 AND buyer is NULL', function(err, rows, fields){
+        if(err){
+            res.json({
+                type: 'checkifExist',
+                result: false
+            })
+        }
+        else if (rows.length > 0){
+            next()
+        }
+        else{
+            res.json({
+                type: 'checkifExist',
+                result: false
+            })
+        }
+    })
+}
+
 var authenticate = function(req, res, next){
 	var id = req.cookies['session']
-	if(id != null){
+	if(typeof id !== undefined){
 		connection.query("SELECT * FROM user WHERE id = '" + id + "'", function(err, rows, fields){
 			if(err){
 				res.json({
@@ -70,15 +97,22 @@ var authenticate = function(req, res, next){
 				})
 			}
 			else{
+				req.user = {
+					username : rows[0].username,
+					email : rows[0].email
+				}
 				next()
 			}
 		})
 	}
-	res.json({
-		type: 'authenticate',
-		result: false
-	})
+	else{
+		res.json({
+			type: 'authenticate',
+			result: false
+		})
+	}
 }
+
 
 function calcRoute(startX, startY, endX, endY) {
     var directionsService = new google.maps.DirectionsService();
@@ -107,7 +141,10 @@ function calcRoute(startX, startY, endX, endY) {
 router.get('/sendEmail', function(req, res){
 
     const ticket = req.body.ticket; //front end sends ticket id,
-	//set up sender email
+    //set up sender email
+    // const type = req.body.deliverType;
+    var type = 'FedEx';
+    var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -116,13 +153,51 @@ router.get('/sendEmail', function(req, res){
             pass: 'ylb12345678'
         }
     });
-    var mailOptions = {
-        from: 'ylbtester@gmail.com',
-        to: 'codyyu36@gmail.com',
-        subject: 'testing',
-        text: 'testing, ticket not found'
-    };
+    if(type == 'FedEx') {
+        var mailOptions = {
 
+            to: 'codyyu36@gmail.com',
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: fedex' + tracking
+        };
+    }
+
+    else if (type == 'UPS') {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by FedEx. Your tracking number is: ups' + tracking
+        };
+    }
+
+    else if (type == 'Uber') {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.' +
+                'Your ticket will be delivered by Uber'
+        };
+
+    }
+    //e-ticket
+    else {
+        var mailOptions = {
+            from: 'ETES Support Team <ylbtester@gmail.com>',
+            to: 'codyyu36@gmail.com',
+            subject: 'Order Confirmation and Tracking',
+            text: 'Thank you for your business! We have received your order and it is currently being processed.'
+
+        };
+    }
+
+
+    connection = getMySQLConnection();
+    connection.connect();
     connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticket), function(err, rows, fields) {
         if (err) {
             res.json({
@@ -132,7 +207,7 @@ router.get('/sendEmail', function(req, res){
         }
 
         else{
-        	if(rows.length > 0) {
+            if(rows.length > 0) {
                 var buyer_email = rows[0].buyer;
                 //var deliver_option = rows[0]...;
 
@@ -143,7 +218,7 @@ router.get('/sendEmail', function(req, res){
                     text: 'testing'
                 };
             }
-		}
+        }
     });
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -153,60 +228,8 @@ router.get('/sendEmail', function(req, res){
         }
     });
 
-});
+    connection.end();
 
-router.get('/updatePopularity', function(req, res){
-    var d = new Date();
-
-    var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getDay();
-    connection.query('SELECT * FROM event ', function(err, rows, fields) {
-        if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
-        }
-        else {
-            for(var i = 0; i < rows.length; i++) {
-
-                var _date = rows[i].date_posted;
-                var _year = _date.substring(6);
-                var _month = _date.substring(0, 2);
-                var _day = _date.substring(3, 5);
-
-
-                var l = (rows[i].ticket_amount - rows[i].ticket_amount_available + rows[i].pageviews / 4) / rows[i].ticket_amount;
-                var days =  year * 365 + month * 30 + day - _year * 365 - _month * 30 - _day;
-                var rate = (100 - days) / 100
-                var popularity = l * rate;      //UPDATE `event` SET `pop_index` = '0.1' WHERE `event`.`event_ID` = '1000'
-                //connection.query('UPDATE users SET Name = :Name WHERE UserID = :UserID',
-                //                      {UserID: userId, Name: name})
-
-                console.log(rows[i].event_ID);
-                /**  connection.query('UPDATE event SET pop_index = 0.2 WHERE event_ID = 1000' , function(err, rows, fields) {
-                    lock -= 1
-                    if (err) {
-                        console.log(err)
-                    }
-                    }); **/
-                connection.query('UPDATE event SET pop_index = ' + mysql.escape(popularity)  + ' WHERE event_ID = ' + mysql.escape(1000 + i)
-                    , function(err, rows, fields) {
-                        if (err) {
-                            console.log(err)
-                            res.status(500).json({"status_code": 500,"status_message": "internal server error2"});
-                        }
-                        else {
-                            res.send({
-                                type: 'POST',
-                                success: true
-                            });
-                        }
-                    });
-
-            }
-
-
-        }
-    });
 });
 
 router.post('/GetPopularEvents', function(req, res){
@@ -234,10 +257,9 @@ router.post('/addTicket', function(req, res){
 	var name = req.body.name
 	var row = req.body.row
 	var col = req.body.col
-	var buyer = req.body.buyer
 	var seller = req.body.seller
     var price = req.body.price
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', NULL, ' + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (' + mysql.escape(id) + ', ' + "'" + name + "'" + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ", NULL, " + "'" + seller + "'" + ', ' + mysql.escape(price) + ', 0)', function(err, rows, fields){
 		if(err){
 			res.json({
 				type: 'addTicket',
@@ -279,10 +301,8 @@ router.post('/addEvent', function(req,res){
 
 
 router.post('/search', function(req, res){
-
 	const index = search(req.body.keyword);
 	connection.query('SELECT * FROM event WHERE' + index, function(err, rows, fields){
-
 		if(err){
 			res.json({
 				type: 'search',
@@ -290,10 +310,27 @@ router.post('/search', function(req, res){
 			});
 		}
 		else if(rows.length > 0){
-			res.json({
-				type: 'search',
-				result: rows
-			});
+			connection.query("SELECT * FROM ticket WHERE event = '" + rows[0].event_name + "' and status = 0 and buyer is NULL", function (err, hasTicket, fields){
+                if(err){
+                    console.log(err)
+                    res.json({
+                        type: 'search',
+                        result: false
+                    })
+                }
+                else if(hasTicket.length > 0){
+                    res.json({
+                        type: 'search',
+                        result: rows
+                    })
+                }
+                else{
+                    res.json({
+                        type: 'search',
+                        result: false
+                    })
+                }
+            })
 		}
 		else{
 			res.json({
@@ -305,7 +342,7 @@ router.post('/search', function(req, res){
 });
 
 router.get('/event', function(req, res){
-	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event,ticket WHERE event_name = event ORDER BY event_name', function(err, event, fields){
+	connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, price FROM event LEFT OUTER JOIN ticket ON event_name = event ORDER BY event_name', function(err, event, fields){
 		if(err){
 			res.json({
 				type: 'event',
@@ -334,40 +371,77 @@ router.get('/event', function(req, res){
 	});
 })
 
-
-router.post('/lockticket', function(req, res){
-    //const ticketid = req.body.t_ID;
-    const ticketid = 1; ///////////////////////////////////////////for testing
-    var lock = 1;
-    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
-        if (err) {
-            console.log(err)
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+router.get('/event_buying', function(req, res){
+    connection.query('SELECT event_name, date, location, ticket_amount, max_rows, max_cols, description, row_Number, col_Number, seller, price FROM event,ticket WHERE event_name = event and buyer is null and status = 0 ORDER BY event_name', function(err, event, fields){
+        if(err){
             res.json({
-                type:'timestamp',
+                type: 'event',
+                result: false
+            });
+        }
+        else if(event.length > 0){
+            createArray(event).then(result =>{
+                res.json({
+                    type: 'event',
+                    result: result
+                });
+            }).catch(err => {
+                res.json({
+                    type: 'event',
+                    result: false
+                });
+            })
+        }
+        else{
+            res.json({
+                type: 'event',
+                result: false
+            });
+        }
+    });
+})
+
+
+router.post('/buyticket', authenticate, function(req, res){
+	var id = req.cookies['session'];
+	var email = req.user.email;
+	var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
+        if(err){
+            res.json({
+                type: 'buyTicket',
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: 'buyTicket',
+                result: true
+            })
+        }
+    })
+})
+
+
+router.post('/lockticket', authenticate, checkifExist, function(req, res){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    //const ticketid = 1;
+    connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col)
+                , function(err, rows, fields) {
+        if (err) {
+            res.send({
+                type: 'timestamp',
                 success: false
             });
         }
-        else if(rows.length > 0) {
-            connection.query('UPDATE ticket SET status = ' + mysql.escape(1)  + ' WHERE id = ' + mysql.escape(ticketid)
-                , function(err, rows, fields) {
-                    if (err) {
-                        console.log(err)
-                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
-                    }
-                    else {
-                        res.send({
-                            type: 'timestamp',
-                            success: true
-                        });
-                    }
-                });
-        }
         else {
-            res.json({
-                type:'timestamp',
-                success: false,
-                msg: 'no such ticket'
+            res.send({
+                type: 'timestamp',
+                success: true
             });
         }
     });
@@ -376,45 +450,25 @@ router.post('/lockticket', function(req, res){
 
 
 router.post('/unlockticket', function(req, res){
-    //const ticketid = req.body.t_ID;
-    const ticketid = 1; ///////////////////////////////////////////for testing
-    var lock = 1;
-    connection.query('SELECT * FROM ticket WHERE id = ' + mysql.escape(ticketid), function(err, rows, fields) {
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    //const ticketid = 1;
+    connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col)
+                , function(err, rows, fields) {
         if (err) {
-            console.log(err)
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
             res.json({
                 type:'timestamp',
                 success: false
-            });
-        }
-        else if(rows.length > 0) {
-            connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE id = ' + mysql.escape(ticketid)
-                , function(err, rows, fields) {
-                    lock -= 1
-                    if (err) {
-                        console.log(err)
-                        res.status(500).json({"status_code": 500,"status_message": "internal server error"});
-                    }
-                    else {
-                        res.send({
-                            type: 'timestamp',
-                            success: true
-                        });
-                    }
-                });
-        }
+          		});
+            }
         else {
-            res.json({
-                type:'timestamp',
-                success: false,
-                msg: 'no such ticket'
+            res.send({
+                type: 'timestamp',
+                success: true
             });
         }
     });
-    if(lock == 0) {
-        connection.end();
-    }
 });
 
 module.exports = router;

@@ -12,10 +12,17 @@ class SigninContainer extends Component{
             return(
                 <div>
                     <HeaderContainer/>
-                    <SignIn signin={this.props.signin} user={this.props.user}/>
+                    <SignIn signin={this.props.signin}/>
                 </div>
             )
-        }else{
+        }else if(this.props.user === 'error'){
+            return(
+                <div>
+                    <HeaderContainer/>
+                    <SignIn signin={this.props.signin} error={"Sign-up failed"}/>
+                </div>
+            )
+        } else{
             return(
                 <div>
                     <Redirect to={'/profile'} />
