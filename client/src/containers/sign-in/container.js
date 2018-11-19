@@ -7,15 +7,18 @@ import HeaderContainer from "../header/container";
 import SignIn from "../../components/sign-in";
 
 class SigninContainer extends Component{
+
     render(){
-        if(this.props.user === ''){
+        console.log("sign: ", this.props.user);
+        console.log("log: ", this.props.loggedin);
+        if(this.props.user === '' || this.props.user === false || this.props.loggedin === false){
             return(
                 <div>
                     <HeaderContainer/>
                     <SignIn signin={this.props.signin}/>
                 </div>
             )
-        }else if(this.props.user === 'error'){
+        }else if(this.props.user === 'error' || this.props.loggedin === false){
             return(
                 <div>
                     <HeaderContainer/>
@@ -34,7 +37,8 @@ class SigninContainer extends Component{
 
 function mapStateToProps(state){
     return {
-        user: state.user
+        user: state.user,
+        loggedin: state.loggedin
     }
 }
 

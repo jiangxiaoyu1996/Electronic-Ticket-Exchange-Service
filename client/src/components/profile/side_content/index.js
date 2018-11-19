@@ -33,6 +33,7 @@ class ProfileContent extends Component {
                         sellingTicketResult={this.props.sellingTicketResult}
                         sellTicketReset={this.props.sellTicketReset}
                         getEventListForPosting={this.props.getEventListForPosting}
+                        getProfile={this.props.getProfile}
                 />;
                 break;
             case ComponentString.PURCHASE_HISTORY:

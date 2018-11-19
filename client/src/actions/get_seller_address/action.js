@@ -5,13 +5,15 @@ const ROOT_URL = "http://localhost:8080/api";
 
 axios.defaults.withCredentials = true;
 
-export function updateUsername(username){
-    const request = axios.post(`${ROOT_URL}/user/updateUsername`, {
-        username: username
+export function getSellerAddress(event, row, col){
+    const request = axios.post(`${ROOT_URL}/main/getSeller`,{
+        event: event,
+        row: row,
+        col: col
     });
 
     return {
-        type: ACTION.UPDATE_USERNAME,
+        type: ACTION.SELLER_ADDRESS,
         payload: request
     };
 }

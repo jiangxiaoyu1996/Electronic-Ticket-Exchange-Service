@@ -23,7 +23,6 @@ var connection = mysql.createPool({
         database : 'ETES'
 });
 
-
 async function createArray(event){
 	var location = []
 	var array = []
@@ -443,6 +442,14 @@ router.post('/lockticket', authenticate, checkifExist, function(req, res){
                 type: 'timestamp',
                 success: true
             });
+            setTimeout(function(){
+                connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col) + ' AND status = 1 AND (buyer is null OR  buyer = ' + "''" + ')', function(err, rows, fields){
+                    if (rows.length > 0){
+                        connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, fields, ticket){
+                        })
+                    }
+                })
+            }, 90000);
         }
     });
 });
@@ -470,5 +477,48 @@ router.post('/unlockticket', function(req, res){
         }
     });
 });
+
+
+router.post('/getSeller', function(req, res){
+    var eventname = req.body.event;
+    var row = req.body.row;
+    var col = req.body.col;
+    connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, event, fields) {
+        if (err) {
+            res.json({
+                type: 'getSeller',
+                result: false
+                });
+            }
+        else if(event.length > 0){
+            connection.query("SELECT * FROM user WHERE username = '" + event[0].seller + "' OR email = '" + event[0].seller + "'", function(err, user, fields){
+                if (err){
+                    res.json({
+                        type: 'getSeller',
+                        result: false
+                    })
+                }
+                else if (user.length > 0){
+                    res.json({
+                        type: 'getSeller',
+                        result: user[0].address
+                    })
+                }
+                else{
+                    res.json({
+                        type: 'getSeller',
+                        result: false
+                    })
+                }
+            })
+        }
+        else {
+            res.send({
+                type: 'getSeller',
+                result: false
+            });
+        }
+    });
+})
 
 module.exports = router;
