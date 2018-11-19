@@ -45,6 +45,8 @@ class Profile extends Component {
                         sellTicketReset={this.props.sellTicketReset}
                         getEventListForPosting={this.props.getEventListForPosting}
                         getProfile={this.props.getProfile}
+                        updateAddress={this.props.updateAddress}
+                        updateUsername={this.props.updateUsername}
                     />
                 </div>
             </div>

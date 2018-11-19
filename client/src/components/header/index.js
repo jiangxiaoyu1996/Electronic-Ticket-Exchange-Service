@@ -43,7 +43,7 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
-        const btns = this.props.user === '' || this.props.loggedin === false ? (
+        const btns = this.props.user === '' || this.props.loggedin === false || this.props.user === 'error' ? (
 		    <div className={classes.sectionDesktop}>
                 <Button className={classes.sectionButton} component={Link} to={"/sign-in"}>Sign up</Button>
                 <Button className={classes.sectionButton} component={Link} to={"/login"}>Login</Button>
