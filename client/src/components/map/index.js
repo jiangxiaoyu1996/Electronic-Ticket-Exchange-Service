@@ -8,6 +8,7 @@ export default class Map extends Component {
     }
     render() {
         console.log('dest: ', JSON.stringify(this.props.dest));
+        console.log('src: ', JSON.stringify(this.props.src));
         const Directions = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?",

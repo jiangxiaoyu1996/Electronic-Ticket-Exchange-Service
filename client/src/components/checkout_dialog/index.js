@@ -32,7 +32,7 @@ class CheckoutDialog extends Component {
     };
 
     render() {
-        console.log("checkoutOpen: ", this.props.open);
+        //console.log("checkoutOpen: ", this.props.open);
         const { classes } = this.props;
         const methods = ['Uber: Same day delivery', 'FedEx: One business day delivery', 'UPS: Two business days delivery'];
 
@@ -73,7 +73,7 @@ class CheckoutDialog extends Component {
                                         className: classes.menu,
                                     },
                                 }}
-                                helperText="Please select a event for posting"
+                                helperText="Please select a delivery method"
                                 margin="normal"
                                 onChange={(event) => this.setState({delivery: event.target.value})}
                             >
@@ -84,7 +84,10 @@ class CheckoutDialog extends Component {
                                 ))}
                             </TextField>
                             {this.state.delivery === 'Uber: Same day delivery' ?
-                                <Map dest={this.props.dest}/> : null}
+                                <Map
+                                    dest={this.props.dest}
+                                    src={this.props.src}
+                                /> : null}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

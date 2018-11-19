@@ -24,6 +24,8 @@ export const LOCK_TICKET_RESET = "lock_ticket_reset";
 export const UNLOCK_TICKET = "unlock_ticket";
 export const BUY_TICKET = "buy_ticket";
 export const BUY_TICKET_RESET = "buy_ticket_reset";
+export const SELLER_ADDRESS = "seller_address";
+export const SELLER_ADDRESS_RESET = "seller_address_reset";
 
 //profile
 export const UPDATE_ADDRESS = "update_address";

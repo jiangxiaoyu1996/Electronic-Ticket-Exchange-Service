@@ -9,8 +9,8 @@ import { lockTicketForBuying } from "../../actions/lock_ticket/action";
 import { unlockTicketForBuying } from "../../actions/unlock_ticket/action";
 import { buyTicket } from "../../actions/buying_ticket/action";
 import { lockTicketReset } from "../../actions/lock_result_reset/action";
-import AlertDialog from "../../components/alert_dialog";
-import Redirect from "react-router-dom/es/Redirect";
+import { getSellerAddress } from "../../actions/get_seller_address/action";
+import {sellerAddressReset} from "../../actions/seller_address_reset/action";
 
 class EventContainer extends Component {
     componentDidMount(){
@@ -18,12 +18,12 @@ class EventContainer extends Component {
     }
 
     render(){
-        console.log("containerLevel: ", this.props.unlockTicketForBuying);
+        //console.log("containerLevel: ", this.props.unlockTicketForBuying);
         if(this.props.selectedEvent !== undefined && this.props.selectedEvent !== '' && this.props.eventListBuying !== undefined
             && this.props.eventListBuying !== {} && makeList(this.props.eventListBuying).length !== 0){
-            console.log("reduxResult: ", this.props.eventListBuying);
-            console.log("list: ", makeList(this.props.eventListBuying));
-            console.log("target: ", findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent));
+            //console.log("reduxResult: ", this.props.eventListBuying);
+            //console.log("list: ", makeList(this.props.eventListBuying));
+            //console.log("target: ", findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent));
             if(findTarget(makeList(this.props.eventListBuying),this.props.selectedEvent).length === 0){
                 return (
                 <div>
@@ -45,6 +45,9 @@ class EventContainer extends Component {
                         unlockTicketForBuying={this.props.unlockTicketForBuying}
                         buyTicket={this.props.buyTicket}
                         lockTicketReset={this.props.lockTicketReset}
+                        sellerAddressReset={this.props.sellerAddressReset}
+                        sellerAddress={this.props.sellerAddress}
+                        getSellerAddress={this.props.getSellerAddress}
                     />
                 </div>
             )
@@ -95,9 +98,10 @@ function mapStateToProps(state){
         selectedEvent: state.selectedEvent,
         eventListBuying: state.eventListBuying,
         profile: state.profile,
-        lockTicket: state.lockTicket
+        lockTicket: state.lockTicket,
+        sellerAddress: state.sellerAddress,
     }
 }
 
 export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying, lockTicketReset,
-    unlockTicketForBuying, buyTicket})(EventContainer);
+    unlockTicketForBuying, buyTicket, getSellerAddress, sellerAddressReset})(EventContainer);
