@@ -28,19 +28,22 @@ class Search extends Component {
             for (var row in rows) {
 		var headers=[];
 		var data=[];
+		var keyMap = new Array();
+		keyMap['event_name'] = 'NAME';
+		keyMap['event_ID'] = 'ID';
+		keyMap['date'] = 'DATE';
+		keyMap['location'] = 'LOCATION';
+		keyMap['ticket_amount'] = 'TICKETS AVAILABLE';
+		keyMap['pop_index'] = 'POPULARITY';
 		if ( rows.hasOwnProperty(row) ) {
 		    for ( var col in rows[row] ) {
-			if ( col !== 'max_rows' &&  col !== 'max_cols' && col !== "description") {
+			if ( typeof keyMap[col] !== 'undefined' ) {
 			    if ( first ) {
-				if ( col == 'event_name' ) {
+				if ( col === 'event_name' ) {
 				    this.eventNameColId = cIdx;
 				}
-				var newName = col;
-				if ( col == 'pop_index' ) {
-				    newName='POPULARITY';
-				}
 				++cIdx;
-				headers.push(newName)
+				headers.push(keyMap[col]);
 			    }
 			    if ( rows[row].hasOwnProperty(col) ) {
 				data.push(rows[row][col]);
