@@ -31,6 +31,7 @@ var checkifBought = function(req, res, next){
         connection.query('SELECT * FROM ticket WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col) + ' AND status = 0 AND buyer is NULL', function(err, rows, fields){
             if (rows.length > 0){
                 connection.query('UPDATE ticket SET status = ' + mysql.escape(0)  + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, fields, ticket){
+                    next()
                 })
             }
         })
