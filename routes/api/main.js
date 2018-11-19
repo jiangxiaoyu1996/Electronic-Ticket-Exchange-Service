@@ -113,7 +113,6 @@ var authenticate = function(req, res, next){
 	}
 }
 
-
 function calcRoute(startX, startY, endX, endY) {
     var directionsService = new google.maps.DirectionsService();
     var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -143,6 +142,7 @@ router.post('/sendEmail', function(req, res){
     var row = req.body.row;
     var col = req.body.col;
     var type = req.body.delivery;
+    var email = req.body.email;
 
     var tracking = Math.floor(Math.random() * Math.floor(100000));
     var nodemailer = require('nodemailer');
@@ -156,7 +156,7 @@ router.post('/sendEmail', function(req, res){
     if(type == 'FedEx') {
         var mailOptions = {
 
-            to: 'codyyu36@gmail.com',
+            to: email,
             from: 'ETES Support Team <ylbtester@gmail.com>',
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
@@ -168,7 +168,7 @@ router.post('/sendEmail', function(req, res){
     else if (type == 'UPS') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
                 + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
@@ -179,7 +179,7 @@ router.post('/sendEmail', function(req, res){
     else if (type == 'Uber') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
                 + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
@@ -191,7 +191,7 @@ router.post('/sendEmail', function(req, res){
     else {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
-            to: 'codyyu36@gmail.com',
+            to: email,
             subject: 'Order Confirmation and Tracking',
             text: 'Thank you for your business! We have received your order and it is currently being processed.' + '\n'
                 + 'Your ticket for event,' + eventname + ' has been successfully booked. ' + '\n Your seat is Row: ' + row + ', Column: ' + col +'\n' +
