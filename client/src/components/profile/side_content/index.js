@@ -28,6 +28,7 @@ class ProfileContent extends Component {
                 temp = <PostTicketContent
                         eventlist={this.props.eventlist}
                         user={this.props.userInfo.email}
+                        address={this.props.userInfo.address}
                         sellTicket={this.props.sellTicket}
                         sellingTicketResult={this.props.sellingTicketResult}
                         sellTicketReset={this.props.sellTicketReset}
