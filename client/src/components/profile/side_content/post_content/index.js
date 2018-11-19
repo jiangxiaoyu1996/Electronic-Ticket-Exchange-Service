@@ -38,6 +38,7 @@ class PostTicketContent extends Component{
             selectedColumn: "TBD",
             price: "",
             validationOpen: false,
+            addressAlertOpen: false,
         });
     };
 
@@ -55,12 +56,16 @@ class PostTicketContent extends Component{
     }
 
     handlePost(){
-        if(this.state.selectedEvent !== "" && this.state.selectedRow !== "TBD" && this.state.selectedColumn !== "TBD"
-            && this.state.price !== ""){
-            this.props.sellTicket(this.state.selectedEvent, this.state.selectedRow,
-                this.state.selectedColumn, this.props.user, this.state.price);
+        if(this.props.address === null){
+            this.setState({addressAlertOpen: true})
         }else{
-            this.setState({ validationOpen: true });
+            if(this.state.selectedEvent !== "" && this.state.selectedRow !== "TBD" && this.state.selectedColumn !== "TBD"
+                && this.state.price !== ""){
+                this.props.sellTicket(this.state.selectedEvent, this.state.selectedRow,
+                    this.state.selectedColumn, this.props.user, this.state.price);
+            }else{
+                this.setState({ validationOpen: true });
+            }
         }
     }
 
@@ -203,6 +208,13 @@ class PostTicketContent extends Component{
                     title={"Posting Requirement Incompletion"}
                     content={" Please check event and seat selection as well as price input field before posting action."}
                 />
+                <AlertDialog
+                    open={this.state.addressAlertOpen}
+                    handleClose={this.handleClose}
+                    type={"addressAlertOpen"}
+                    title={"Address Requirement Incompletion"}
+                    content={" Please provide valid address before posting"}
+                />
             </div>
         );
     }
@@ -270,25 +282,3 @@ PostTicketContent.propTypes = {
 
 export default withStyles(styles)(PostTicketContent);
 
-/*
-<div>
-                    <Dialog
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{"Posting Requirement Incompletion"}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Please check event and seat selection as well as price input field before posting action.
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.handleClose} autoFocus>
-                                OK
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>
- */
