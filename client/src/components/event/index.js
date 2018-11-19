@@ -156,7 +156,7 @@ class EventDetail extends Component {
                             size={"medium"}
                             onClick={() => this.handleCheckout()}
                         >
-                            Make an Order
+                            Double Click to make an Order
                         </Button>
                     </div>
                     <AlertDialog

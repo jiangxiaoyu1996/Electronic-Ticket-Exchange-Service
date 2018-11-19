@@ -73,7 +73,7 @@ class CheckoutDialog extends Component {
                                         className: classes.menu,
                                     },
                                 }}
-                                helperText="Please select a event for posting"
+                                helperText="Please select a delivery method"
                                 margin="normal"
                                 onChange={(event) => this.setState({delivery: event.target.value})}
                             >
