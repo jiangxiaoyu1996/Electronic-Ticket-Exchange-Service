@@ -185,7 +185,7 @@ class EventDetail extends Component {
                         selectedRow={this.state.selectedRow}
                         selectedColumn={this.state.selectedColumn}
                         price={this.state.price}
-
+                        dest={this.props.profile.UserInfo[0].address}
                     />
                 </div>
             );
