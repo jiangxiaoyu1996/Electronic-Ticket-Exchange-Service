@@ -10,10 +10,11 @@ import SearchReducer from './search/reducer';
 import EventSelectionReducer from './event_selection/reducer';
 import EventListBuyingReducer from './event_list_buy/reducer';
 import LockTicketReducer from './lock_ticket/reducer';
+import SellerAddressReducer from './seller_address/reducer';
 
 const rootReducer = (state, action) => {
     if(action.type === Action.LOG_OUT){
-        console.log("data: ", action.payload);
+        //console.log("data: ", action.payload);
         state = undefined;
     }
     return appReducer(state, action);
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
     selectedEvent: EventSelectionReducer,
     eventListBuying: EventListBuyingReducer,
     lockTicket: LockTicketReducer,
+    sellerAddress: SellerAddressReducer,
 });
 
 export default rootReducer;

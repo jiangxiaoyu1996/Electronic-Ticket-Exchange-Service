@@ -18,6 +18,7 @@ class EventDetail extends Component {
             selectedRow: 'TBD',
             selectedColumn: 'TBD',
             price: 0,
+            sellerAddress: '',
             validationOpen: false,
             loginAlertOpen: false,
             addressAlertOpen: false,
@@ -48,7 +49,13 @@ class EventDetail extends Component {
                 addressAlertOpen: true
             })
         }else{
-            this.props.lockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+            this.props.getSellerAddress(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+            if(this.props.sellerAddress !== null){
+                this.setState({
+                    sellerAddress: this.props.sellerAddress
+                });
+                this.props.lockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+            }
         }
     }
 
@@ -57,7 +64,7 @@ class EventDetail extends Component {
             selectedRow: row,
             selectedColumn: column,
             price: findAvaiableSeatForBuying(this.props.selectedEvent[0].maxRow,this.props.selectedEvent[0].maxCol,
-                this.props.selectedEvent[0].buyableSeat)[row-1][column-1]
+                this.props.selectedEvent[0].buyableSeat)[row-1][column-1],
         })
     }
 
@@ -89,6 +96,8 @@ class EventDetail extends Component {
     render(){
         const { classes } = this.props;
         //console.log("error: ", this.props.selectedEvent);
+        console.log("seller address api: ", this.props.sellerAddress);
+        console.log("seller address state: ", this.state.sellerAddress);
 
         if(this.props.selectedEvent !== undefined){
             const avaiableSeatForBuying = findAvaiableSeatForBuying(this.props.selectedEvent[0].maxRow,this.props.selectedEvent[0].maxCol,
@@ -186,6 +195,7 @@ class EventDetail extends Component {
                         selectedColumn={this.state.selectedColumn}
                         price={this.state.price}
                         dest={this.props.profile.UserInfo[0].address}
+                        src={this.state.sellerAddress}
                     />
                 </div>
             );

@@ -32,7 +32,7 @@ class CheckoutDialog extends Component {
     };
 
     render() {
-        console.log("checkoutOpen: ", this.props.open);
+        //console.log("checkoutOpen: ", this.props.open);
         const { classes } = this.props;
         const methods = ['Uber: Same day delivery', 'FedEx: One business day delivery', 'UPS: Two business days delivery'];
 
@@ -84,7 +84,10 @@ class CheckoutDialog extends Component {
                                 ))}
                             </TextField>
                             {this.state.delivery === 'Uber: Same day delivery' ?
-                                <Map dest={this.props.dest}/> : null}
+                                <Map
+                                    dest={this.props.dest}
+                                    src={this.props.src}
+                                /> : null}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

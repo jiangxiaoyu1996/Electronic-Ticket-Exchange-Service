@@ -43,8 +43,8 @@ class Header extends Component {
     render() {
         const { classes } = this.props;
 
-        console.log("logheader: ", this.props.loggedin);
-        console.log("signHeadr: ", this.props.user);
+        //console.log("logheader: ", this.props.loggedin);
+        //console.log("signHeadr: ", this.props.user);
 
         let btns = (this.props.user !== '' && this.props.user !== 'error' && this.props.user !== false) || this.props.loggedin === true  ? (
             <div className={classes.sectionDesktop}>
