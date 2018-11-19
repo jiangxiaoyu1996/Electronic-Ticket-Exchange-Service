@@ -5,9 +5,9 @@ const ROOT_URL = "http://localhost:8080/api";
 
 axios.defaults.withCredentials = true;
 
-export function updateUsername(address){
+export function updateUsername(username){
     const request = axios.post(`${ROOT_URL}/user/updateUsername`, {
-        address: address
+        username: username
     });
 
     return {

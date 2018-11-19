@@ -82,7 +82,7 @@ class AccountContent extends Component{
                                 variant="outlined"
                                 onChange = {(event) => this.setState({username: event.target.value})}
                             />
-                            <Button onClick={() => this.handleUpdateUsername()}>
+                            <Button variant="contained" onClick={() => this.handleUpdateUsername()} style={{marginTop: 25, textTransform: "none"}}>
                                 Update username
                             </Button>
                         </Grid>
@@ -98,7 +98,7 @@ class AccountContent extends Component{
                                 variant="outlined"
                                 onChange = {(event) => this.setState({address: event.target.value})}
                             />
-                            <Button onClick={() => this.handleUpdateAddress()}>
+                            <Button variant="contained" onClick={() => this.handleUpdateAddress()} style={{marginTop: 25, textTransform: "none"}}>
                                 Update address
                             </Button>
                         </Grid>
