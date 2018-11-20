@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import { compose, withProps, lifecycle } from 'recompose'
 import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer} from 'react-google-maps'
 
-var distanceG= 0;
-var timeG = 0;
+var distanceG= "0";
+var timeG = "0 mins";
+
 export default class Map extends Component {
     constructor(props){
         super(props)
@@ -12,6 +13,21 @@ export default class Map extends Component {
 	    distance:0,
 	    time:0
 	};
+    }
+
+    incrementHour(t) {
+	/* eg. 1 hour 2 mins; 10 mins; 2 hours 45mins */
+	var res=t.split(" ");
+	var s = t;
+	if ( res.length === 4 ) {
+	    var h=parseInt(res[0]);
+	    ++h;
+	    s = h+" hours "+res[2]+" "+res[3];
+	}
+	else {
+	    s = "1 hour "+t;
+	}
+	return s;
     }
     
     render() {
@@ -37,9 +53,9 @@ export default class Map extends Component {
                 componentDidMount() {
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode( { 'address': src}, function(resultsSrc, status) {
-                        if (status == 'OK') {
+                        if (status === 'OK') {
                             geocoder.geocode( { 'address': dest}, function(resultsDest, status) {
-                                if (status == 'OK') {
+                                if (status === 'OK') {
                                     const dirService = new google.maps.DirectionsService();
                                     dirService.route({
                                         origin: new google.maps.LatLng(resultsSrc[0].geometry.location.lat(), resultsSrc[0].geometry.location.lng()),
@@ -52,7 +68,6 @@ export default class Map extends Component {
 					    distanceG = res.routes[0].legs[0].distance.text;
 					    timeG = res.routes[0].legs[0].duration.text;
 					    //console.log("DISTANCE: "+this.state.distance+", Travel Time "+this.state.time);
-					    //console.log(this.refs.travel);
 
                                             this.setState({
                                                 directions: {...res},
@@ -77,7 +92,7 @@ export default class Map extends Component {
                 defaultZoom={3}
             >
           {props.directions && <DirectionsRenderer directions={props.directions} suppressMarkers={props.markers} />}
-	   {this.refs.travelInfo="Distance: "+distanceG+", Time: "+timeG}
+	  {this.refs.travelInfo="Distance: "+distanceG+", Delivery Time: "+this.incrementHour(timeG)}
            </GoogleMap>
 
         );
