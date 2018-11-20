@@ -204,6 +204,10 @@ router.post('/sendEmail', function(req, res){
             console.log(error);
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         } else {
+            res.send({
+                type: 'Email',
+                success: true
+            });
             console.log('Email sent: ' + info.response);
             res.send({
                 type: 'EMAIL',
