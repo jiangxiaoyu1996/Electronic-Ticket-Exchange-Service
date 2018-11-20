@@ -202,7 +202,10 @@ router.post('/sendEmail', function(req, res){
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
             console.log(error);
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
+            res.send({
+                type: 'EMAIL',
+                success: false
+            });
         } else {
             console.log('Email sent: ' + info.response);
             res.send({
