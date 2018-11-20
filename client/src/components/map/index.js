@@ -2,13 +2,22 @@
 import React, { Component } from 'react';
 import { compose, withProps, lifecycle } from 'recompose'
 import {withScriptjs, withGoogleMap, GoogleMap, DirectionsRenderer} from 'react-google-maps'
+
 export default class Map extends Component {
     constructor(props){
         super(props)
+	this.state = {
+	    distance:0,
+	    time:0
+	};
     }
     render() {
         console.log('dest: ', JSON.stringify(this.props.dest));
         console.log('src: ', JSON.stringify(this.props.src));
+        //var src="Golden Gate Bridge, San Francisco, CA";
+        //var dest="San Jose State University, San Jose, CA";
+        var src=this.props.src;
+        var dest=this.props.dest;
         const Directions = compose(
             withProps({
                 googleMapURL: "https://maps.googleapis.com/maps/api/js?",
@@ -21,10 +30,6 @@ export default class Map extends Component {
             lifecycle({
                 componentDidMount() {
                     var geocoder = new google.maps.Geocoder();
-                    var src="Golden Gate Bridge, San Francisco, CA";
-                    var dest="San Jose State University, San Jose, CA";
-                    //var src=this.props.src;
-                    //var dest=this.props.dest;
                     geocoder.geocode( { 'address': src}, function(resultsSrc, status) {
                         if (status == 'OK') {
                             geocoder.geocode( { 'address': dest}, function(resultsDest, status) {
@@ -36,6 +41,9 @@ export default class Map extends Component {
                                         travelMode: google.maps.TravelMode.DRIVING,
                                     }, (res, status) => {
                                         if (status === google.maps.DirectionsStatus.OK) {
+					    this.setState({distance:res.routes[0].legs[0].distance.text,
+							   time:res.routes[0].legs[0].duration.text})
+					    //console.log("DISTANCE: "+this.state.distance+", Travel Time "+this.state.time);
                                             this.setState({
                                                 directions: {...res},
                                                 markers: true
@@ -62,7 +70,10 @@ export default class Map extends Component {
             </GoogleMap>
         );
         return (
-            <Directions />
+		<div>		
+		<Directions />
+		<h4>DISTANCE: {this.state.distance}, Travel Time {this.state.time}</h4>;
+	        </div>
         )
     }
 }
