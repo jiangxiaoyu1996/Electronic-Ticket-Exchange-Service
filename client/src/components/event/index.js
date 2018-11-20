@@ -156,7 +156,7 @@ class EventDetail extends Component {
                             size={"medium"}
                             onClick={() => this.handleCheckout()}
                         >
-                            Double Click to make an Order
+                            Make an Order
                         </Button>
                     </div>
                     <AlertDialog
@@ -204,6 +204,8 @@ class EventDetail extends Component {
                         price={this.state.price}
                         dest={this.props.profile.UserInfo[0].address}
                         src={this.state.sellerAddress}
+                        sendEmail={this.props.sendEmail}
+                        email={this.props.profile.UserInfo[0].email}
                     />
                 </div>
             );

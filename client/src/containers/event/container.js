@@ -11,6 +11,7 @@ import { buyTicket } from "../../actions/buying_ticket/action";
 import { lockTicketReset } from "../../actions/lock_result_reset/action";
 import { getSellerAddress } from "../../actions/get_seller_address/action";
 import {sellerAddressReset} from "../../actions/seller_address_reset/action";
+import {sendEmail} from "../../actions/send_email/action";
 
 class EventContainer extends Component {
     componentDidMount(){
@@ -48,6 +49,7 @@ class EventContainer extends Component {
                         sellerAddressReset={this.props.sellerAddressReset}
                         sellerAddress={this.props.sellerAddress}
                         getSellerAddress={this.props.getSellerAddress}
+                        sendEmail={this.props.sendEmail}
                     />
                 </div>
             )
@@ -104,4 +106,4 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, { getEventListForBuying, lockTicketForBuying, lockTicketReset,
-    unlockTicketForBuying, buyTicket, getSellerAddress, sellerAddressReset})(EventContainer);
+    unlockTicketForBuying, buyTicket, getSellerAddress, sellerAddressReset, sendEmail})(EventContainer);

@@ -26,6 +26,7 @@ export const BUY_TICKET = "buy_ticket";
 export const BUY_TICKET_RESET = "buy_ticket_reset";
 export const SELLER_ADDRESS = "seller_address";
 export const SELLER_ADDRESS_RESET = "seller_address_reset";
+export const SEND_EMAIL = "send_email";
 
 //profile
 export const UPDATE_ADDRESS = "update_address";
