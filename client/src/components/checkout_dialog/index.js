@@ -40,8 +40,11 @@ class CheckoutDialog extends Component {
         //const ConfirmOrder = () => this.props.handleOrderConfimation();
         const ConfirmOrder = () => {
             this.props.handleOrderConfimation();
-            this.props.sendEmail(this.props.email, this.props.name, this.props.selectedRow, this.props.selectedColumn, this.state.delivery)
+            this.props.sendEmail(this.props.email, this.props.name, this.props.selectedRow, this.props.selectedColumn, this.state.delivery);
+            this.props.handleOrderConfimation();
         };
+
+
         return (
             <div>
                 <Dialog

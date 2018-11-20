@@ -128,6 +128,6 @@ app.use('/api/profile', profile);
 
 const port = 8080;
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.    listen(port, () => console.log(`Server running on port ${port}`));
 
 module.exports = salt
