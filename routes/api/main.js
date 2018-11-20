@@ -50,7 +50,7 @@ async function createArray(event){
 function search(text){
 	var filterStr = ""
 	for (var key in text){
-		filterStr = filterStr + " " + mysql.escapeId(key) + " = " + mysql.escape(text[key]) + " AND"
+		filterStr = filterStr + " " + mysql.escapeId(key) + " LIKE '%" + text[key] + "%' AND"
 	}
 	filterStr = filterStr.substring(0, filterStr.lastIndexOf(" AND"))
 	return filterStr
@@ -246,6 +246,8 @@ router.post('/addTicket', function(req, res){
 			})
 		}
 		else{
+            connection.query('UPDATE event SET ticket_amount_available = ticket_amount_available - 1 WHERE event_name = ' + mysql.escape(name), function(err, event, fields){
+            })
 			res.json({
 				type: 'addTicket',
 				result: true
@@ -255,27 +257,34 @@ router.post('/addTicket', function(req, res){
 })
 
 router.post('/addEvent', function(req,res){
-	var id = cryptoRandomString(20);
-	var name = req.body.name
-	var date = req.body.date
-	var location = req.body.location
-	var row = req.body.row
-	var col = req.body.col
-	var description = req.body.description
-	connection.query('INSERT INTO event (event_name, event_ID, date, location, ticket_amount, max_rows, max_cols, description) VALUES (' + "'" + name + "'" + ', ' + id + ', ' + "'" + date + "'" + ', ' + "'" + location + "'" + ', ' + mysql.escape(ticket_amount) + ', ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', ' + "'" + description + "'" + ')', function(err, rows, fields){
-		if(err){
-			res.json({
-				type: 'addEvent',
-				result: false
-			})
-		}
-		else{
-			res.json({
-				type: 'addEvent',
-				result: true
-			})
-		}
-	})
+    var id = cryptoRandomString(20);
+    var name = req.body.name
+    var date = req.body.date
+    var location = req.body.location
+    var row = req.body.row
+    var col = req.body.col
+    var description = req.body.description
+    var amount = req.body.amount
+
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDay();
+    var today = month + '/' + day + '/' + year
+    connection.query('INSERT INTO event (event_name, event_ID, date, date_posted, location, pageviews, ticket_amount, ticket_amount_available, max_rows, max_cols, pop_index, description) VALUES (' + mysql.escape(name) + ', ' + mysql.escape(id) + ', ' + mysql.escape(date) +  ', ' + mysql.escape(today) + ', ' + mysql.escape(location) + ', null, ' + mysql.escape(amount) + ', 0, ' + mysql.escape(row) + ', ' + mysql.escape(col) + ', null, ' +  mysql.escape(description) + ')', function(err, rows, fields){
+        if(err){
+            res.json({
+                type: 'addEvent',
+                result: false
+            })
+        }
+        else{
+            res.json({
+                type: 'addEvent',
+                result: true
+            })
+        }
+    })
 })
 
 
