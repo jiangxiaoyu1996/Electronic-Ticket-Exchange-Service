@@ -212,8 +212,6 @@ router.post('/sendEmail', function(req, res){
         }
     });
 
-    connection.end();
-
 });
 
 router.post('/GetPopularEvents', function(req, res){
@@ -222,9 +220,6 @@ router.post('/GetPopularEvents', function(req, res){
         if (err) {
             res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
-
-
-
         else {
             res.send({
                 type: 'GET',
