@@ -152,7 +152,7 @@ router.post('/sendEmail', function(req, res){
             pass: 'ylb12345678'
         }
     });
-    if(type == 'FedEx') {
+    if(type == 'FedEx: One business day delivery') {
         var mailOptions = {
 
             to: email,
@@ -164,7 +164,7 @@ router.post('/sendEmail', function(req, res){
         };
     }
 
-    else if (type == 'UPS') {
+    else if (type == 'UPS: Two business days delivery') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
             to: email,
@@ -175,7 +175,7 @@ router.post('/sendEmail', function(req, res){
         };
     }
 
-    else if (type == 'Uber') {
+    else if (type == 'Uber: Same day delivery') {
         var mailOptions = {
             from: 'ETES Support Team <ylbtester@gmail.com>',
             to: email,

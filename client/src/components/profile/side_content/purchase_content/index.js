@@ -24,7 +24,6 @@ class PurchaseContent extends Component{
                     <TableCell>{record.location}</TableCell>
                     <TableCell>({record.row_Number}, {record.col_Number})</TableCell>
                     <TableCell>${record.price}</TableCell>
-                    <TableCell>${record.delivery}</TableCell>
                 </TableRow>
             )
         })
@@ -52,7 +51,6 @@ class PurchaseContent extends Component{
                             <TableCell>Event Location</TableCell>
                             <TableCell>Event Seat</TableCell>
                             <TableCell>Event Ticket Price</TableCell>
-                            <TableCell>Event Ticket Delivery</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
