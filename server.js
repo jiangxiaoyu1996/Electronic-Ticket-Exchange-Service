@@ -82,7 +82,6 @@ function updatePop(){
     var day = d.getDay();
     connection.query('SELECT * FROM event ', function(err, rows, fields) {
         if (err) {
-            res.status(500).json({"status_code": 500,"status_message": "internal server error"});
         }
         else {
             for(var i = 0; i < rows.length; i++) {
