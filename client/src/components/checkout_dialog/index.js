@@ -37,11 +37,12 @@ class CheckoutDialog extends Component {
         const methods = ['Uber: Same day delivery', 'FedEx: One business day delivery', 'UPS: Two business days delivery'];
 
         const CheckoutClose = () => this.props.handleCheckoutClose();
-        //const ConfirmOrder = () => this.props.handleOrderConfimation();
-        const ConfirmOrder = () => {
+        const ConfirmOrder = () => this.props.handleOrderConfimation();
+        /*const ConfirmOrder = () => {
             this.props.handleOrderConfimation();
             this.props.sendEmail(this.props.email, this.props.name, this.props.selectedRow, this.props.selectedColumn, this.state.delivery)
-        };
+        };*/
+
         return (
             <div>
                 <Dialog
