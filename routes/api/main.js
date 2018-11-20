@@ -246,6 +246,8 @@ router.post('/addTicket', function(req, res){
 			})
 		}
 		else{
+            connection.query('UPDATE event SET ticket_amount_available = ticket_amount_available - 1 WHERE event_name = ' + mysql.escape(name), function(err, event, fields){
+            })
 			res.json({
 				type: 'addTicket',
 				result: true
