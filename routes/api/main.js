@@ -216,7 +216,7 @@ router.post('/sendEmail', function(req, res){
         }
     });
 
-    connection.end();
+
 
 });
 

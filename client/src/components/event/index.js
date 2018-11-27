@@ -93,8 +93,11 @@ class EventDetail extends Component {
     }
 
     handleOrderConfimation(){
+        this.props.sendEmail(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+
         this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
         this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+
         this.props.sellerAddressReset();
         return (
             <Redirect to={'/profile'} />
