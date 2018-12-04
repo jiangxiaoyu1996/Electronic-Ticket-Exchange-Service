@@ -21,7 +21,9 @@ class CheckoutDialog extends Component {
             cancel: false,
             confirm: false,
             delivery: '',
-            deliveryErrorOpen: false
+            payment: '',
+            deliveryErrorOpen: false,
+            paymentErrorOpen: false
         }
     }
 
@@ -32,16 +34,12 @@ class CheckoutDialog extends Component {
     };
 
     render() {
-        //console.log("checkoutOpen: ", this.props.open);
+        console.log("payment: ", this.state.payment);
         const { classes } = this.props;
         const methods = ['Uber: Same day delivery', 'FedEx: One business day delivery', 'UPS: Two business days delivery'];
 
         const CheckoutClose = () => this.props.handleCheckoutClose();
-        const ConfirmOrder = () => this.props.handleOrderConfimation();
-        /*const ConfirmOrder = () => {
-            this.props.handleOrderConfimation();
-            this.props.sendEmail(this.props.email, this.props.name, this.props.selectedRow, this.props.selectedColumn, this.state.delivery)
-        };*/
+        const ConfirmOrder = () => this.props.handleOrderConfimation(this.state.payment);
 
         return (
             <div>
@@ -63,6 +61,23 @@ class CheckoutDialog extends Component {
                         </DialogContentText>
                         <DialogContentText>
                             Ticket price: ${this.props.price}
+                        </DialogContentText>
+                        <DialogContentText>
+                            Please specify your payment card number:
+                        </DialogContentText>
+                        <DialogContentText>
+                            <TextField
+                                id="outlined-name"
+                                label="Card number"
+                                type="number"
+                                margin="normal"
+                                variant="outlined"
+                                onChange = {(event) => this.setState({payment:event.target.value})}
+                            />
+                        </DialogContentText>
+                        <DialogContentText>
+                            Your card type: {validateCardNumber(parseInt(this.state.payment, 10)) ? getCardType(this.state.payment) :
+                            (this.state.payment === '' ? '' : 'Cannot recognize')}
                         </DialogContentText>
                         <DialogContentText>
                             Please select your delivery plan:
@@ -101,10 +116,14 @@ class CheckoutDialog extends Component {
                         </Button>
                         {this.state.cancel === true ? <CheckoutClose/> : null}
                         <Button onClick={() => {
-                            if(this.state.delivery !== ''){
-                                this.setState({confirm: true})
+                            if(validateCardNumber(parseInt(this.state.payment, 10)) && getCardType(this.state.payment) !== ''){
+                                if(this.state.delivery !== ''){
+                                    this.setState({confirm: true})
+                                }else{
+                                    this.setState({deliveryErrorOpen: true})
+                                }
                             }else{
-                                this.setState({deliveryErrorOpen: true})
+                                this.setState({paymentErrorOpen: true})
                             }
                         }
                         } color="primary">
@@ -120,10 +139,85 @@ class CheckoutDialog extends Component {
                     title={"Delivery Requirement Incompletion"}
                     content={" Please specify delivery option."}
                 />
+                <AlertDialog
+                    open={this.state.paymentErrorOpen}
+                    handleClose={this.handleClose}
+                    type={"paymentErrorOpen"}
+                    title={"Payment Requirement Incompletion"}
+                    content={" Please specify card number in correct format."}
+                />
             </div>
 
         );
     }
+}
+
+function validateCardNumber(number) {
+    var regex = new RegExp("^[0-9]{16}$");
+    if (!regex.test(number))
+        return false;
+
+    return luhnCheck(number);
+}
+
+function luhnCheck(val) {
+    var sum = 0;
+    for (var i = 0; i < val.length; i++) {
+        var intVal = parseInt(val.substr(i, 1));
+        if (i % 2 == 0) {
+            intVal *= 2;
+            if (intVal > 9) {
+                intVal = 1 + (intVal % 10);
+            }
+        }
+        sum += intVal;
+    }
+    return (sum % 10) == 0;
+}
+
+function getCardType(number)
+{
+    // visa
+    var re = new RegExp("^4");
+    if (number.match(re) != null)
+        return "Visa";
+
+    // Mastercard
+    // Updated for Mastercard 2017 BINs expansion
+    if (/^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12}))$/.test(number))
+        return "Mastercard";
+
+    // AMEX
+    re = new RegExp("^3[47]");
+    if (number.match(re) != null)
+        return "AMEX";
+
+    // Discover
+    re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
+    if (number.match(re) != null)
+        return "Discover";
+
+    // Diners
+    re = new RegExp("^36");
+    if (number.match(re) != null)
+        return "Diners";
+
+    // Diners - Carte Blanche
+    re = new RegExp("^30[0-5]");
+    if (number.match(re) != null)
+        return "Diners - Carte Blanche";
+
+    // JCB
+    re = new RegExp("^35(2[89]|[3-8][0-9])");
+    if (number.match(re) != null)
+        return "JCB";
+
+    // Visa Electron
+    re = new RegExp("^(4026|417500|4508|4844|491(3|7))");
+    if (number.match(re) != null)
+        return "Visa Electron";
+
+    return "";
 }
 
 CheckoutDialog.propTypes = {
