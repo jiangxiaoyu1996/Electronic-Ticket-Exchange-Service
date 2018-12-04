@@ -61,7 +61,7 @@ class PostTicketContent extends Component{
             this.setState({addressAlertOpen: true})
         }else{
             if(this.state.selectedEvent !== "" && this.state.selectedRow !== "TBD" && this.state.selectedColumn !== "TBD"
-                && this.state.price !== ""){
+                && this.state.price !== "" && parseFloat(this.state.price) > 0){
                 this.props.sellTicket(this.state.selectedEvent, this.state.selectedRow,
                     this.state.selectedColumn, this.props.user, this.state.price);
             }else{
