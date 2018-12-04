@@ -46,7 +46,7 @@ function deleteDb(){
 
 function createDb(){
         connection.query('CREATE TABLE event (event_name VARCHAR(255), event_ID VARCHAR(255), date VARCHAR(255),date_posted VARCHAR(255), location VARCHAR(255), pageviews INTEGER, ticket_amount INTEGER, ticket_amount_available INTEGER, max_rows INTEGER, max_cols INTEGER, pop_index DOUBLE, description TEXT, PRIMARY KEY (event_ID))', function (err, rows, fields) {
-            connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), price INTEGER, deliver_method VARCHAR(255), status VARCHAR(255), PRIMARY KEY (event, row_Number, col_Number))', function (err, rows, fields) {
+            connection.query('CREATE TABLE ticket (id VARCHAR(255), event VARCHAR(255), row_Number INTEGER, col_Number INTEGER, buyer VARCHAR(255), seller VARCHAR(255), price INTEGER, deliver_method VARCHAR(255), status VARCHAR(255), card VARCHAR(255), PRIMARY KEY (event, row_Number, col_Number))', function (err, rows, fields) {
                 connection.query('CREATE TABLE user (id VARCHAR(255), username TEXT, email TEXT, password TEXT, address TEXT, PRIMARY KEY (id))', function (err, rows, fields) {
                     populateDb();
                 });
@@ -62,9 +62,9 @@ function populateDb(){
     });
 	connection.query('INSERT INTO user (id, username, email, password, address) VALUES (1, ' + "'test'" + ', ' + "'codyyu36@gmail.com'" + ', ' + "'" + pass1 + "'" + ', ' + "'San Jose State University, San Jose, CA'" + '), (2, ' + "'time'" + ', ' + "'user1@gmail.com'" + ', ' + "'" + pass2 + "'" + ', ' + "'San Francisco'" + '), (500, NULL, ' + "'another1@gmail.com'" + ', ' + "'" + pass3 + "'" + ', ' + "'Sacramento'" + ')', function(err, rows, fields){
 	});
-	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, status) VALUES (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 1, NULL, ' + "'test@gmail.com'" +
-	', 50, 0), (2, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 2, 2, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ', 32, 1), (3, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 5, ' + 'NULL' + ', ' + "'user1@gmail.com'" + ', 35, 0), '
-	+ '(4, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 9, 9, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ', 28, 1), (5, ' + mysql.escape('Magnificent Mozart') + ', 1, 5, ' + 'NULL' + ', ' + "'test@gmail.com'" + ', 25, 0), (6, ' + mysql.escape('Magnificent Mozart') + ', 20, 20, ' + 'NULL' + ', ' + "'test@gmail.com'" + ', 15, 0)', function(err, rows, fields){
+	connection.query('INSERT INTO ticket (id, event, row_Number, col_Number, buyer, seller, price, deliver_method, status, card) VALUES (1, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 1, NULL, ' + "'test@gmail.com'" +
+	', 50, NULL, 0, NULL), (2, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 2, 2, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ', 32, NULL, 1, 2905849672093285), (3, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 1, 5, ' + 'NULL' + ', ' + "'user1@gmail.com'" + ', 35, NULL, 0, NULL), '
+	+ '(4, ' + mysql.escape('Bay Area Taco & Beer Festival') + ', 9, 9, ' + "'another1@gmail.com'" + ', ' + "'user1@gmail.com'" + ', 28, NULL, 1, 2905849672093285), (5, ' + mysql.escape('Magnificent Mozart') + ', 1, 5, ' + 'NULL' + ', ' + "'test@gmail.com'" + ', 25, NULL, 0, NULL), (6, ' + mysql.escape('Magnificent Mozart') + ', 20, 20, ' + 'NULL' + ', ' + "'test@gmail.com'" + ', 15, NULL, 0, NULL)', function(err, rows, fields){
 	});
 }
 
