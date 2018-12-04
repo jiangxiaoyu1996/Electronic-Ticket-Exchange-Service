@@ -93,9 +93,8 @@ class EventDetail extends Component {
     }
 
     handleOrderConfimation(payment){
-        console.log("focus: ", payment);
         this.props.unlockTicketForBuying(this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
-        this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn);
+        this.props.buyTicket(this.props.profile.UserInfo[0].email, this.props.selectedEvent[0].name, this.state.selectedRow, this.state.selectedColumn, payment);
         this.props.sellerAddressReset();
         return (
             <Redirect to={'/profile'} />
