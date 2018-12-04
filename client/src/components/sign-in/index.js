@@ -31,16 +31,19 @@ class SignIn extends Component {
             if(!this.state.email.match(`^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$`)){
                 this.setState({errorTextEmail: 'Invalid email format'})
             }else{
-                this.setState({errorTextEmail: ''})
+                this.setState({errorTextEmail: 'no error'})
             }
         }else{
             this.setState({errorTextEmail: 'Email is required'})
         }
+        console.log("State: ", this.state.errorTextEmail);
     }
 
     checkPassword(){
         if(this.state.password === ''){
             this.setState({errorTextPassword: 'Password is required'})
+        }else{
+            this.setState({errorTextPassword: 'no error'})
         }
     }
 
@@ -50,7 +53,7 @@ class SignIn extends Component {
                 this.setState({errorTextPassword2: 'Please check password confirmation again',
                     errorTextPassword: 'Please check password again'})
             }else{
-                this.setState({errorTextPassword2: '', errorTextPassword: ''})
+                this.setState({errorTextPassword2: 'no error', errorTextPassword: 'no error'})
             }
         }else{
             this.setState({errorTextPassword2: 'Password confirmation is required'})
@@ -62,7 +65,7 @@ class SignIn extends Component {
         this.checkPassword();
         this.checkConfirmedPassword();
 
-        if(this.state.errorTextEmail === '' && this.state.errorTextPassword === ''){
+        if(this.state.errorTextEmail === 'no error' && this.state.errorTextPassword === 'no error' && this.state.errorTextPassword2 === 'no error'){
             console.log("perfect");
             this.props.signin(this.state.email, this.state.password);
         }
@@ -77,6 +80,12 @@ class SignIn extends Component {
             marginLeft: 5
         };
 
+        console.log("original email: ", this.state.email);
+        console.log("original password: ", this.state.password);
+        console.log("original password2: ", this.state.password2);
+        console.log("original erroremail: ", this.state.errorTextEmail);
+        console.log("original errorpassword: ", this.state.errorTextPassword);
+
         return(
             <div className={classes.container}>
                 <Grid container justify="center" spacing={256}>
@@ -88,7 +97,7 @@ class SignIn extends Component {
                                 variant="outlined"
                                 onChange = {(event) => this.setState({email: event.target.value})}
                             />
-                            <FormHelperText style={errorStyle}>{this.state.errorTextEmail}</FormHelperText>
+                            <FormHelperText style={errorStyle}>{this.state.errorTextEmail === '' || this.state.errorTextEmail === 'no error' ? '' : this.state.errorTextEmail}</FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
@@ -100,7 +109,7 @@ class SignIn extends Component {
                             variant="outlined"
                             onChange = {(event) => this.setState({password: event.target.value})}
                         />
-                        <FormHelperText style={errorStyle}>{this.state.errorTextPassword}</FormHelperText>
+                        <FormHelperText style={errorStyle}>{this.state.errorTextPassword === '' || this.state.errorTextPassword === 'no error' ? '' : this.state.errorTextPassword}</FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}>
@@ -112,7 +121,7 @@ class SignIn extends Component {
                             variant="outlined"
                             onChange = {(event) => this.setState({password2: event.target.value})}
                         />
-                            <FormHelperText style={errorStyle}>{this.state.errorTextPassword2}</FormHelperText>
+                            <FormHelperText style={errorStyle}>{this.state.errorTextPassword2 === '' || this.state.errorTextPassword2 === 'no error' ? '' : this.state.errorTextPassword2}</FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item xs={12}><br/><br/></Grid>
