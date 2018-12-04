@@ -32,7 +32,7 @@ class ProfileContainer extends Component{
                 </div>
             );
         }else{
-            //console.log("Profile: ", this.props.profile);
+            console.log("Profile: ", this.props.profile);
             //console.log("List: ", makeList(this.props.eventListPosting));
             return(
                 <div>

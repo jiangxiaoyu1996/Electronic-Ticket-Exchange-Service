@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cryptoRandomString = require('crypto-random-string');
 const cookieParser = require('cookie-parser');
 const salt = require('../../server.js').salt;
+const bcrypt = require('bcryptjs');
 
 router.use(cookieParser());
 router.use(bodyParser.json());
@@ -407,7 +408,7 @@ router.post('/buyticket', authenticate, function(req, res){
     var row = req.body.row;
     var col = req.body.col;
     var card = bcrypt.hashSync(req.body.payment, salt);
-    connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ', card = ' + card + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
+    connection.query('UPDATE ticket SET buyer = ' + mysql.escape(email) + ', card = ' + mysql.escape(card) + ' WHERE event = ' + mysql.escape(eventname) + ' AND row_Number = ' + mysql.escape(row) + ' AND col_Number = ' + mysql.escape(col), function(err, rows, fields){
         if(err){
             res.json({
                 type: 'buyTicket',
