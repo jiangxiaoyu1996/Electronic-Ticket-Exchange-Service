@@ -39,7 +39,7 @@ export default class Map extends Component {
         var dest=this.props.dest;
         const Directions = compose(
             withProps({
-                googleMapURL: "https://maps.googleapis.com/maps/api/js?",
+                googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCWDcR5KYum5w8_Io-AyHgGDxG9o69Awig",
                 loadingElement: <div style={{ height: `480px` }} />,
                 containerElement: <div style={{ width: `100%` }} />,
                 mapElement: <div style={{height: `640px`, width: `640px` }}  />
